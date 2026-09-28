@@ -30,3 +30,9 @@ local Konsole. That remains an interactive check; the app emits no mouse capture
 GitHub repository creation succeeded as PRIVATE. Uploading an active workflow was
 rejected because the OAuth token lacks workflow scope; CI is retained as an inactive
 template. No remote CI run is claimed.
+
+## CI authorization follow-up — 2026-09-28
+
+GitHub device authorization completed; the token now includes workflow scope.
+Moved the workflow to `.github/workflows/ci.yml` and updated current setup guidance.
+The initial upload failure above is retained as historical evidence.

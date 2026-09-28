@@ -33,7 +33,8 @@ message is explained in [USB permissions](docs/notes/0004-linux-usb-access.md).
 
 ```text
 src/          CLI, TUI, USB diagnostics, pure DMX contracts
-contrib/      Optional udev rule and GitHub Actions template
+contrib/      Optional udev rule and CI documentation
+.github/      Automatic build and test workflow
 docs/         Standalone zk notebook
 idea.md       Original concept
 ```
@@ -44,5 +45,5 @@ and `cargo test --locked --all-targets` before committing. Build with `cargo bui
 Hardware tests are manual.
 This is a private project; distribution licensing is undecided.
 
-GitHub Actions is prepared in `contrib/ci/github-actions.yml` but inactive: the current
-GitHub token lacks workflow scope. See [CI setup](contrib/ci/README.md).
+GitHub Actions runs the normal build and test checks on pushes and pull requests.
+See [CI details](contrib/ci/README.md).

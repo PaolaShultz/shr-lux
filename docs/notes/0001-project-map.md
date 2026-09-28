@@ -14,7 +14,7 @@ LED feedback. Rust on Raspberry Pi; target display 80×25.
 - Rust application and keyboard-driven TUI shell.
 - Read-only USB descriptor diagnostics for the observed uDMX identity.
 - Validated DMX addresses and a pure uDMX range-request encoder, tested without output.
-- This notebook, project working agreements, local checks and a GitHub CI template.
+- This notebook, project working agreements, local checks and GitHub CI.
 
 Audio capture, musical analysis, fixture patch loading, output, and MIDI are not implemented.
 Unknown measurements remain unavailable in the UI; no simulated BPM or energy is shown.

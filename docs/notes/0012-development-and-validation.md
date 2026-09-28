@@ -32,9 +32,8 @@ python3 scripts/check-terminal.py
 - Run the complete normal suite for shared models, rendering, output, concurrency or safety
   changes. Use focused tests while iterating; do not ask the user to classify tests.
 
-The prepared GitHub Actions template runs formatting, Clippy, default tests, a release
-build and PTY checks on Linux. It is inactive because the current GitHub token lacks
-workflow scope. See [CI setup](../../contrib/ci/README.md).
+GitHub Actions runs formatting, Clippy, default tests, a release build and PTY checks
+on Linux for pushes and pull requests. See [CI details](../../contrib/ci/README.md).
 The local build provides Raspberry Pi/AArch64 verification; CI does not emulate fixtures.
 No release binaries are published automatically. No distribution license has been chosen.
 
