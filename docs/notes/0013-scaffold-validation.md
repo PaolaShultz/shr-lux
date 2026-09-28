@@ -36,3 +36,10 @@ template. No remote CI run is claimed.
 GitHub device authorization completed; the token now includes workflow scope.
 Moved the workflow to `.github/workflows/ci.yml` and updated current setup guidance.
 The initial upload failure above is retained as historical evidence.
+
+First remote CI run passed for commit `ea2c7cb`: formatting, Clippy, all five Rust
+tests, optimized build and all three PTY exit/recovery checks.
+[GitHub Actions evidence](https://github.com/PaolaShultz/shr-lux/actions/runs/36486029648).
+The same normal suite passed locally before pushing. Physical tests remain pending;
+no historical/exhaustive suite exists. GitHub reported a checkout@v4 Node runtime
+deprecation warning; it did not fail the run.
