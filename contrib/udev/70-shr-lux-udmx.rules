@@ -1,0 +1,2 @@
+# Shared VID/PID: constrain this rule to the observed uDMX descriptor strings.
+SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ATTR{idVendor}=="16c0", ATTR{idProduct}=="05dc", ATTR{manufacturer}=="www.anyma.ch", ATTR{product}=="uDMX", GROUP="plugdev", MODE="0660"

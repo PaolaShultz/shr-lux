@@ -1,0 +1,13 @@
+[note]
+language = "en"
+filename = "{{id}}-{{slug title}}"
+extension = "md"
+template = "default.md"
+id-length = 6
+exclude = [".zk/**"]
+[format.markdown]
+link-format = "markdown"
+link-drop-extension = false
+hashtags = true
+[tool]
+editor = "nano"

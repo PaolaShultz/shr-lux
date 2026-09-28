@@ -1,0 +1,43 @@
+# shr-lux project notebook
+
+A standalone zk notebook of linked Markdown notes. Keep observed facts, protocol
+references, proposals, decisions and test results distinguishable. Sources were consulted
+on 2026-09-28 unless another date is stated. The original [idea](../idea.md) remains intact.
+
+## Notes
+
+- [Project map](notes/0001-project-map.md)
+- [Hardware baseline — 2026-09-28](notes/0002-hardware-baseline.md)
+- [uDMX USB protocol](notes/0003-udmx-protocol.md)
+- [Linux USB access](notes/0004-linux-usb-access.md)
+- [Architecture and state ownership](notes/0005-architecture.md)
+- [DMX and fixture patching](notes/0006-dmx-fixtures.md)
+- [Terminal interaction contract](notes/0007-terminal-contract.md)
+- [Audio inputs and musical estimates](notes/0008-audio-and-musical-state.md)
+- [MIDI control and feedback](notes/0009-midi-feedback.md)
+- [Development milestones](notes/0010-roadmap.md)
+- [First fixture bench test](notes/0011-fixture-bench-test.md)
+- [Development and validation](notes/0012-development-and-validation.md)
+
+- [Scaffold validation](notes/0013-scaffold-validation.md)
+
+## Using zk
+
+From the project root:
+
+```sh
+zk --notebook-dir docs index
+zk --notebook-dir docs list
+zk --notebook-dir docs list --match udmx
+zk --notebook-dir docs new docs/notes --title "Fixture test observations"
+```
+
+Or `cd docs` and use zk normally. This nested notebook is deliberately independent of
+any parent notebook. Regular `.md` links also work on GitHub and without zk installed.
+The generated index database is ignored; notes, config and template are versioned.
+New notes should link to related notes and be added here. Never turn an untested
+assumption into a hardware fact. Keep large recordings and private venue details in
+ignored local storage; add only the small evidence needed to explain a result.
+
+zk may warn that links to the root idea.md are outside this notebook; those links
+are intentional and resolve normally in Markdown.

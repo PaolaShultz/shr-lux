@@ -1,0 +1,6 @@
+/target/
+/docs/.zk/notebook.db*
+/docs/.zk/*.log
+/recordings/
+/local/
+.env
