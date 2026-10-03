@@ -1,7 +1,8 @@
-# shr-lux
+# SHR Lux
 
-Autonomous, source-aware DMX lighting for small live bands. Rust on Raspberry Pi,
-with an 80×25 TUI and MiniLab mkII pad previews.
+An experimental lighting engine for small live bands, built in Rust for
+Raspberry Pi. Analyze separate instrument recordings and preview coordinated
+scenes in an 80×25 terminal or on MiniLab mkII pads.
 
 **Status: working recorded-audio simulation with source activity, kick candidates,
 kick pulse estimates, automatic scenes and optional MiniLab mkII pad output.
@@ -16,6 +17,8 @@ Requires Rust/rustup and a C build toolchain. On Linux install `libasound2-dev` 
 `pkg-config`. The repository selects Rust 1.97.1. Optional listening uses SoX `play`.
 
 ```sh
+git clone https://github.com/PaolaShultz/shr-lux.git
+cd shr-lux
 cargo run --locked -- --help
 cargo run --locked -- doctor
 cargo run --locked
@@ -48,8 +51,8 @@ python3 scripts/prepare-simulation.py --download
 cargo run --locked --release --example aux-replay -- recordings/simulation/punk/aux.wav --realtime
 ```
 
-No sound input is needed. Audio stays in ignored `recordings/` for this private
-educational experiment. See the [simulation guide](docs/notes/0017-local-aux-simulation.md)
+No sound input is needed. Audio stays in ignored `recordings/` for local
+educational use. See the [simulation guide](docs/notes/0017-local-aux-simulation.md)
 for preparation, routing and source terms.
 
 ### Analyze music and preview the show
@@ -65,14 +68,14 @@ target/release/shr-lux pads-test
 # Separate eight-second irregular white-strobe audition:
 target/release/shr-lux strobe-test
 # Offline metrics (no hardware access):
+mkdir -p local
 target/release/shr-lux analyze metal --bursts > local/metal-analysis.csv
 ```
 
 `--midi` explicitly enables pad output; omit it for terminal-only development.
 `--listen` plays the prepared stereo monitor through the default sound output;
 playback and analysis have independent clocks, so listening is approximate.
-The current host has no working default playback destination; omit `--listen`
-until your sound output is configured.
+Use `--listen` only after configuring your sound output.
 Keys: **q/Esc/Ctrl+C** quit, **b** toggles burst requests, **x** toggles blackout.
 
 All eight pads form a coordinated show: mirrored sweeps, opposing chases, guitar
@@ -91,8 +94,8 @@ for measured results, shutdown behavior and remaining limits.
 The [design study](docs/notes/0020-lighting-design-study.md) connects stage composition,
 color science, concert designers' practice and musical timing to a proposed small
 engine. It includes annotated sources, a code audit and controlled audition exercises.
-These proposals are separate from the current runtime. Physical demos wait for your
-explicit **go** after preparation.
+These proposals are separate from the current runtime. Hardware output is enabled
+only by explicit commands or flags; see the linked test procedures before use.
 
 ## Reference
 
@@ -117,7 +120,11 @@ and `cargo test --locked --all-targets` before committing. Build with `cargo bui
 `python3 scripts/check-terminal.py` for normal Linux terminal recovery checks.
 Fast preparation checks: `python3 scripts/check-simulation.py`.
 Hardware tests are manual.
-This is a private project; distribution licensing is undecided.
 
 GitHub Actions runs the normal build and test checks on pushes and pull requests.
 See [CI details](contrib/ci/README.md).
+
+## License
+
+No project license has been selected. Dependency licenses and the terms for
+external recordings are documented separately in the linked guides.
