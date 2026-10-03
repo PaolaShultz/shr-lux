@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "usage": "Local, noncommercial educational experiment only. Audio and derived files remain under ignored recordings/. No redistribution or publication.",
+  "songs": {
+    "punk": {
+      "artist": "The Complainiacs",
+      "title": "Etc",
+      "style": "Punk/garage rock",
+      "source_page": "https://cambridge-mt.com/ms/mtk/#Complainiacs",
+      "archive_url": "https://mtkdata.cambridgemusictechnology.co.uk/MTK001/Complainiacs_Etc_Full.zip",
+      "archive_sha256": "d6da0fa9ca280aa8677d6919bb32bec5933886a0aacc796728dc02df74069947",
+      "archive_directory": "Complainiacs_Etc_Full",
+      "reference_bpm": 174,
+      "channels": {
+        "kick": "01_Kick.wav",
+        "bass": "08_BassDI.wav",
+        "guitar_1": "10_ElecGtr1.wav",
+        "guitar_2": "11_ElecGtr2.wav"
+      }
+    },
+    "metal": {
+      "artist": "Dark Ride",
+      "title": "Hammer Down",
+      "style": "Heavy metal",
+      "source_page": "https://cambridge-mt.com/ms/mtk/#DarkRide",
+      "archive_url": "https://mtkdata.cambridgemusictechnology.co.uk/MTK008/DarkRide_HammerDown_Full.zip",
+      "archive_sha256": "c628259e0570cd111a2f04203174a314a7a53dae2143b6b03353af7f464a1fab",
+      "archive_directory": "DarkRide_HammerDown_Full",
+      "reference_bpm": 95,
+      "channels": {
+        "kick": "01_Kick.wav",
+        "bass": "11_Bass1.wav",
+        "guitar_1": "13_ElecGtr01.wav",
+        "guitar_2": "14_ElecGtr02.wav"
+      }
+    }
+  }
+}

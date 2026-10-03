@@ -7,9 +7,14 @@ description = "Source-aware lighting for live bands on Raspberry Pi"
 publish = false
 
 [dependencies]
+hound = "3.5.1"
+signal-hook = "0.3.18"
 crossterm = "0.29"
 ratatui = "0.30.2"
 rusb = { version = "0.9.4", features = ["vendored"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+alsa = "0.12.1"
 
 [profile.release]
 lto = "thin"

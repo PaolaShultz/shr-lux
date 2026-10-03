@@ -21,6 +21,26 @@ on 2026-09-28 unless another date is stated. The original [idea](../idea.md) rem
 
 - [Scaffold validation](notes/0013-scaffold-validation.md)
 
+- [Pi 1 / 512 MB feasibility and deployment](notes/0014-pi1-feasibility.md)
+- [Musical understanding and punk/metal programs](notes/0015-musical-direction.md)
+- [Show-policy prototype and validation](notes/0016-show-policy-validation.md)
+
+- [Local four-AUX simulation: punk and metal](notes/0017-local-aux-simulation.md)
+
+- [Music analysis and MiniLab pad preview](notes/0018-analysis-and-pad-preview.md)
+
+- [Composed eight-fixture pad show](notes/0019-composed-pad-show.md)
+
+## Lighting design study — 2026-09-29
+
+- [Study map and conclusions](notes/0020-lighting-design-study.md)
+- [Composition, visibility and attention](notes/0021-composition-and-attention.md)
+- [Color theory and real fixtures](notes/0022-color-and-fixtures.md)
+- [Musical time, chases and storms](notes/0023-musical-time-and-motion.md)
+- [Design specification and implementation priorities](notes/0024-design-to-engine.md)
+- [Audition laboratory](notes/0025-design-audition-lab.md)
+- [Annotated primary sources and further reading](notes/0026-lighting-study-sources.md)
+
 ## Using zk
 
 From the project root:

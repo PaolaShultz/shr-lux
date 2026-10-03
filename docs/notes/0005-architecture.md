@@ -7,6 +7,20 @@ Status: initial engineering direction, not all implemented. Tags: #architecture
 Use one Rust package with a library and CLI until real boundaries justify a workspace.
 Current modules: `dmx` (address/range contracts), `hardware` (descriptor inspection),
 `ui` (rendering); `main` owns CLI routing and terminal lifetime.
+As of 2026-09-29, `show` adds a pure, fixed-size policy driven by timestamped features.
+The synthetic `show-preview` example exercises it without audio or hardware.
+See [policy scope](0016-show-policy-validation.md).
+
+`replay` now supplies synchronized four-source PCM from prepared local files using
+a fixed caller-owned buffer. It remains separate from musical analysis, `show`, UI
+and hardware. See [simulation](0017-local-aux-simulation.md).
+
+## Recorded-input implementation
+
+`simulation` connects `replay` → `analysis` → `show` → `preview`; `live` paces
+the sample clock and renders snapshots. `midi` owns device encoding and a one-frame
+queue to a bounded ALSA worker. Neither analysis nor policy accesses hardware.
+See [behavior and limits](0018-analysis-and-pad-preview.md).
 
 ## Planned pipeline
 

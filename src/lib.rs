@@ -1,3 +1,10 @@
+pub mod analysis;
 pub mod dmx;
 pub mod hardware;
+pub mod live;
+pub mod midi;
+pub mod preview;
+pub mod replay;
+pub mod show;
+pub mod simulation;
 pub mod ui;

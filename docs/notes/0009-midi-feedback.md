@@ -2,11 +2,12 @@
 
 Date: 2026-09-28
 
-Status: device model and protocol not established. Tags: #midi #controller
+Status: MiniLab mkII identified; opt-in pad feedback implemented. Tags: #midi #controller
 
-User owns an Arturia controller with controllable colored pads, roughly seven or eight
-colors. Exact model, firmware, MIDI ports and LED protocol are still needed. Do not
-assume generic Note On velocity maps to colors, or that brightness is supported.
+Observed 2026-09-29: Arturia MiniLab mkII, USB `1c75:0289`, ALSA `hw:2,0,0`.
+The opt-in preview writes researched pad-color SysEx on both logical banks. It never
+stores presets or changes mappings. Physical color confirmation is still pending.
+See [protocol sources and test evidence](0018-analysis-and-pad-preview.md).
 
 Input mappings should produce semantic actions. Feedback derives from resolved active
 state so automatic changes, TUI actions and MIDI actions agree. Avoid MIDI feedback loops:
@@ -17,9 +18,8 @@ faders need a deliberate pickup/takeover strategy. No touch sensor is assumed.
 Blackout stays latched until explicit release; an LED should distinguish it from an
 unplugged or unknown controller state.
 
-Potential Rust backend: [midir](https://github.com/Boddlnagg/midir). No MIDI dependency
-or guessed device mapping is added yet. Obtain the model's official Arturia documentation
-before implementing LED output.
+Current output uses Linux ALSA raw MIDI in nonblocking mode on a bounded worker.
+MIDI input actions and takeover remain proposals; no input mapping is implemented.
 
 Related: [architecture](0005-architecture.md), [roadmap](0010-roadmap.md).
 

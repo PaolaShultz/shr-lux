@@ -9,6 +9,10 @@ actually isolate the intended source. AUX output names alone do not establish th
 Confirm whether each cheap interface has two independent inputs, suitable input levels,
 and simultaneous capture support before choosing a channel configuration.
 
+Updated research: [punk/metal analysis and programs](0015-musical-direction.md) and
+[Pi 1 resource targets](0014-pi1-feasibility.md). Live analysis remains unimplemented;
+synthetic policy inputs are not measurements.
+
 ## First analysis milestone
 
 Start with activity, level and transients on recorded and live inputs. Then evaluate
@@ -30,6 +34,13 @@ Potential Rust backends to evaluate, not yet dependencies:
 [CPAL](https://github.com/RustAudio/cpal) and [ALSA](https://www.alsa-project.org/wiki/Main_Page).
 
 ## Replay
+
+As of 2026-09-29, [two local multitrack simulations](0017-local-aux-simulation.md)
+provide synchronized kick/bass/two-guitar PCM, a streaming Rust reader and measured
+RMS levels. [Music analysis](0018-analysis-and-pad-preview.md) now measures activity,
+kick candidates, kick density, relative energy and regular kick pulse. Live capture
+and higher-level musical interpretation remain pending.
+
 
 Plan local multichannel recordings plus timestamped manual actions and decisions.
 Keep recordings outside Git (`recordings/` is ignored). Small synthetic fixtures can

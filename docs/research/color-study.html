@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>shr-lux — color transition study</title>
+<style>
+:root { color-scheme: dark; font: 16px/1.5 system-ui, sans-serif; background: #151719; color: #edeff1 }
+body { max-width: 1040px; margin: auto; padding: 28px 22px 64px }
+h1 { font-size: 2rem; margin-bottom: 8px } h2 { font-size: 1.1rem; margin: 0 0 8px }
+a { color: #92cbed } p { max-width: 80ch } .muted { color: #b3bbc2 }
+.controls { display: flex; flex-wrap: wrap; gap: 22px; align-items: center; padding: 22px 0 }
+label { display: flex; gap: 8px; align-items: center } input[type=color] { width: 48px; height: 38px; border: 0 }
+select, button { font: inherit; color: inherit; background: #25292d; border: 1px solid #68717b; padding: 7px }
+input[type=range] { width: min(55vw,360px) }
+article { background: #202428; border: 1px solid #42484e; border-radius: 8px; margin: 18px 0; padding: 18px }
+.ramp { display: flex; height: 76px; border: 1px solid #828990; margin: 14px 0 }
+.ramp span { flex: 1; min-width: 0 }.sample { display: inline-block; width: 78px; height: 42px; vertical-align: middle; border: 1px solid #828990; margin-right: 12px }
+.readout { font: 14px/1.5 ui-monospace, monospace } .note { font-size: .9rem; color: #c2c9cf }
+footer { border-top: 1px solid #42484e; margin-top: 28px; padding-top: 14px }
+</style>
+<h1>Color changes have a route</h1>
+<p>Compare the same endpoints through four mixing methods. Move the slider to inspect a moment in the fade. Everything is static until you change a control.</p>
+<p class="muted">This is a display study in sRGB/CSS. It does not predict a lamp's spectrum, dimmer curve, brightness or the appearance of a person under it.</p>
+<div class="controls">
+<label>Study <select id="preset">
+<option value="#ff0000,#0000ff">Red → blue</option>
+<option value="#ff0000,#00ffff">Red → cyan</option>
+<option value="#ffffff,#ffffff">White → white: identity check</option>
+<option value="#f1d6b8,#3c62bb">Warm tint → blue</option>
+<option value="#005de0,#9a2bd2">Blue → violet</option>
+</select></label>
+<label>Start <input id="a" type="color" value="#ff0000"></label>
+<label>End <input id="b" type="color" value="#0000ff"></label>
+</div>
+<label>Fade position <input id="position" type="range" min="0" max="100" value="50"><output id="percent">50%</output></label>
+<div id="methods"></div>
+<footer>
+<p><strong>Questions to study:</strong> Does the middle become unexpectedly dark or neutral? Does the route preserve the intended palette? Is a neutral midpoint useful here? Try white → white and inspect the last row.</p>
+<p>The current saturated mixer intentionally subtracts the shared RGB component. That prevents pale and neutral colors, so it is unsuitable as a general-purpose stage color mixer. A designed transition may legitimately pass through white.</p>
+<p class="note">Oklab uses the browser's CSS implementation and gamut handling. The linear-light row clamps to the sRGB display range. Neither supplies fixture calibration. Your monitor and viewing conditions also affect the result.</p>
+<p>Sources: <a href="https://www.w3.org/TR/2026/CRD-css-color-4-20260926/#interpolation">W3C CSS Color 4</a> · <a href="https://bottosson.github.io/posts/oklab/">Oklab author reference</a> · <a href="../notes/0022-color-and-fixtures.md">Project color study</a></p>
+</footer>
+<script>
+'use strict';
+// Defined display-space calculations; fixture-control values need a device model.
+function decode(x) { return x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4; }
+function encode(x) { return x <= 0.0031308 ? 12.92 * x : 1.055 * x ** (1 / 2.4) - 0.055; }
+function parseHex(hex) { return [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16) / 255); }
+function blend(a, b, t, method) {
+    let rgb = a.map((x, i) => method === 'linear'
+        ? encode(decode(x) * (1 - t) + decode(b[i]) * t)
+        : x * (1 - t) + b[i] * t);
+    rgb = rgb.map(x => Math.round(Math.max(0, Math.min(1, x)) * 255));
+    if (method === 'current') { const common = Math.min(...rgb); rgb = rgb.map(x => x - common); }
+    return rgb;
+}
+// UI: no timer, autoplay, network fetch, hardware or external script.
+const methods = [
+    ['encoded', 'Average sRGB bytes', 'A direct numeric fade between display values. Convenient, but its midpoint can be darker than expected.'],
+    ['linear', 'Average linear light, then encode', 'Models weighted mixing of these display primaries in linear light. A different goal from equal perceptual steps.'],
+    ['oklab', 'Interpolate in Oklab', 'A perceptual route rendered by the browser. Its midpoint may be less saturated; it does not force a path around a hue wheel.'],
+    ['current', 'Current saturated pad mixer', 'The existing prototype removes the common RGB component after mixing. This row demonstrates that artistic restriction and its limitations.']
+];
+const supported = CSS.supports('color', 'color-mix(in oklab, red, blue)');
+const container = document.getElementById('methods');
+for (const [id, title, note] of methods) {
+    const article = document.createElement('article');
+    article.innerHTML = `<h2>${title}</h2><p class="note">${note}</p><div class="ramp" id="ramp-${id}" aria-label="${title}: transition from start to end"></div><div><span class="sample" id="sample-${id}"></span><output class="readout" id="value-${id}"></output></div>`;
+    container.append(article);
+}
+function update() {
+    const ah = document.getElementById('a').value, bh = document.getElementById('b').value;
+    const a = parseHex(ah), b = parseHex(bh), t = Number(document.getElementById('position').value) / 100;
+    document.getElementById('percent').textContent = `${Math.round(t * 100)}%`;
+    for (const [id] of methods) {
+        const ramp = document.getElementById(`ramp-${id}`);
+        const css = f => id === 'oklab' ? `color-mix(in oklab, ${ah} ${(1-f)*100}%, ${bh} ${f*100}%)` : `rgb(${blend(a,b,f,id).join(' ')})`;
+        ramp.replaceChildren();
+        if (id === 'oklab' && !supported) {
+            document.getElementById(`value-${id}`).textContent = 'This browser does not support Oklab color-mix.';
+            continue;
+        }
+        for (let i = 0; i <= 32; i++) {
+            const swatch = document.createElement('span');
+            swatch.style.backgroundColor = css(i/32);
+            ramp.append(swatch);
+        }
+        document.getElementById(`sample-${id}`).style.backgroundColor = css(t);
+        document.getElementById(`value-${id}`).textContent = id === 'oklab' ? 'Browser-rendered Oklab mix' : css(t);
+    }
+}
+for (const id of ['a','b','position']) document.getElementById(id).addEventListener('input', update);
+document.getElementById('preset').addEventListener('change', event => {
+    const [a,b] = event.target.value.split(',');
+    document.getElementById('a').value = a; document.getElementById('b').value = b; update();
+});
+update();
+</script>
+</html>
