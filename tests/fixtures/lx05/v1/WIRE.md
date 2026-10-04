@@ -80,3 +80,19 @@ silently relabel an old retained contribution. `features.json` is actual owner
 output for qualified exact E09 PCM, active AUTO, aged loss and a real manual
 command/reply under an injected acquisition clock. The normal unit test compares
 it exactly; it contains no provider algorithms or physical measurements.
+
+## Independent release capability
+
+`lx05-v1` analysis is independent of the existing timed-release and durable modes.
+`lux-service --analysis PATH` alone advertises analysis without `release` or
+`checkpoint`. `--timed` adds the existing validated release capability; `--durable`
+includes timed release and adds checkpoint capability. These two mode flags are
+alternatives: `--durable` already enables timing.
+
+For LX05, consumers validate `release` strictly when present and keep static
+operation restrictions when it is absent. A schema name alone never enables a
+timed preview. `checkpoint` is available only when its existing durable capability
+is advertised and validated. Legacy LX03/LX04 required fields are unchanged.
+`untimed-absent.json` is an actual accepted producer inventory with analysis enabled,
+a missing source and neither optional mode; no private paths or physical state
+are included. The original command/feature corpus remains byte-identical.

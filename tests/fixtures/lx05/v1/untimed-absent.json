@@ -1,0 +1,368 @@
+{
+  "analysis": {
+    "analysis_version": "lux.analysis.v1",
+    "automatic_layer": {
+      "values": []
+    },
+    "beat": null,
+    "calibration_generation": null,
+    "calibration_revision": null,
+    "calibration_windows": 0,
+    "confidence": 0,
+    "downbeat": null,
+    "energy_millionths": null,
+    "generation": "1",
+    "grant": null,
+    "harmony": null,
+    "held_reason": null,
+    "losses": "0",
+    "map_revision": null,
+    "proposal": null,
+    "reason": "provider_absent",
+    "rms_millionths": null,
+    "source_age_ms": null,
+    "source_epoch": null,
+    "source_identity": null,
+    "source_window_range": null,
+    "sources": null,
+    "state": "absent"
+  },
+  "applied_auto": "explicit_bounded_intensity_grant",
+  "authority_inventory": {
+    "cues": [],
+    "fixture_masters": [],
+    "palettes": [],
+    "playbacks": []
+  },
+  "blackout": false,
+  "capability_metadata": [
+    {
+      "attributes": [
+        {
+          "attribute": "intensity",
+          "default": 0,
+          "max": 1000,
+          "min": 0,
+          "step": 1,
+          "unit": "tenth_percent"
+        },
+        {
+          "attribute": "red",
+          "default": 0,
+          "max": 1000,
+          "min": 0,
+          "step": 1,
+          "unit": "tenth_percent"
+        },
+        {
+          "attribute": "green",
+          "default": 0,
+          "max": 1000,
+          "min": 0,
+          "step": 1,
+          "unit": "tenth_percent"
+        },
+        {
+          "attribute": "blue",
+          "default": 0,
+          "max": 1000,
+          "min": 0,
+          "step": 1,
+          "unit": "tenth_percent"
+        },
+        {
+          "attribute": "pan",
+          "default": 0,
+          "max": 2700,
+          "min": -2700,
+          "step": 1,
+          "unit": "tenth_degree"
+        },
+        {
+          "attribute": "tilt",
+          "default": 0,
+          "max": 1350,
+          "min": -1350,
+          "step": 1,
+          "unit": "tenth_degree"
+        },
+        {
+          "attribute": "zoom",
+          "default": 50,
+          "max": 450,
+          "min": 50,
+          "step": 1,
+          "unit": "tenth_degree"
+        }
+      ],
+      "coherent_groups": [
+        [
+          "red",
+          "green",
+          "blue"
+        ],
+        [
+          "pan",
+          "tilt"
+        ]
+      ],
+      "fixture": "fixture-11"
+    }
+  ],
+  "grants": [],
+  "groups": [
+    {
+      "fixtures": [
+        "fixture-11"
+      ],
+      "id": "all"
+    }
+  ],
+  "limits": {
+    "cached_responses": 64,
+    "cues": 32,
+    "depth": 12,
+    "fixtures": 32,
+    "lease_ms": 2000,
+    "message_bytes": 65536,
+    "pages": 16,
+    "palettes": 32,
+    "playbacks": 8,
+    "renew_ms": 500,
+    "targets": 64,
+    "writer_history": 1024,
+    "writers": 1
+  },
+  "master": 1000,
+  "mode": "manual",
+  "output": "null_disarmed",
+  "patch": {
+    "fixtures": [
+      {
+        "address": 1,
+        "capabilities": [
+          {
+            "attribute": "intensity",
+            "default": 0,
+            "max": 1000,
+            "min": 0
+          },
+          {
+            "attribute": "red",
+            "default": 0,
+            "max": 1000,
+            "min": 0
+          },
+          {
+            "attribute": "green",
+            "default": 0,
+            "max": 1000,
+            "min": 0
+          },
+          {
+            "attribute": "blue",
+            "default": 0,
+            "max": 1000,
+            "min": 0
+          },
+          {
+            "attribute": "pan",
+            "default": 0,
+            "max": 2700,
+            "min": -2700
+          },
+          {
+            "attribute": "tilt",
+            "default": 0,
+            "max": 1350,
+            "min": -1350
+          },
+          {
+            "attribute": "zoom",
+            "default": 50,
+            "max": 450,
+            "min": 50
+          }
+        ],
+        "id": "fixture-11",
+        "label": "Synthetic",
+        "mode": "rgb_position"
+      }
+    ],
+    "patch_revision": "1",
+    "version": 1
+  },
+  "physical": "unknown",
+  "scope": "lighting-control",
+  "snapshot": {
+    "durability": "volatile",
+    "epoch": "1",
+    "fixtures": [
+      {
+        "attributes": [
+          {
+            "attribute": "intensity",
+            "clamped": false,
+            "contributors": [
+              {
+                "source": "fixture_default",
+                "value": 0,
+                "winner": true
+              }
+            ],
+            "final_intent": 0,
+            "hold": null,
+            "inhibit": "none",
+            "observed": null,
+            "playing": [],
+            "programmer": null,
+            "proposal": null,
+            "resolved": 0,
+            "source": "fixture_default",
+            "stored": [],
+            "submitted": null
+          },
+          {
+            "attribute": "red",
+            "clamped": false,
+            "contributors": [
+              {
+                "source": "fixture_default",
+                "value": 0,
+                "winner": true
+              }
+            ],
+            "final_intent": 0,
+            "hold": null,
+            "inhibit": "none",
+            "observed": null,
+            "playing": [],
+            "programmer": null,
+            "proposal": null,
+            "resolved": 0,
+            "source": "fixture_default",
+            "stored": [],
+            "submitted": null
+          },
+          {
+            "attribute": "green",
+            "clamped": false,
+            "contributors": [
+              {
+                "source": "fixture_default",
+                "value": 0,
+                "winner": true
+              }
+            ],
+            "final_intent": 0,
+            "hold": null,
+            "inhibit": "none",
+            "observed": null,
+            "playing": [],
+            "programmer": null,
+            "proposal": null,
+            "resolved": 0,
+            "source": "fixture_default",
+            "stored": [],
+            "submitted": null
+          },
+          {
+            "attribute": "blue",
+            "clamped": false,
+            "contributors": [
+              {
+                "source": "fixture_default",
+                "value": 0,
+                "winner": true
+              }
+            ],
+            "final_intent": 0,
+            "hold": null,
+            "inhibit": "none",
+            "observed": null,
+            "playing": [],
+            "programmer": null,
+            "proposal": null,
+            "resolved": 0,
+            "source": "fixture_default",
+            "stored": [],
+            "submitted": null
+          },
+          {
+            "attribute": "pan",
+            "clamped": false,
+            "contributors": [
+              {
+                "source": "fixture_default",
+                "value": 0,
+                "winner": true
+              }
+            ],
+            "final_intent": 0,
+            "hold": null,
+            "inhibit": "none",
+            "observed": null,
+            "playing": [],
+            "programmer": null,
+            "proposal": null,
+            "resolved": 0,
+            "source": "fixture_default",
+            "stored": [],
+            "submitted": null
+          },
+          {
+            "attribute": "tilt",
+            "clamped": false,
+            "contributors": [
+              {
+                "source": "fixture_default",
+                "value": 0,
+                "winner": true
+              }
+            ],
+            "final_intent": 0,
+            "hold": null,
+            "inhibit": "none",
+            "observed": null,
+            "playing": [],
+            "programmer": null,
+            "proposal": null,
+            "resolved": 0,
+            "source": "fixture_default",
+            "stored": [],
+            "submitted": null
+          },
+          {
+            "attribute": "zoom",
+            "clamped": false,
+            "contributors": [
+              {
+                "source": "fixture_default",
+                "value": 50,
+                "winner": true
+              }
+            ],
+            "final_intent": 50,
+            "hold": null,
+            "inhibit": "none",
+            "observed": null,
+            "playing": [],
+            "programmer": null,
+            "proposal": null,
+            "resolved": 50,
+            "source": "fixture_default",
+            "stored": [],
+            "submitted": null
+          }
+        ],
+        "fixture": "fixture-11"
+      }
+    ],
+    "patch_revision": "1",
+    "revision": "0",
+    "show_id": "11111111-1111-4111-8111-111111111111",
+    "version": 1
+  },
+  "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+  "wire_schema": "lx05-v1"
+}

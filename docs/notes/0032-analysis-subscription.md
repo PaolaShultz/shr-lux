@@ -63,3 +63,16 @@ tests, warning-denied Clippy, fmt,8PTY,6fast simulation checks, legacy corpus
 validation and actual release/checkpoint/restart checks. See the owning plan for
 commands/counts. Exact artifact/evidence hashes remain in the private handoff;
 physical and combined-load acceptance remain separate.
+
+### Analysis without timed release
+
+A final consumer check also exercised the accepted release with `--analysis` alone.
+Its actual LX05 inventory advertises analysis while omitting release/checkpoint;
+this valid combination is captured in `tests/fixtures/lx05/v1/untimed-absent.json`.
+The wire note now states that analysis and the explicit timed/durable modes are
+independent. Consumers must validate advertised capabilities before timed preview
+or checkpoint operations. `--durable` includes timing, so it replaces `--timed`.
+Provider code and the original command/feature corpus are unchanged. The existing
+full normal/style/release evidence is reused for this documentation/fixture change;
+the additional actual process check joined its child before removing its private
+socket directory. This remains synthetic null-output software acceptance.
