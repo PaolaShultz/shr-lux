@@ -7,6 +7,13 @@ scenes in an 80×25 terminal or on MiniLab mkII pads.
 **Status: working recorded-audio simulation with source activity, kick candidates,
 kick pulse estimates, automatic scenes and optional MiniLab mkII pad output.
 Live audio capture, MIDI input controls and DMX output remain pending.**
+Integrated software additionally provides a private null-output lighting authority
+with programmer/Hold/cue/playback state, timed release and disarmed checkpoint
+recovery (LX-01–04). LX-05 adds an explicit named analysis subscription, ASSIST
+proposals and bounded intensity AUTO grants; device-free software validation passed and is recorded
+in [the owning plan](docs/notes/0027-gigpies-implementation.md) and
+[analysis protocol/evidence](docs/notes/0032-analysis-subscription.md).
+
 Minimum design target: Raspberry Pi 1 with 512 MB; hardware validation pending.
 The connected uDMX dongle responds to USB descriptor queries; physical lighting output
 has not been tested. Read [hardware evidence](docs/notes/0002-hardware-baseline.md).

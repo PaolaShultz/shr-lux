@@ -3,4 +3,5 @@
 /docs/.zk/*.log
 /recordings/
 /local/
+__pycache__/
 .env

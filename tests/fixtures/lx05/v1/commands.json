@@ -1,0 +1,1601 @@
+{
+  "cases": [
+    {
+      "input": {
+        "body": {
+          "scope": "lighting-control"
+        },
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": "0",
+        "kind": "grant",
+        "lease": null,
+        "module": "lighting",
+        "request_id": "1",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      },
+      "inventory": {
+        "analysis": {
+          "analysis_version": "lux.analysis.v1",
+          "automatic_layer": {
+            "values": []
+          },
+          "beat": null,
+          "calibration_generation": null,
+          "calibration_revision": null,
+          "calibration_windows": 0,
+          "confidence": 0,
+          "downbeat": null,
+          "energy_millionths": null,
+          "generation": "0",
+          "grant": null,
+          "harmony": null,
+          "held_reason": null,
+          "losses": "0",
+          "map_revision": null,
+          "proposal": null,
+          "reason": "provider_absent",
+          "rms_millionths": null,
+          "source_age_ms": null,
+          "source_epoch": null,
+          "source_identity": null,
+          "source_window_range": null,
+          "sources": null,
+          "state": "absent"
+        },
+        "applied_auto": "explicit_bounded_intensity_grant",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue-1",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "fixture-11",
+                  "value": 300
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": []
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "red",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "green",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "blue",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [
+              [
+                "red",
+                "green",
+                "blue"
+              ]
+            ],
+            "fixture": "fixture-11"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "fixture-12"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "fixture-11",
+              "fixture-12"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "red",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "green",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "blue",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "fixture-11",
+              "label": "Synthetic",
+              "mode": "rgb"
+            },
+            {
+              "address": 5,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "fixture-12",
+              "label": "Other",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [
+                    {
+                      "id": "cue-1",
+                      "kind": "cue",
+                      "value": 300
+                    }
+                  ],
+                  "submitted": null
+                },
+                {
+                  "attribute": "red",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                },
+                {
+                  "attribute": "green",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                },
+                {
+                  "attribute": "blue",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                }
+              ],
+              "fixture": "fixture-11"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                }
+              ],
+              "fixture": "fixture-12"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "0",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx05-v1"
+      },
+      "reply": {
+        "body": {
+          "lease": "1",
+          "remaining_ms": 2000,
+          "scope": "lighting-control"
+        },
+        "contract": "C-LIGHT",
+        "effective_tick": "0",
+        "epoch": "9",
+        "expected_revision": "0",
+        "kind": "applied",
+        "lease": null,
+        "module": "lighting",
+        "reason": null,
+        "request_id": "1",
+        "revision": "0",
+        "sequence": "1",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      }
+    },
+    {
+      "command": {
+        "action": "mode",
+        "mode": "auto"
+      },
+      "inventory": {
+        "analysis": {
+          "analysis_version": "lux.analysis.v1",
+          "automatic_layer": {
+            "values": [
+              {
+                "fixture": "fixture-11",
+                "held_reason": "mode_entry",
+                "intensity": 0,
+                "provenance": null,
+                "source": "mode-entry-continuity"
+              },
+              {
+                "fixture": "fixture-12",
+                "held_reason": "mode_entry",
+                "intensity": 0,
+                "provenance": null,
+                "source": "mode-entry-continuity"
+              }
+            ]
+          },
+          "beat": null,
+          "calibration_generation": null,
+          "calibration_revision": null,
+          "calibration_windows": 0,
+          "confidence": 0,
+          "downbeat": null,
+          "energy_millionths": null,
+          "generation": "0",
+          "grant": null,
+          "harmony": null,
+          "held_reason": null,
+          "losses": "0",
+          "map_revision": null,
+          "proposal": null,
+          "reason": "provider_absent",
+          "rms_millionths": null,
+          "source_age_ms": null,
+          "source_epoch": null,
+          "source_identity": null,
+          "source_window_range": null,
+          "sources": null,
+          "state": "absent"
+        },
+        "applied_auto": "explicit_bounded_intensity_grant",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue-1",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "fixture-11",
+                  "value": 300
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": []
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "red",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "green",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "blue",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [
+              [
+                "red",
+                "green",
+                "blue"
+              ]
+            ],
+            "fixture": "fixture-11"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "fixture-12"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "fixture-11",
+              "fixture-12"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "auto",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "red",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "green",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "blue",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "fixture-11",
+              "label": "Synthetic",
+              "mode": "rgb"
+            },
+            {
+              "address": 5,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "fixture-12",
+              "label": "Other",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "auto": 0,
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "auto": "mode-entry-continuity"
+                      },
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": {
+                    "auto": "mode-entry-continuity"
+                  },
+                  "stored": [
+                    {
+                      "id": "cue-1",
+                      "kind": "cue",
+                      "value": 300
+                    }
+                  ],
+                  "submitted": null
+                },
+                {
+                  "attribute": "red",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                },
+                {
+                  "attribute": "green",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                },
+                {
+                  "attribute": "blue",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                }
+              ],
+              "fixture": "fixture-11"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "auto": 0,
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "auto": "mode-entry-continuity"
+                      },
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": {
+                    "auto": "mode-entry-continuity"
+                  },
+                  "stored": [],
+                  "submitted": null
+                }
+              ],
+              "fixture": "fixture-12"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "1",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx05-v1"
+      },
+      "reply": {
+        "body": {
+          "application": "logical_static",
+          "output": "null_disarmed",
+          "physical": "unknown"
+        },
+        "contract": "C-LIGHT",
+        "effective_tick": "0",
+        "epoch": "9",
+        "expected_revision": "0",
+        "kind": "applied",
+        "lease": "1",
+        "module": "lighting",
+        "reason": null,
+        "request_id": "2",
+        "revision": "1",
+        "sequence": "2",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      }
+    },
+    {
+      "command": {
+        "action": "analysis_grant",
+        "cap": 500,
+        "fixtures": [
+          "fixture-11"
+        ],
+        "ttl_ms": 1000
+      },
+      "inventory": {
+        "analysis": {
+          "analysis_version": "lux.analysis.v1",
+          "automatic_layer": {
+            "values": [
+              {
+                "fixture": "fixture-11",
+                "held_reason": "mode_entry",
+                "intensity": 0,
+                "provenance": null,
+                "source": "mode-entry-continuity"
+              },
+              {
+                "fixture": "fixture-12",
+                "held_reason": "mode_entry",
+                "intensity": 0,
+                "provenance": null,
+                "source": "mode-entry-continuity"
+              }
+            ]
+          },
+          "beat": null,
+          "calibration_generation": null,
+          "calibration_revision": null,
+          "calibration_windows": 0,
+          "confidence": 0,
+          "downbeat": null,
+          "energy_millionths": null,
+          "generation": "0",
+          "grant": null,
+          "harmony": null,
+          "held_reason": null,
+          "losses": "0",
+          "map_revision": null,
+          "proposal": null,
+          "reason": "provider_absent",
+          "rms_millionths": null,
+          "source_age_ms": null,
+          "source_epoch": null,
+          "source_identity": null,
+          "source_window_range": null,
+          "sources": null,
+          "state": "absent"
+        },
+        "applied_auto": "explicit_bounded_intensity_grant",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue-1",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "fixture-11",
+                  "value": 300
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": []
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "red",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "green",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "blue",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [
+              [
+                "red",
+                "green",
+                "blue"
+              ]
+            ],
+            "fixture": "fixture-11"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "fixture-12"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "fixture-11",
+              "fixture-12"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "auto",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "red",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "green",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "blue",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "fixture-11",
+              "label": "Synthetic",
+              "mode": "rgb"
+            },
+            {
+              "address": 5,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "fixture-12",
+              "label": "Other",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "auto": 0,
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "auto": "mode-entry-continuity"
+                      },
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": {
+                    "auto": "mode-entry-continuity"
+                  },
+                  "stored": [
+                    {
+                      "id": "cue-1",
+                      "kind": "cue",
+                      "value": 300
+                    }
+                  ],
+                  "submitted": null
+                },
+                {
+                  "attribute": "red",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                },
+                {
+                  "attribute": "green",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                },
+                {
+                  "attribute": "blue",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "fixture_default",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "fixture_default",
+                  "stored": [],
+                  "submitted": null
+                }
+              ],
+              "fixture": "fixture-11"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "auto": 0,
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "auto": "mode-entry-continuity"
+                      },
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": {
+                    "auto": "mode-entry-continuity"
+                  },
+                  "stored": [],
+                  "submitted": null
+                }
+              ],
+              "fixture": "fixture-12"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "1",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx05-v1"
+      },
+      "reply": {
+        "body": null,
+        "contract": "C-LIGHT",
+        "effective_tick": "0",
+        "epoch": "9",
+        "expected_revision": "1",
+        "kind": "rejected",
+        "lease": "1",
+        "module": "lighting",
+        "reason": "analysis_unavailable",
+        "request_id": "3",
+        "revision": "1",
+        "sequence": "3",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      }
+    },
+    {
+      "command": {
+        "action": "mode",
+        "mode": "assist"
+      },
+      "inventory": {
+        "analysis": {
+          "analysis_version": "lux.analysis.v1",
+          "automatic_layer": {
+            "values": []
+          },
+          "beat": null,
+          "calibration_generation": null,
+          "calibration_revision": null,
+          "calibration_windows": 0,
+          "confidence": 0,
+          "downbeat": null,
+          "energy_millionths": null,
+          "generation": "0",
+          "grant": null,
+          "harmony": null,
+          "held_reason": null,
+          "losses": "0",
+          "map_revision": null,
+          "proposal": null,
+          "reason": "provider_absent",
+          "rms_millionths": null,
+          "source_age_ms": null,
+          "source_epoch": null,
+          "source_identity": null,
+          "source_window_range": null,
+          "sources": null,
+          "state": "absent"
+        },
+        "applied_auto": "explicit_bounded_intensity_grant",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue-1",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "fixture-11",
+                  "value": 300
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": []
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "red",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "green",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              },
+              {
+                "attribute": "blue",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [
+              [
+                "red",
+                "green",
+                "blue"
+              ]
+            ],
+            "fixture": "fixture-11"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "fixture-12"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "fixture-11",
+              "fixture-12"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "assist",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "red",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "green",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                },
+                {
+                  "attribute": "blue",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "fixture-11",
+              "label": "Synthetic",
+              "mode": "rgb"
+            },
+            {
+              "address": 5,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "fixture-12",
+              "label": "Other",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "hold",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": 0,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue-1",
+                      "kind": "cue",
+                      "value": 300
+                    }
+                  ],
+                  "submitted": null
+                },
+                {
+                  "attribute": "red",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "hold",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": 0,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "hold",
+                  "stored": [],
+                  "submitted": null
+                },
+                {
+                  "attribute": "green",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "hold",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": 0,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "hold",
+                  "stored": [],
+                  "submitted": null
+                },
+                {
+                  "attribute": "blue",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "hold",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": 0,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "hold",
+                  "stored": [],
+                  "submitted": null
+                }
+              ],
+              "fixture": "fixture-11"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": "hold",
+                      "value": 0,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 0,
+                  "hold": 0,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 0,
+                  "source": "hold",
+                  "stored": [],
+                  "submitted": null
+                }
+              ],
+              "fixture": "fixture-12"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "2",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx05-v1"
+      },
+      "reply": {
+        "body": {
+          "application": "logical_static",
+          "output": "null_disarmed",
+          "physical": "unknown"
+        },
+        "contract": "C-LIGHT",
+        "effective_tick": "0",
+        "epoch": "9",
+        "expected_revision": "1",
+        "kind": "applied",
+        "lease": "1",
+        "module": "lighting",
+        "reason": null,
+        "request_id": "4",
+        "revision": "2",
+        "sequence": "4",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      }
+    },
+    {
+      "input": {
+        "body": {},
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": null,
+        "kind": "analysis_status",
+        "lease": null,
+        "module": "lighting",
+        "request_id": null,
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": null
+      },
+      "reply": {
+        "body": {
+          "analysis": {
+            "analysis_version": "lux.analysis.v1",
+            "automatic_layer": {
+              "values": []
+            },
+            "beat": null,
+            "calibration_generation": null,
+            "calibration_revision": null,
+            "calibration_windows": 0,
+            "confidence": 0,
+            "downbeat": null,
+            "energy_millionths": null,
+            "generation": "0",
+            "grant": null,
+            "harmony": null,
+            "held_reason": null,
+            "losses": "0",
+            "map_revision": null,
+            "proposal": null,
+            "reason": "provider_absent",
+            "rms_millionths": null,
+            "source_age_ms": null,
+            "source_epoch": null,
+            "source_identity": null,
+            "source_window_range": null,
+            "sources": null,
+            "state": "absent"
+          },
+          "wire_schema": "lx05-v1"
+        },
+        "contract": "C-LIGHT",
+        "effective_tick": "0",
+        "epoch": "9",
+        "expected_revision": null,
+        "kind": "analysis_status",
+        "lease": null,
+        "module": "lighting",
+        "reason": null,
+        "request_id": null,
+        "revision": "2",
+        "sequence": "5",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": null
+      }
+    }
+  ],
+  "provenance": "Actual Lux Service over Authority; synthetic patch, absent provider, no output. Unavailable grant and mode-entry retained AUTO are real owner results.",
+  "schema": "lx05-v1"
+}

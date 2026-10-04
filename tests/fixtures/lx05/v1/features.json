@@ -1,0 +1,769 @@
+{
+  "active": {
+    "analysis": {
+      "analysis_version": "lux.analysis.v1",
+      "automatic_layer": {
+        "values": [
+          {
+            "fixture": "fixture-11",
+            "held_reason": null,
+            "intensity": 20,
+            "provenance": {
+              "analysis_version": "lux.analysis.v1",
+              "calibration_generation": "2",
+              "confidence": 1000,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "analysis-active"
+          }
+        ]
+      },
+      "beat": null,
+      "calibration_generation": "2",
+      "calibration_revision": "2",
+      "calibration_windows": 50,
+      "confidence": 1000,
+      "downbeat": null,
+      "energy_millionths": 520261,
+      "generation": "2",
+      "grant": {
+        "analysis_generation": "2",
+        "cap": 500,
+        "expiry_tick": "100",
+        "fixtures": [
+          "fixture-11"
+        ],
+        "issue_revision": "1",
+        "lease": "1",
+        "patch_revision": "1",
+        "writer": "clock-test"
+      },
+      "harmony": null,
+      "held_reason": null,
+      "losses": "0",
+      "map_revision": "1",
+      "proposal": 250,
+      "reason": null,
+      "rms_millionths": [
+        4364,
+        8727,
+        13091,
+        17455
+      ],
+      "source_age_ms": 0,
+      "source_epoch": "9",
+      "source_identity": {
+        "calibration_revision": "2",
+        "clock": "linux-clock-monotonic-ms",
+        "contract": "C-ANALYSIS",
+        "first_frame": "48000",
+        "inputs": [
+          "input-01",
+          "input-02",
+          "input-03",
+          "input-04"
+        ],
+        "map_revision": "1",
+        "sample_rate": 48000,
+        "source_epoch": "9",
+        "sources": [
+          "kick",
+          "bass",
+          "guitar-1",
+          "guitar-2"
+        ],
+        "stream": 3,
+        "subscription": "lux.aux.v1",
+        "tap": "raw-pre-fader",
+        "version": 1
+      },
+      "source_window_range": {
+        "end_frame_exclusive": "101280",
+        "first_frame": "100800"
+      },
+      "sources": [
+        "kick",
+        "bass",
+        "guitar-1",
+        "guitar-2"
+      ],
+      "state": "ready"
+    },
+    "applied_auto": "explicit_bounded_intensity_grant",
+    "authority_inventory": {
+      "cues": [],
+      "fixture_masters": [],
+      "palettes": [],
+      "playbacks": []
+    },
+    "blackout": false,
+    "capability_metadata": [
+      {
+        "attributes": [
+          {
+            "attribute": "intensity",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          }
+        ],
+        "coherent_groups": [],
+        "fixture": "fixture-11"
+      }
+    ],
+    "grants": [
+      {
+        "remaining_ms": 1990,
+        "scope": "lighting-control",
+        "writer": "clock-test"
+      }
+    ],
+    "groups": [
+      {
+        "fixtures": [
+          "fixture-11"
+        ],
+        "id": "all"
+      }
+    ],
+    "limits": {
+      "cached_responses": 64,
+      "cues": 32,
+      "depth": 12,
+      "fixtures": 32,
+      "lease_ms": 2000,
+      "message_bytes": 65536,
+      "pages": 16,
+      "palettes": 32,
+      "playbacks": 8,
+      "renew_ms": 500,
+      "targets": 64,
+      "writer_history": 1024,
+      "writers": 1
+    },
+    "master": 1000,
+    "mode": "auto",
+    "output": "null_disarmed",
+    "patch": {
+      "fixtures": [
+        {
+          "address": 1,
+          "capabilities": [
+            {
+              "attribute": "intensity",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            }
+          ],
+          "id": "fixture-11",
+          "label": "Synthetic",
+          "mode": "dimmer"
+        }
+      ],
+      "patch_revision": "1",
+      "version": 1
+    },
+    "physical": "unknown",
+    "release": {
+      "preview_available": false,
+      "preview_validity_ms": 2000,
+      "transition": null,
+      "transition_ms": 500
+    },
+    "scope": "lighting-control",
+    "snapshot": {
+      "durability": "volatile",
+      "epoch": "9",
+      "fixtures": [
+        {
+          "attributes": [
+            {
+              "attribute": "intensity",
+              "auto": 20,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "analysis-active"
+                  },
+                  "value": 20,
+                  "winner": true
+                }
+              ],
+              "final_intent": 20,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 20,
+              "source": {
+                "auto": "analysis-active"
+              },
+              "stored": [],
+              "submitted": null
+            }
+          ],
+          "fixture": "fixture-11"
+        }
+      ],
+      "patch_revision": "1",
+      "revision": "2",
+      "show_id": "11111111-1111-4111-8111-111111111111",
+      "version": 1
+    },
+    "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+    "wire_schema": "lx05-v1"
+  },
+  "aged_loss": {
+    "analysis": {
+      "analysis_version": "lux.analysis.v1",
+      "automatic_layer": {
+        "values": [
+          {
+            "fixture": "fixture-11",
+            "held_reason": "analysis_loss_or_change",
+            "intensity": 20,
+            "provenance": {
+              "analysis_version": "lux.analysis.v1",
+              "calibration_generation": "2",
+              "confidence": 1000,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "analysis-held"
+          }
+        ]
+      },
+      "beat": null,
+      "calibration_generation": null,
+      "calibration_revision": "2",
+      "calibration_windows": 50,
+      "confidence": 0,
+      "downbeat": null,
+      "energy_millionths": null,
+      "generation": "3",
+      "grant": null,
+      "harmony": null,
+      "held_reason": "analysis_loss_or_change",
+      "losses": "0",
+      "map_revision": "1",
+      "proposal": null,
+      "reason": "age",
+      "rms_millionths": null,
+      "source_age_ms": 101,
+      "source_epoch": "9",
+      "source_identity": {
+        "calibration_revision": "2",
+        "clock": "linux-clock-monotonic-ms",
+        "contract": "C-ANALYSIS",
+        "first_frame": "48000",
+        "inputs": [
+          "input-01",
+          "input-02",
+          "input-03",
+          "input-04"
+        ],
+        "map_revision": "1",
+        "sample_rate": 48000,
+        "source_epoch": "9",
+        "sources": [
+          "kick",
+          "bass",
+          "guitar-1",
+          "guitar-2"
+        ],
+        "stream": 3,
+        "subscription": "lux.aux.v1",
+        "tap": "raw-pre-fader",
+        "version": 1
+      },
+      "source_window_range": {
+        "end_frame_exclusive": "101280",
+        "first_frame": "100800"
+      },
+      "sources": [
+        "kick",
+        "bass",
+        "guitar-1",
+        "guitar-2"
+      ],
+      "state": "stale"
+    },
+    "applied_auto": "explicit_bounded_intensity_grant",
+    "authority_inventory": {
+      "cues": [],
+      "fixture_masters": [],
+      "palettes": [],
+      "playbacks": []
+    },
+    "blackout": false,
+    "capability_metadata": [
+      {
+        "attributes": [
+          {
+            "attribute": "intensity",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          }
+        ],
+        "coherent_groups": [],
+        "fixture": "fixture-11"
+      }
+    ],
+    "grants": [
+      {
+        "remaining_ms": 1980,
+        "scope": "lighting-control",
+        "writer": "clock-test"
+      }
+    ],
+    "groups": [
+      {
+        "fixtures": [
+          "fixture-11"
+        ],
+        "id": "all"
+      }
+    ],
+    "limits": {
+      "cached_responses": 64,
+      "cues": 32,
+      "depth": 12,
+      "fixtures": 32,
+      "lease_ms": 2000,
+      "message_bytes": 65536,
+      "pages": 16,
+      "palettes": 32,
+      "playbacks": 8,
+      "renew_ms": 500,
+      "targets": 64,
+      "writer_history": 1024,
+      "writers": 1
+    },
+    "master": 1000,
+    "mode": "auto",
+    "output": "null_disarmed",
+    "patch": {
+      "fixtures": [
+        {
+          "address": 1,
+          "capabilities": [
+            {
+              "attribute": "intensity",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            }
+          ],
+          "id": "fixture-11",
+          "label": "Synthetic",
+          "mode": "dimmer"
+        }
+      ],
+      "patch_revision": "1",
+      "version": 1
+    },
+    "physical": "unknown",
+    "release": {
+      "preview_available": false,
+      "preview_validity_ms": 2000,
+      "transition": null,
+      "transition_ms": 500
+    },
+    "scope": "lighting-control",
+    "snapshot": {
+      "durability": "volatile",
+      "epoch": "9",
+      "fixtures": [
+        {
+          "attributes": [
+            {
+              "attribute": "intensity",
+              "auto": 20,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "analysis-held"
+                  },
+                  "value": 20,
+                  "winner": true
+                }
+              ],
+              "final_intent": 20,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 20,
+              "source": {
+                "auto": "analysis-held"
+              },
+              "stored": [],
+              "submitted": null
+            }
+          ],
+          "fixture": "fixture-11"
+        }
+      ],
+      "patch_revision": "1",
+      "revision": "3",
+      "show_id": "11111111-1111-4111-8111-111111111111",
+      "version": 1
+    },
+    "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+    "wire_schema": "lx05-v1"
+  },
+  "manual": {
+    "inventory": {
+      "analysis": {
+        "analysis_version": "lux.analysis.v1",
+        "automatic_layer": {
+          "values": [
+            {
+              "fixture": "fixture-11",
+              "held_reason": "analysis_loss_or_change",
+              "intensity": 20,
+              "provenance": {
+                "analysis_version": "lux.analysis.v1",
+                "calibration_generation": "2",
+                "confidence": 1000,
+                "source_identity": {
+                  "calibration_revision": "2",
+                  "clock": "linux-clock-monotonic-ms",
+                  "contract": "C-ANALYSIS",
+                  "first_frame": "48000",
+                  "inputs": [
+                    "input-01",
+                    "input-02",
+                    "input-03",
+                    "input-04"
+                  ],
+                  "map_revision": "1",
+                  "sample_rate": 48000,
+                  "source_epoch": "9",
+                  "sources": [
+                    "kick",
+                    "bass",
+                    "guitar-1",
+                    "guitar-2"
+                  ],
+                  "stream": 3,
+                  "subscription": "lux.aux.v1",
+                  "tap": "raw-pre-fader",
+                  "version": 1
+                },
+                "source_window_range": {
+                  "end_frame_exclusive": "101280",
+                  "first_frame": "100800"
+                }
+              },
+              "source": "analysis-held"
+            }
+          ]
+        },
+        "beat": null,
+        "calibration_generation": null,
+        "calibration_revision": "2",
+        "calibration_windows": 50,
+        "confidence": 0,
+        "downbeat": null,
+        "energy_millionths": null,
+        "generation": "3",
+        "grant": null,
+        "harmony": null,
+        "held_reason": "analysis_loss_or_change",
+        "losses": "0",
+        "map_revision": "1",
+        "proposal": null,
+        "reason": "age",
+        "rms_millionths": null,
+        "source_age_ms": 101,
+        "source_epoch": "9",
+        "source_identity": {
+          "calibration_revision": "2",
+          "clock": "linux-clock-monotonic-ms",
+          "contract": "C-ANALYSIS",
+          "first_frame": "48000",
+          "inputs": [
+            "input-01",
+            "input-02",
+            "input-03",
+            "input-04"
+          ],
+          "map_revision": "1",
+          "sample_rate": 48000,
+          "source_epoch": "9",
+          "sources": [
+            "kick",
+            "bass",
+            "guitar-1",
+            "guitar-2"
+          ],
+          "stream": 3,
+          "subscription": "lux.aux.v1",
+          "tap": "raw-pre-fader",
+          "version": 1
+        },
+        "source_window_range": {
+          "end_frame_exclusive": "101280",
+          "first_frame": "100800"
+        },
+        "sources": [
+          "kick",
+          "bass",
+          "guitar-1",
+          "guitar-2"
+        ],
+        "state": "stale"
+      },
+      "applied_auto": "explicit_bounded_intensity_grant",
+      "authority_inventory": {
+        "cues": [],
+        "fixture_masters": [],
+        "palettes": [],
+        "playbacks": []
+      },
+      "blackout": false,
+      "capability_metadata": [
+        {
+          "attributes": [
+            {
+              "attribute": "intensity",
+              "default": 0,
+              "max": 1000,
+              "min": 0,
+              "step": 1,
+              "unit": "tenth_percent"
+            }
+          ],
+          "coherent_groups": [],
+          "fixture": "fixture-11"
+        }
+      ],
+      "grants": [
+        {
+          "remaining_ms": 1980,
+          "scope": "lighting-control",
+          "writer": "clock-test"
+        }
+      ],
+      "groups": [
+        {
+          "fixtures": [
+            "fixture-11"
+          ],
+          "id": "all"
+        }
+      ],
+      "limits": {
+        "cached_responses": 64,
+        "cues": 32,
+        "depth": 12,
+        "fixtures": 32,
+        "lease_ms": 2000,
+        "message_bytes": 65536,
+        "pages": 16,
+        "palettes": 32,
+        "playbacks": 8,
+        "renew_ms": 500,
+        "targets": 64,
+        "writer_history": 1024,
+        "writers": 1
+      },
+      "master": 1000,
+      "mode": "auto",
+      "output": "null_disarmed",
+      "patch": {
+        "fixtures": [
+          {
+            "address": 1,
+            "capabilities": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0
+              }
+            ],
+            "id": "fixture-11",
+            "label": "Synthetic",
+            "mode": "dimmer"
+          }
+        ],
+        "patch_revision": "1",
+        "version": 1
+      },
+      "physical": "unknown",
+      "release": {
+        "preview_available": false,
+        "preview_validity_ms": 2000,
+        "transition": null,
+        "transition_ms": 500
+      },
+      "scope": "lighting-control",
+      "snapshot": {
+        "durability": "volatile",
+        "epoch": "9",
+        "fixtures": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "auto": 20,
+                "clamped": false,
+                "contributors": [
+                  {
+                    "source": {
+                      "auto": "analysis-held"
+                    },
+                    "value": 20,
+                    "winner": false
+                  },
+                  {
+                    "source": "programmer",
+                    "value": 900,
+                    "winner": true
+                  }
+                ],
+                "final_intent": 900,
+                "hold": null,
+                "inhibit": "none",
+                "observed": null,
+                "playing": [],
+                "programmer": 900,
+                "proposal": null,
+                "resolved": 900,
+                "source": "programmer",
+                "stored": [],
+                "submitted": null
+              }
+            ],
+            "fixture": "fixture-11"
+          }
+        ],
+        "patch_revision": "1",
+        "revision": "4",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1
+      },
+      "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+      "wire_schema": "lx05-v1"
+    },
+    "replies": [
+      {
+        "body": {
+          "application": "logical_static",
+          "output": "null_disarmed",
+          "physical": "unknown"
+        },
+        "contract": "C-LIGHT",
+        "effective_tick": "2",
+        "epoch": "9",
+        "expected_revision": "3",
+        "kind": "applied",
+        "lease": "1",
+        "module": "lighting",
+        "reason": null,
+        "request_id": "2",
+        "revision": "4",
+        "sequence": "1",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "clock-test"
+      }
+    ],
+    "request": {
+      "body": {
+        "command": {
+          "action": "touch",
+          "values": [
+            {
+              "attribute": "intensity",
+              "fixture": "fixture-11",
+              "value": 900
+            }
+          ]
+        },
+        "scope": "lighting-control"
+      },
+      "contract": "C-LIGHT",
+      "epoch": "9",
+      "expected_revision": "3",
+      "kind": "command",
+      "lease": "1",
+      "module": "lighting",
+      "request_id": "2",
+      "show_id": "11111111-1111-4111-8111-111111111111",
+      "version": 1,
+      "writer": "clock-test"
+    }
+  },
+  "provenance": "Actual independent Lux PCM decoder/Calibrator/Analyzer/Director and Authority/Service. Exact accepted E09 PCM; injected same-host acquisition clock1000/1101ms, synthetic fixture; no physical output.",
+  "schema": "lx05-v1"
+}

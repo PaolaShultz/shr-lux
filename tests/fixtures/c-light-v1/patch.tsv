@@ -1,0 +1,9 @@
+case	mode	address	second_address	intensity_default	expected
+last_dimmer	dimmer	512	null	0	valid
+last_rgb	rgb	509	null	0	valid
+last_position	rgb_position	506	null	0	valid
+zero_address	dimmer	0	null	0	address
+universe_overflow	rgb_position	507	null	0	address
+overlap	rgb	1	4	0	overlap
+adjacent	rgb	1	5	0	valid
+bad_default	dimmer	1	null	1001	default

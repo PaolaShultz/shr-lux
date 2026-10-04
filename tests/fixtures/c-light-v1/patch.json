@@ -1,0 +1,78 @@
+{
+  "contract": "C-LIGHT",
+  "version": 1,
+  "patch_revision": "1",
+  "fixtures": [
+    {
+      "id": "fixture-11",
+      "label": "Invented fixture",
+      "synthetic": true,
+      "mode": "synthetic-rgb-position-v1",
+      "universe": 1,
+      "address": 1,
+      "footprint": 7,
+      "capabilities": [
+        {
+          "attribute": "intensity",
+          "unit": "tenth_percent",
+          "min": 0,
+          "max": 1000,
+          "default": 0
+        },
+        {
+          "attribute": "red",
+          "unit": "tenth_percent",
+          "min": 0,
+          "max": 1000,
+          "default": 0
+        },
+        {
+          "attribute": "green",
+          "unit": "tenth_percent",
+          "min": 0,
+          "max": 1000,
+          "default": 0
+        },
+        {
+          "attribute": "blue",
+          "unit": "tenth_percent",
+          "min": 0,
+          "max": 1000,
+          "default": 0
+        },
+        {
+          "attribute": "pan",
+          "unit": "tenth_degree",
+          "min": -2700,
+          "max": 2700,
+          "default": 0
+        },
+        {
+          "attribute": "tilt",
+          "unit": "tenth_degree",
+          "min": -1350,
+          "max": 1350,
+          "default": 0
+        },
+        {
+          "attribute": "zoom",
+          "unit": "tenth_degree",
+          "min": 50,
+          "max": 450,
+          "default": 50
+        }
+      ],
+      "coherent_groups": [
+        [
+          "red",
+          "green",
+          "blue"
+        ],
+        [
+          "pan",
+          "tilt"
+        ]
+      ]
+    }
+  ]
+}

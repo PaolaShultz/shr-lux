@@ -28,6 +28,7 @@ impl Calibration {
 
 /// Bounded level histogram. For file simulation this is an explicit soundcheck
 /// pass over the file. The causal analyzer never reads future samples.
+#[derive(Clone)]
 pub struct Calibrator {
     bins: [[u32; 81]; 4],
 }
@@ -111,6 +112,7 @@ impl Snapshot {
     }
 }
 
+#[derive(Clone)]
 pub struct Analyzer {
     calibration: Calibration,
     smooth: [f32; 4],

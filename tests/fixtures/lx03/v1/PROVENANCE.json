@@ -1,0 +1,12 @@
+{
+  "contract": "GP-2026-10-04.1/C-LIGHT:1",
+  "contract_sha256": "54a887f4a300d049d3ba67077a2e0446f7a92c57c41cef9d3b7da13735a092ac",
+  "base": "ba4ccd92656e6d2a3cbc6424cdc2a017d3e4f14d",
+  "source_manifest": "task0008 pass2/B checkpoint-LX03-R2.json",
+  "generator": "tests/wire.rs actual wire::Service over authority::Authority",
+  "files": {
+    "commands.json": "3cfb07f4d626cfb73d2e4363d777467be6789d67958b79090aa9b3fb62e437c1",
+    "refusals.json": "d443783d6d4e602c6fde8c1d77d20c6397122373bbb87e4e3a02c55e5f435587",
+    "README.md": "2e026b96706b7ad644ee503fc252d78f39969c4c5469a01afe86e7379d3318a8"
+  }
+}

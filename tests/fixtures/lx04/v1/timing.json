@@ -1,0 +1,3995 @@
+{
+  "cases": [
+    {
+      "after": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 700,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 700,
+                  "hold": 700,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 700,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "3",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "input": {
+        "body": {
+          "scope": "lighting-control"
+        },
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": "3",
+        "kind": "grant",
+        "lease": null,
+        "module": "lighting",
+        "request_id": "1",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      },
+      "prior": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 700,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 700,
+                  "hold": 700,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 700,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "3",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "replies": [
+        {
+          "body": {
+            "lease": "1",
+            "remaining_ms": 2000,
+            "scope": "lighting-control"
+          },
+          "contract": "C-LIGHT",
+          "effective_tick": "0",
+          "epoch": "9",
+          "expected_revision": "3",
+          "kind": "applied",
+          "lease": null,
+          "module": "lighting",
+          "reason": null,
+          "request_id": "1",
+          "revision": "3",
+          "sequence": "1",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1,
+          "writer": "writer-a"
+        }
+      ],
+      "tick": "0"
+    },
+    {
+      "after": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": true,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 700,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 700,
+                  "hold": 700,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 700,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "3",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "input": {
+        "body": {
+          "command": {
+            "action": "release_preview",
+            "values": [
+              {
+                "attribute": "intensity",
+                "fixture": "f1",
+                "value": 0
+              }
+            ]
+          },
+          "scope": "lighting-control"
+        },
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": "3",
+        "kind": "command",
+        "lease": "1",
+        "module": "lighting",
+        "request_id": "2",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      },
+      "prior": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 700,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 700,
+                  "hold": 700,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 700,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "3",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "replies": [
+        {
+          "body": {
+            "application": "preview_only",
+            "physical": "unknown",
+            "token": {
+              "lease": "1",
+              "nonce": "16a227cf350cff57f0740c047c2190a6",
+              "preview": {
+                "epoch": "9",
+                "expiry_tick": "200",
+                "issued_tick": "0",
+                "patch_revision": "1",
+                "revision": "3",
+                "show_id": "11111111-1111-4111-8111-111111111111",
+                "transition_ms": 500,
+                "validity_ms": 2000,
+                "values": [
+                  {
+                    "attribute": "intensity",
+                    "current": 700,
+                    "destination": 500,
+                    "fixture": "f1"
+                  }
+                ]
+              },
+              "schema": "lx04-release-v1",
+              "scope": "lighting-control",
+              "writer": "writer-a"
+            }
+          },
+          "contract": "C-LIGHT",
+          "effective_tick": "0",
+          "epoch": "9",
+          "expected_revision": "3",
+          "kind": "applied",
+          "lease": "1",
+          "module": "lighting",
+          "reason": null,
+          "request_id": "2",
+          "revision": "3",
+          "sequence": "2",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1,
+          "writer": "writer-a"
+        }
+      ],
+      "tick": "0"
+    },
+    {
+      "after": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": {
+            "current_tick": "0",
+            "duration_ticks": 50,
+            "end_tick": "50",
+            "physical": "unknown",
+            "progress_ticks": 0,
+            "start_tick": "0",
+            "targets": [
+              {
+                "attribute": "intensity",
+                "current": 700,
+                "fixture": "f1",
+                "start": 700,
+                "target": 500
+              }
+            ]
+          },
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "release",
+                      "value": 700,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 700,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "release": 700,
+                  "resolved": 700,
+                  "source": "release",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "4",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "input": {
+        "body": {
+          "command": {
+            "action": "release_commit",
+            "token": {
+              "lease": "1",
+              "nonce": "16a227cf350cff57f0740c047c2190a6",
+              "preview": {
+                "epoch": "9",
+                "expiry_tick": "200",
+                "issued_tick": "0",
+                "patch_revision": "1",
+                "revision": "3",
+                "show_id": "11111111-1111-4111-8111-111111111111",
+                "transition_ms": 500,
+                "validity_ms": 2000,
+                "values": [
+                  {
+                    "attribute": "intensity",
+                    "current": 700,
+                    "destination": 500,
+                    "fixture": "f1"
+                  }
+                ]
+              },
+              "schema": "lx04-release-v1",
+              "scope": "lighting-control",
+              "writer": "writer-a"
+            }
+          },
+          "scope": "lighting-control"
+        },
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": "3",
+        "kind": "command",
+        "lease": "1",
+        "module": "lighting",
+        "request_id": "3",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      },
+      "prior": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 2000,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": true,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 700,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 700,
+                  "hold": 700,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 700,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "3",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "replies": [
+        {
+          "body": {
+            "application": "logical_timed",
+            "physical": "unknown",
+            "transition": {
+              "current_tick": "0",
+              "duration_ticks": 50,
+              "end_tick": "50",
+              "physical": "unknown",
+              "progress_ticks": 0,
+              "start_tick": "0",
+              "targets": [
+                {
+                  "attribute": "intensity",
+                  "current": 700,
+                  "fixture": "f1",
+                  "start": 700,
+                  "target": 500
+                }
+              ]
+            }
+          },
+          "contract": "C-LIGHT",
+          "effective_tick": "0",
+          "epoch": "9",
+          "expected_revision": "3",
+          "kind": "applied",
+          "lease": "1",
+          "module": "lighting",
+          "reason": null,
+          "request_id": "3",
+          "revision": "4",
+          "sequence": "3",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1,
+          "writer": "writer-a"
+        }
+      ],
+      "tick": "0"
+    },
+    {
+      "after": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 1750,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": {
+            "current_tick": "25",
+            "duration_ticks": 50,
+            "end_tick": "50",
+            "physical": "unknown",
+            "progress_ticks": 25,
+            "start_tick": "0",
+            "targets": [
+              {
+                "attribute": "intensity",
+                "current": 600,
+                "fixture": "f1",
+                "start": 700,
+                "target": 500
+              }
+            ]
+          },
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "release",
+                      "value": 600,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 600,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "release": 600,
+                  "resolved": 600,
+                  "source": "release",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "5",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "input": {
+        "body": {},
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": null,
+        "kind": "snapshot",
+        "lease": null,
+        "module": "lighting",
+        "request_id": null,
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": null
+      },
+      "prior": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 1750,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": {
+            "current_tick": "25",
+            "duration_ticks": 50,
+            "end_tick": "50",
+            "physical": "unknown",
+            "progress_ticks": 25,
+            "start_tick": "0",
+            "targets": [
+              {
+                "attribute": "intensity",
+                "current": 600,
+                "fixture": "f1",
+                "start": 700,
+                "target": 500
+              }
+            ]
+          },
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "release",
+                      "value": 600,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 600,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "release": 600,
+                  "resolved": 600,
+                  "source": "release",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "5",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "replies": [
+        {
+          "body": {
+            "chunk": "{\"applied_auto\":\"unavailable\",\"authority_inventory\":{\"cues\":[{\"id\":\"cue\",\"values\":[{\"attribute\":\"intensity\",\"fixture\":\"f1\",\"value\":500},{\"attribute\":\"intensity\",\"fixture\":\"f2\",\"value\":200}]}],\"fixture_masters\":[],\"palettes\":[],\"playbacks\":[{\"activation_order\":\"1\",\"id\":\"playback\",\"level\":1000,\"values\":[{\"attribute\":\"intensity\",\"fixture\":\"f1\",\"value\":500},{\"attribute\":\"intensity\",\"fixture\":\"f2\",\"value\":200}]}]},\"blackout\":false,\"capability_metadata\":[{\"attributes\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0,\"step\":1,\"unit\":\"tenth_percent\"}],\"coherent_groups\":[],\"fixture\":\"f1\"},{\"attributes\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0,\"step\":1,\"unit\":\"tenth_percent\"}],\"coherent_groups\":[],\"fixture\":\"f2\"}],\"grants\":[{\"remaining_ms\":1750,\"scope\":\"lighting-control\",\"writer\":\"writer-a\"}],\"groups\":[{\"fixtures\":[\"f1\",\"f2\"],\"id\":\"all\"}],\"limits\":{\"cached_responses\":64,\"cues\":32,\"depth\":12,\"fixtures\":32,\"lease_ms\":2000,\"message_bytes\":65536,\"pages\":16,\"palettes\":32,\"playbacks\":8,\"renew_ms\":500,\"targets\":64,\"writer_history\":1024,\"writers\":1},\"master\":1000,\"mode\":\"manual\",\"output\":\"null_disarmed\",\"patch\":{\"fixtures\":[{\"address\":1,\"capabilities\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0}],\"id\":\"f1\",\"label\":\"Synthetic\",\"mode\":\"dimmer\"},{\"address\":2,\"capabilities\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0}],\"id\":\"f2\",\"label\":\"Synthetic\",\"mode\":\"dimmer\"}],\"patch_revision\":\"1\",\"version\":1},\"physical\":\"unknown\",\"release\":{\"preview_available\":false,\"preview_validity_ms\":2000,\"transition\":{\"current_tick\":\"25\",\"duration_ticks\":50,\"end_tick\":\"50\",\"physical\":\"unknown\",\"progress_ticks\":25,\"start_tick\":\"0\",\"targets\":[{\"attribute\":\"intensity\",\"current\":600,\"fixture\":\"f1\",\"start\":700,\"target\":500}]},\"transition_ms\":500},\"scope\":\"lighting-control\",\"snapshot\":{\"durability\":\"volatile\",\"epoch\":\"9\",\"fixtures\":[{\"attributes\":[{\"attribute\":\"intensity\",\"clamped\":false,\"contributors\":[{\"source\":{\"playback\":\"playback\"},\"value\":500,\"winner\":false},{\"source\":\"release\",\"value\":600,\"winner\":true}],\"final_intent\":600,\"hold\":null,\"inhibit\":\"none\",\"observed\":null,\"playing\":[{\"id\":\"playback\",\"value\":500}],\"programmer\":null,\"proposal\":null,\"release\":600,\"resolved\":600,\"source\":\"release\",\"stored\":[{\"id\":\"cue\",\"kind\":\"cue\",\"value\":500}],\"submitted\":null}],\"fixture\":\"f1\"},{\"attributes\":[{\"attribute\":\"intensity\",\"clamped\":false,\"contributors\":[{\"source\":{\"playback\":\"playback\"},\"value\":200,\"winner\":false},{\"source\":\"hold\",\"value\":800,\"winner\":true}],\"final_intent\":800,\"hold\":800,\"inhibit\":\"none\",\"observed\":null,\"playing\":[{\"id\":\"playback\",\"value\":200}],\"programmer\":null,\"proposal\":null,\"resolved\":800,\"source\":\"hold\",\"stored\":[{\"id\":\"cue\",\"kind\":\"cue\",\"value\":200}],\"submitted\":null}],\"fixture\":\"f2\"}],\"patch_revision\":\"1\",\"revision\":\"5\",\"show_id\":\"11111111-1111-4111-8111-111111111111\",\"version\":1},\"snapshot_budget\":\"16 encoded pages of at most 65536 bytes; overbudget edits refused atomically\",\"wire_schema\":\"lx04-v1\"}",
+            "encoding": "json_utf8_chunks",
+            "page": 0,
+            "page_count": 1
+          },
+          "contract": "C-LIGHT",
+          "effective_tick": "25",
+          "epoch": "9",
+          "expected_revision": null,
+          "kind": "snapshot",
+          "lease": null,
+          "module": "lighting",
+          "reason": null,
+          "request_id": null,
+          "revision": "5",
+          "sequence": "4",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1,
+          "writer": null
+        }
+      ],
+      "tick": "25"
+    },
+    {
+      "after": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 1750,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": {
+            "current_tick": "25",
+            "duration_ticks": 50,
+            "end_tick": "50",
+            "physical": "unknown",
+            "progress_ticks": 25,
+            "start_tick": "0",
+            "targets": [
+              {
+                "attribute": "intensity",
+                "current": 600,
+                "fixture": "f1",
+                "start": 700,
+                "target": 500
+              }
+            ]
+          },
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "release",
+                      "value": 600,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 600,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "release": 600,
+                  "resolved": 600,
+                  "source": "release",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "5",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "input": {
+        "body": {
+          "command": {
+            "action": "release_commit",
+            "token": {
+              "lease": "1",
+              "nonce": "16a227cf350cff57f0740c047c2190a6",
+              "preview": {
+                "epoch": "9",
+                "expiry_tick": "200",
+                "issued_tick": "0",
+                "patch_revision": "1",
+                "revision": "3",
+                "show_id": "11111111-1111-4111-8111-111111111111",
+                "transition_ms": 500,
+                "validity_ms": 2000,
+                "values": [
+                  {
+                    "attribute": "intensity",
+                    "current": 700,
+                    "destination": 500,
+                    "fixture": "f1"
+                  }
+                ]
+              },
+              "schema": "lx04-release-v1",
+              "scope": "lighting-control",
+              "writer": "writer-a"
+            }
+          },
+          "scope": "lighting-control"
+        },
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": "3",
+        "kind": "command",
+        "lease": "1",
+        "module": "lighting",
+        "request_id": "3",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "writer-a"
+      },
+      "prior": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 1750,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": {
+            "current_tick": "25",
+            "duration_ticks": 50,
+            "end_tick": "50",
+            "physical": "unknown",
+            "progress_ticks": 25,
+            "start_tick": "0",
+            "targets": [
+              {
+                "attribute": "intensity",
+                "current": 600,
+                "fixture": "f1",
+                "start": 700,
+                "target": 500
+              }
+            ]
+          },
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": false
+                    },
+                    {
+                      "source": "release",
+                      "value": 600,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 600,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "release": 600,
+                  "resolved": 600,
+                  "source": "release",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "5",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "replies": [
+        {
+          "body": {
+            "application": "logical_timed",
+            "physical": "unknown",
+            "transition": {
+              "current_tick": "0",
+              "duration_ticks": 50,
+              "end_tick": "50",
+              "physical": "unknown",
+              "progress_ticks": 0,
+              "start_tick": "0",
+              "targets": [
+                {
+                  "attribute": "intensity",
+                  "current": 700,
+                  "fixture": "f1",
+                  "start": 700,
+                  "target": 500
+                }
+              ]
+            }
+          },
+          "contract": "C-LIGHT",
+          "effective_tick": "0",
+          "epoch": "9",
+          "expected_revision": "3",
+          "kind": "applied",
+          "lease": "1",
+          "module": "lighting",
+          "reason": null,
+          "request_id": "3",
+          "revision": "4",
+          "sequence": "3",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1,
+          "writer": "writer-a"
+        }
+      ],
+      "tick": "25"
+    },
+    {
+      "after": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 1500,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 500,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 500,
+                  "source": {
+                    "playback": "playback"
+                  },
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "6",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "input": {
+        "body": {},
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": null,
+        "kind": "snapshot",
+        "lease": null,
+        "module": "lighting",
+        "request_id": null,
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": null
+      },
+      "prior": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [
+          {
+            "remaining_ms": 1500,
+            "scope": "lighting-control",
+            "writer": "writer-a"
+          }
+        ],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 500,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 500,
+                  "source": {
+                    "playback": "playback"
+                  },
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "6",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "replies": [
+        {
+          "body": {
+            "chunk": "{\"applied_auto\":\"unavailable\",\"authority_inventory\":{\"cues\":[{\"id\":\"cue\",\"values\":[{\"attribute\":\"intensity\",\"fixture\":\"f1\",\"value\":500},{\"attribute\":\"intensity\",\"fixture\":\"f2\",\"value\":200}]}],\"fixture_masters\":[],\"palettes\":[],\"playbacks\":[{\"activation_order\":\"1\",\"id\":\"playback\",\"level\":1000,\"values\":[{\"attribute\":\"intensity\",\"fixture\":\"f1\",\"value\":500},{\"attribute\":\"intensity\",\"fixture\":\"f2\",\"value\":200}]}]},\"blackout\":false,\"capability_metadata\":[{\"attributes\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0,\"step\":1,\"unit\":\"tenth_percent\"}],\"coherent_groups\":[],\"fixture\":\"f1\"},{\"attributes\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0,\"step\":1,\"unit\":\"tenth_percent\"}],\"coherent_groups\":[],\"fixture\":\"f2\"}],\"grants\":[{\"remaining_ms\":1500,\"scope\":\"lighting-control\",\"writer\":\"writer-a\"}],\"groups\":[{\"fixtures\":[\"f1\",\"f2\"],\"id\":\"all\"}],\"limits\":{\"cached_responses\":64,\"cues\":32,\"depth\":12,\"fixtures\":32,\"lease_ms\":2000,\"message_bytes\":65536,\"pages\":16,\"palettes\":32,\"playbacks\":8,\"renew_ms\":500,\"targets\":64,\"writer_history\":1024,\"writers\":1},\"master\":1000,\"mode\":\"manual\",\"output\":\"null_disarmed\",\"patch\":{\"fixtures\":[{\"address\":1,\"capabilities\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0}],\"id\":\"f1\",\"label\":\"Synthetic\",\"mode\":\"dimmer\"},{\"address\":2,\"capabilities\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0}],\"id\":\"f2\",\"label\":\"Synthetic\",\"mode\":\"dimmer\"}],\"patch_revision\":\"1\",\"version\":1},\"physical\":\"unknown\",\"release\":{\"preview_available\":false,\"preview_validity_ms\":2000,\"transition\":null,\"transition_ms\":500},\"scope\":\"lighting-control\",\"snapshot\":{\"durability\":\"volatile\",\"epoch\":\"9\",\"fixtures\":[{\"attributes\":[{\"attribute\":\"intensity\",\"clamped\":false,\"contributors\":[{\"source\":{\"playback\":\"playback\"},\"value\":500,\"winner\":true}],\"final_intent\":500,\"hold\":null,\"inhibit\":\"none\",\"observed\":null,\"playing\":[{\"id\":\"playback\",\"value\":500}],\"programmer\":null,\"proposal\":null,\"resolved\":500,\"source\":{\"playback\":\"playback\"},\"stored\":[{\"id\":\"cue\",\"kind\":\"cue\",\"value\":500}],\"submitted\":null}],\"fixture\":\"f1\"},{\"attributes\":[{\"attribute\":\"intensity\",\"clamped\":false,\"contributors\":[{\"source\":{\"playback\":\"playback\"},\"value\":200,\"winner\":false},{\"source\":\"hold\",\"value\":800,\"winner\":true}],\"final_intent\":800,\"hold\":800,\"inhibit\":\"none\",\"observed\":null,\"playing\":[{\"id\":\"playback\",\"value\":200}],\"programmer\":null,\"proposal\":null,\"resolved\":800,\"source\":\"hold\",\"stored\":[{\"id\":\"cue\",\"kind\":\"cue\",\"value\":200}],\"submitted\":null}],\"fixture\":\"f2\"}],\"patch_revision\":\"1\",\"revision\":\"6\",\"show_id\":\"11111111-1111-4111-8111-111111111111\",\"version\":1},\"snapshot_budget\":\"16 encoded pages of at most 65536 bytes; overbudget edits refused atomically\",\"wire_schema\":\"lx04-v1\"}",
+            "encoding": "json_utf8_chunks",
+            "page": 0,
+            "page_count": 1
+          },
+          "contract": "C-LIGHT",
+          "effective_tick": "50",
+          "epoch": "9",
+          "expected_revision": null,
+          "kind": "snapshot",
+          "lease": null,
+          "module": "lighting",
+          "reason": null,
+          "request_id": null,
+          "revision": "6",
+          "sequence": "6",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1,
+          "writer": null
+        }
+      ],
+      "tick": "50"
+    },
+    {
+      "after": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 500,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 500,
+                  "source": {
+                    "playback": "playback"
+                  },
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "6",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "input": {
+        "body": {},
+        "contract": "C-LIGHT",
+        "epoch": "9",
+        "expected_revision": null,
+        "kind": "snapshot",
+        "lease": null,
+        "module": "lighting",
+        "request_id": null,
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": null
+      },
+      "prior": {
+        "applied_auto": "unavailable",
+        "authority_inventory": {
+          "cues": [
+            {
+              "id": "cue",
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ],
+          "fixture_masters": [],
+          "palettes": [],
+          "playbacks": [
+            {
+              "activation_order": "1",
+              "id": "playback",
+              "level": 1000,
+              "values": [
+                {
+                  "attribute": "intensity",
+                  "fixture": "f1",
+                  "value": 500
+                },
+                {
+                  "attribute": "intensity",
+                  "fixture": "f2",
+                  "value": 200
+                }
+              ]
+            }
+          ]
+        },
+        "blackout": false,
+        "capability_metadata": [
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f1"
+          },
+          {
+            "attributes": [
+              {
+                "attribute": "intensity",
+                "default": 0,
+                "max": 1000,
+                "min": 0,
+                "step": 1,
+                "unit": "tenth_percent"
+              }
+            ],
+            "coherent_groups": [],
+            "fixture": "f2"
+          }
+        ],
+        "grants": [],
+        "groups": [
+          {
+            "fixtures": [
+              "f1",
+              "f2"
+            ],
+            "id": "all"
+          }
+        ],
+        "limits": {
+          "cached_responses": 64,
+          "cues": 32,
+          "depth": 12,
+          "fixtures": 32,
+          "lease_ms": 2000,
+          "message_bytes": 65536,
+          "pages": 16,
+          "palettes": 32,
+          "playbacks": 8,
+          "renew_ms": 500,
+          "targets": 64,
+          "writer_history": 1024,
+          "writers": 1
+        },
+        "master": 1000,
+        "mode": "manual",
+        "output": "null_disarmed",
+        "patch": {
+          "fixtures": [
+            {
+              "address": 1,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f1",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            },
+            {
+              "address": 2,
+              "capabilities": [
+                {
+                  "attribute": "intensity",
+                  "default": 0,
+                  "max": 1000,
+                  "min": 0
+                }
+              ],
+              "id": "f2",
+              "label": "Synthetic",
+              "mode": "dimmer"
+            }
+          ],
+          "patch_revision": "1",
+          "version": 1
+        },
+        "physical": "unknown",
+        "release": {
+          "preview_available": false,
+          "preview_validity_ms": 2000,
+          "transition": null,
+          "transition_ms": 500
+        },
+        "scope": "lighting-control",
+        "snapshot": {
+          "durability": "volatile",
+          "epoch": "9",
+          "fixtures": [
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 500,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 500,
+                  "hold": null,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 500
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 500,
+                  "source": {
+                    "playback": "playback"
+                  },
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 500
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f1"
+            },
+            {
+              "attributes": [
+                {
+                  "attribute": "intensity",
+                  "clamped": false,
+                  "contributors": [
+                    {
+                      "source": {
+                        "playback": "playback"
+                      },
+                      "value": 200,
+                      "winner": false
+                    },
+                    {
+                      "source": "hold",
+                      "value": 800,
+                      "winner": true
+                    }
+                  ],
+                  "final_intent": 800,
+                  "hold": 800,
+                  "inhibit": "none",
+                  "observed": null,
+                  "playing": [
+                    {
+                      "id": "playback",
+                      "value": 200
+                    }
+                  ],
+                  "programmer": null,
+                  "proposal": null,
+                  "resolved": 800,
+                  "source": "hold",
+                  "stored": [
+                    {
+                      "id": "cue",
+                      "kind": "cue",
+                      "value": 200
+                    }
+                  ],
+                  "submitted": null
+                }
+              ],
+              "fixture": "f2"
+            }
+          ],
+          "patch_revision": "1",
+          "revision": "6",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1
+        },
+        "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+        "wire_schema": "lx04-v1"
+      },
+      "replies": [
+        {
+          "body": {
+            "chunk": "{\"applied_auto\":\"unavailable\",\"authority_inventory\":{\"cues\":[{\"id\":\"cue\",\"values\":[{\"attribute\":\"intensity\",\"fixture\":\"f1\",\"value\":500},{\"attribute\":\"intensity\",\"fixture\":\"f2\",\"value\":200}]}],\"fixture_masters\":[],\"palettes\":[],\"playbacks\":[{\"activation_order\":\"1\",\"id\":\"playback\",\"level\":1000,\"values\":[{\"attribute\":\"intensity\",\"fixture\":\"f1\",\"value\":500},{\"attribute\":\"intensity\",\"fixture\":\"f2\",\"value\":200}]}]},\"blackout\":false,\"capability_metadata\":[{\"attributes\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0,\"step\":1,\"unit\":\"tenth_percent\"}],\"coherent_groups\":[],\"fixture\":\"f1\"},{\"attributes\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0,\"step\":1,\"unit\":\"tenth_percent\"}],\"coherent_groups\":[],\"fixture\":\"f2\"}],\"grants\":[],\"groups\":[{\"fixtures\":[\"f1\",\"f2\"],\"id\":\"all\"}],\"limits\":{\"cached_responses\":64,\"cues\":32,\"depth\":12,\"fixtures\":32,\"lease_ms\":2000,\"message_bytes\":65536,\"pages\":16,\"palettes\":32,\"playbacks\":8,\"renew_ms\":500,\"targets\":64,\"writer_history\":1024,\"writers\":1},\"master\":1000,\"mode\":\"manual\",\"output\":\"null_disarmed\",\"patch\":{\"fixtures\":[{\"address\":1,\"capabilities\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0}],\"id\":\"f1\",\"label\":\"Synthetic\",\"mode\":\"dimmer\"},{\"address\":2,\"capabilities\":[{\"attribute\":\"intensity\",\"default\":0,\"max\":1000,\"min\":0}],\"id\":\"f2\",\"label\":\"Synthetic\",\"mode\":\"dimmer\"}],\"patch_revision\":\"1\",\"version\":1},\"physical\":\"unknown\",\"release\":{\"preview_available\":false,\"preview_validity_ms\":2000,\"transition\":null,\"transition_ms\":500},\"scope\":\"lighting-control\",\"snapshot\":{\"durability\":\"volatile\",\"epoch\":\"9\",\"fixtures\":[{\"attributes\":[{\"attribute\":\"intensity\",\"clamped\":false,\"contributors\":[{\"source\":{\"playback\":\"playback\"},\"value\":500,\"winner\":true}],\"final_intent\":500,\"hold\":null,\"inhibit\":\"none\",\"observed\":null,\"playing\":[{\"id\":\"playback\",\"value\":500}],\"programmer\":null,\"proposal\":null,\"resolved\":500,\"source\":{\"playback\":\"playback\"},\"stored\":[{\"id\":\"cue\",\"kind\":\"cue\",\"value\":500}],\"submitted\":null}],\"fixture\":\"f1\"},{\"attributes\":[{\"attribute\":\"intensity\",\"clamped\":false,\"contributors\":[{\"source\":{\"playback\":\"playback\"},\"value\":200,\"winner\":false},{\"source\":\"hold\",\"value\":800,\"winner\":true}],\"final_intent\":800,\"hold\":800,\"inhibit\":\"none\",\"observed\":null,\"playing\":[{\"id\":\"playback\",\"value\":200}],\"programmer\":null,\"proposal\":null,\"resolved\":800,\"source\":\"hold\",\"stored\":[{\"id\":\"cue\",\"kind\":\"cue\",\"value\":200}],\"submitted\":null}],\"fixture\":\"f2\"}],\"patch_revision\":\"1\",\"revision\":\"6\",\"show_id\":\"11111111-1111-4111-8111-111111111111\",\"version\":1},\"snapshot_budget\":\"16 encoded pages of at most 65536 bytes; overbudget edits refused atomically\",\"wire_schema\":\"lx04-v1\"}",
+            "encoding": "json_utf8_chunks",
+            "page": 0,
+            "page_count": 1
+          },
+          "contract": "C-LIGHT",
+          "effective_tick": "200",
+          "epoch": "9",
+          "expected_revision": null,
+          "kind": "snapshot",
+          "lease": null,
+          "module": "lighting",
+          "reason": null,
+          "request_id": null,
+          "revision": "6",
+          "sequence": "7",
+          "show_id": "11111111-1111-4111-8111-111111111111",
+          "version": 1,
+          "writer": null
+        }
+      ],
+      "tick": "200"
+    }
+  ],
+  "contract": "C-LIGHT:1",
+  "wire_schema": "lx04-v1"
+}

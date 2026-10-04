@@ -1,0 +1,6 @@
+case	prior_state	command	playback_1	playback_2	programmer	hold	master	blackout	resolved	final_intent	source	winner_1	winner_2	color_red	color_green	color_blue	pan	tilt	zoom	submitted	observed
+htp	fixture_defaults	go_playback_1_then_2	700	500	null	null	1000	false	700	700	playback-1	true	false	200	300	400	100	-100	50	null	null
+programmer_zero	htp	touch_programmer_intensity_0	700	500	0	null	1000	false	0	0	programmer	false	false	200	300	400	100	-100	50	null	null
+clear_to_hold	programmer_zero	clear_to_hold	700	500	null	0	1000	false	0	0	hold	false	false	200	300	400	100	-100	50	null	null
+master	htp	set_master_500	700	500	null	null	500	false	700	350	playback-1	true	false	200	300	400	100	-100	50	null	null
+blackout	master	set_blackout_true	700	500	null	null	500	true	700	0	playback-1	true	false	200	300	400	100	-100	50	null	null

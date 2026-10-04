@@ -61,3 +61,22 @@ ignored local storage; add only the small evidence needed to explain a result.
 
 zk may warn that links to the root idea.md are outside this notebook; those links
 are intentional and resolve normally in Markdown.
+
+## GigPies integration — 2026-10-04
+
+[Owning GigPies plan](notes/0027-gigpies-implementation.md) records scoped tasks, contract dependencies,
+validation and historical launch instructions. LX-01–04 are accepted software;
+LX-05 is implemented and device-free software validation has passed; root runtime
+acceptance remains separate. Physical output remains
+unverified and disarmed.
+
+[Null-output static authority](notes/0028-static-authority.md) documents the
+manual command API, copies/masks, provenance and preview-only release boundary.
+
+- [0029 C-LIGHT encoded local authority](notes/0029-lighting-wire.md)
+
+- [0030 Timed release and private restart](notes/0030-release-recovery.md)
+
+- [0031 Real private provider integration](notes/0031-local-provider-integration.md)
+
+- [0032 Independent named analysis subscription](notes/0032-analysis-subscription.md)

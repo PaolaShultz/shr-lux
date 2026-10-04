@@ -88,6 +88,7 @@ pub struct Decision {
 /// Call with monotonic elapsed time at least every 500 ms, including during input
 /// loss. A stalled caller or reversed clock cancels transient effects. Consumers
 /// must independently expire output: stopping calls cannot switch off real fixtures.
+#[derive(Clone)]
 pub struct Director {
     program: Program,
     scene: Scene,

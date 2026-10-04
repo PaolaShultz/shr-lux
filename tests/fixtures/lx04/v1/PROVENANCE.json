@@ -1,0 +1,18 @@
+{
+  "artifact": "LX04 v1 actual Service command corpus",
+  "contract": "GP-2026-10-04.1/C-LIGHT:1",
+  "contract_sha256": "54a887f4a300d049d3ba67077a2e0446f7a92c57c41cef9d3b7da13735a092ac",
+  "baseline": "ba4ccd92656e6d2a3cbc6424cdc2a017d3e4f14d",
+  "source_sha256": {
+    "src/authority.rs": "eb20cde273182a1598e89ed4f11f92f47c9bbc020f3cf7cadb739684db69aac1",
+    "src/wire.rs": "d215d13b456acb4c36f1a6ff60c74940fcc0d24a0e53d2ea66fc33925d97ea46",
+    "src/recovery.rs": "37fe20279b238726645846eed856d865b01f2f6a3077ad0cc80a016a639665bf",
+    "tests/timing.rs": "201c2a0508eefc5fcd5e133c2d5c4da4116049d7329fc179e89a3d787f5af546",
+    "tests/recovery.rs": "4e45b325f7e3a4fee19812ddc4bf5fa12ddafc2ce7520ce3384f1fd153357e40",
+    "src/lighting_contract.rs": "e7b50b9da2029f0eda717b020c396e260cbc99f2fd81b5f75ae21ed9b6cf6529"
+  },
+  "generation": "LUX_GENERATE_LX04=1 cargo +1.97.1 test --locked -j1 --test recovery --test timing; parent host build lock, jobs1/incremental0",
+  "validation": "89 full normal passed incl44lib,10recovery,6timing; actual checkpointed/error PageAssembler roundtrip; no generation env during full normal",
+  "randomness": "Only nonce values normalized during test comparisons; artifact tokens are actual provider issued values",
+  "limits": "Offline synthetic/null output, no physical claims"
+}
