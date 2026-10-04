@@ -103,7 +103,10 @@ def run(provider, lux):
             assert active["snapshot"]["fixtures"][0]["attributes"][0]["source"] == {"auto":"analysis-active"}
             producer.kill()
             producer.wait(timeout=5)
-            lost = wait(lambda inv: inv["analysis"]["grant"] is None)
+            lost = wait(lambda inv: inv["analysis"]["grant"] is None
+                        and inv["analysis"]["state"] == "absent")
+            for key in ["source_identity", "source_window_range", "source_age_ms"]:
+                assert lost["analysis"][key] is None, key
             retained = lost["snapshot"]["fixtures"][0]["attributes"][0]
             assert retained["source"] == {"auto":"analysis-held"}
             time.sleep(.12)

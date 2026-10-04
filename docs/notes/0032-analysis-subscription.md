@@ -14,6 +14,16 @@ it imports no provider DSP or sibling dependency. The exact accepted synthetic
 acquisition times, gaps, overlaps, reorder, loss and identity changes refuse input.
 Missing windows never become zero-filled musical silence.
 
+The first delivered window must begin on a whole-window offset from the
+descriptor's 48-frame-aligned source origin, with the corresponding GPA1 sequence.
+Late attachment may skip whole windows; it cannot reset sequence or relabel a
+partial window. Epoch and mapping/calibration revisions must be nonzero.
+
+Detach and reattachment clear current source-window, age and calibration-count
+metadata. A new descriptor cannot inherit a previous source's observations, and
+an absent source carries no window range. Retained automatic lighting contributions
+keep their independent original provenance while manual control remains available.
+
 A separate transport worker has a two-window inbox, 100ms total frame deadline,
 250ms reconnect backoff and bounded shutdown. It opens only the explicitly
 configured same-UID private Unix socket. No audio/MIDI/DMX device discovery,

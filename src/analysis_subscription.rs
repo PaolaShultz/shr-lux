@@ -56,8 +56,12 @@ impl Descriptor {
         ] {
             counter::parse(s)?;
         }
-        if counter::parse(&d.source_epoch)? == 0 {
-            return Err("epoch");
+        if counter::parse(&d.source_epoch)? == 0
+            || counter::parse(&d.map_revision)? == 0
+            || counter::parse(&d.calibration_revision)? == 0
+            || !counter::parse(&d.first_frame)?.is_multiple_of(48)
+        {
+            return Err("descriptor_origin");
         }
         Ok(d)
     }
@@ -125,7 +129,11 @@ pub fn decode_window(d: &Descriptor, b: &[u8], now_ms: u64) -> Result<Window, &'
             w.pcm[n * 48 + i / 4][i % 4] = v as f32 / 8388608.;
         }
     }
-    if w.first < counter::parse(&d.first_frame)? {
+    let offset = w
+        .first
+        .checked_sub(counter::parse(&d.first_frame)?)
+        .ok_or("frame_origin")?;
+    if !offset.is_multiple_of(480) || offset / 48 != u64::from(w.sequence) {
         return Err("frame_origin");
     }
     w.first.checked_add(480).ok_or("frame_overflow")?;
@@ -201,6 +209,8 @@ impl AnalysisState {
         self.state = "invalid";
         self.expected = None;
         self.oldest = None;
+        self.last_range = None;
+        self.calibration_windows = 0;
     }
     pub fn invalidate(&mut self, reason: &'static str) {
         self.state = "invalid";
@@ -218,6 +228,9 @@ impl AnalysisState {
         self.state = "absent";
         self.descriptor = None;
         self.expected = None;
+        self.oldest = None;
+        self.last_range = None;
+        self.calibration_windows = 0;
     }
     pub fn calibrate(&mut self, phase: &str, now: u64) -> Result<(), &'static str> {
         if !self.admitted
