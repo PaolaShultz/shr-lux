@@ -80,3 +80,9 @@ manual command API, copies/masks, provenance and preview-only release boundary.
 - [0031 Real private provider integration](notes/0031-local-provider-integration.md)
 
 - [0032 Independent named analysis subscription](notes/0032-analysis-subscription.md)
+
+## CI incident notifications
+
+[CI failure and recovery](CI.md#failure-and-recovery-notifications) describes the
+GitHub issue thread that tracks each current default-branch failure and recovery.
+This is repository automation; it does not activate lighting or other hardware.
