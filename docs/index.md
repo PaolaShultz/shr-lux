@@ -80,6 +80,7 @@ manual command API, copies/masks, provenance and preview-only release boundary.
 - [0031 Real private provider integration](notes/0031-local-provider-integration.md)
 
 - [0032 Independent named analysis subscription](notes/0032-analysis-subscription.md)
+- [0033 Configured synthetic authority and named analysis](notes/0033-configured-analysis.md)
 
 ## CI incident notifications
 

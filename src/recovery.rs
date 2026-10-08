@@ -16,6 +16,7 @@ use std::{
 const LIMIT: usize = 16 * 65536;
 const CHECKPOINT: &str = "lighting-checkpoint.json";
 const EPOCH: &str = "lighting-epoch.json";
+const CONFIG: &str = "lighting-startup.json";
 static SCRATCH: AtomicU64 = AtomicU64::new(0);
 fn invalid(message: &str) -> io::Error {
     io::Error::new(io::ErrorKind::InvalidData, message)
@@ -131,10 +132,25 @@ pub struct CheckpointStore {
     directory: PathBuf,
     show: String,
     epoch: u64,
+    configured_patch: Option<PatchSpec>,
     _lock: File,
 }
 impl CheckpointStore {
     pub fn open(directory: &Path, show: &str) -> io::Result<Self> {
+        Self::open_inner(directory, show, None)
+    }
+    pub fn open_configured(
+        directory: &Path,
+        config: &crate::service_config::ServiceConfig,
+    ) -> io::Result<Self> {
+        config.validate().map_err(invalid)?;
+        Self::open_inner(directory, &config.show_id, Some(config))
+    }
+    fn open_inner(
+        directory: &Path,
+        show: &str,
+        config: Option<&crate::service_config::ServiceConfig>,
+    ) -> io::Result<Self> {
         crate::local_service::private_directory(directory)?;
         validate_show_id(show).map_err(|_| invalid("show id"))?;
         let had_lock = fs::symlink_metadata(directory.join("lighting-owner.lock")).is_ok();
@@ -150,6 +166,28 @@ impl CheckpointStore {
         // SAFETY: valid retained file descriptor, nonblocking exclusive advisory lock.
         if unsafe { libc::flock(lock.as_raw_fd(), libc::LOCK_EX | libc::LOCK_NB) } != 0 {
             return Err(io::Error::last_os_error());
+        }
+        // Startup identity is checked under the same retained lock, before epoch
+        // reservation. Legacy callers cannot silently enter configured storage.
+        let identity_exists = fs::symlink_metadata(directory.join(CONFIG)).is_ok();
+        if let Some(config) = config {
+            if identity_exists {
+                let saved =
+                    crate::service_config::ServiceConfig::decode(&read_private(directory, CONFIG)?)
+                        .map_err(invalid)?;
+                if &saved != config {
+                    return Err(invalid("startup identity mismatch"));
+                }
+            } else if fs::read_dir(directory)?
+                .any(|entry| entry.map_or(true, |e| e.file_name() != "lighting-owner.lock"))
+                || had_lock
+            {
+                return Err(invalid(
+                    "configured startup requires fresh private directory",
+                ));
+            }
+        } else if identity_exists {
+            return Err(invalid("configured startup identity required"));
         }
         let prior = match read_private(directory, EPOCH) {
             Ok(bytes) => {
@@ -173,6 +211,9 @@ impl CheckpointStore {
         if let Ok(bytes) = read_private(directory, CHECKPOINT) {
             let state = decode(&bytes)?;
             state.validate(show)?;
+            if config.is_some_and(|c| c.patch != state.patch) {
+                return Err(invalid("configured checkpoint patch mismatch"));
+            }
             if state.epoch > prior {
                 return Err(invalid("checkpoint newer than epoch registry"));
             }
@@ -188,6 +229,16 @@ impl CheckpointStore {
             show_id: show.into(),
             epoch,
         };
+        if let Some(config) = config
+            && !identity_exists
+        {
+            atomic_replace(
+                directory,
+                CONFIG,
+                &serde_json::to_vec(config)?,
+                WriteFault::None,
+            )?;
+        }
         atomic_replace(
             directory,
             EPOCH,
@@ -198,6 +249,7 @@ impl CheckpointStore {
             directory: directory.to_owned(),
             show: show.into(),
             epoch,
+            configured_patch: config.map(|c| c.patch.clone()),
             _lock: lock,
         })
     }
@@ -212,6 +264,13 @@ impl CheckpointStore {
             Ok(bytes) => {
                 let state = decode(&bytes)?;
                 state.validate(&self.show)?;
+                if self
+                    .configured_patch
+                    .as_ref()
+                    .is_some_and(|p| p != &state.patch)
+                {
+                    return Err(invalid("configured checkpoint patch mismatch"));
+                }
                 if state.epoch >= self.epoch {
                     return Err(invalid("checkpoint epoch"));
                 }
@@ -227,6 +286,13 @@ impl CheckpointStore {
     /// Fault injection applies only to owned private test storage; never changes sync policy.
     pub fn checkpoint_with_fault(&self, state: &DurableState, fault: WriteFault) -> io::Result<()> {
         state.validate(&self.show)?;
+        if self
+            .configured_patch
+            .as_ref()
+            .is_some_and(|p| p != &state.patch)
+        {
+            return Err(invalid("configured checkpoint patch mismatch"));
+        }
         if state.epoch != self.epoch {
             return Err(invalid("wrong checkpoint epoch"));
         }

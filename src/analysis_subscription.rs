@@ -33,18 +33,59 @@ pub struct Descriptor {
     pub calibration_revision: String,
     pub clock: String,
 }
+/// Exact configured semantic-source binding, independently validated by the consumer.
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct Binding {
+    pub version: u32,
+    pub inputs: [String; 4],
+}
+impl Binding {
+    pub fn validate(&self) -> Result<(), &'static str> {
+        if self.version != 2 {
+            return Err("analysis binding version");
+        }
+        for (i, id) in self.inputs.iter().enumerate() {
+            let index = id
+                .strip_prefix("input-")
+                .and_then(|s| s.parse::<u16>().ok());
+            if !index.is_some_and(|n| n > 0 && *id == format!("input-{n:02}"))
+                || self.inputs[..i].contains(id)
+            {
+                return Err("analysis binding inputs");
+            }
+        }
+        Ok(())
+    }
+}
 impl Descriptor {
     pub fn decode(bytes: &[u8]) -> Result<Self, &'static str> {
+        Self::decode_expected(bytes, None)
+    }
+    pub fn decode_configured(bytes: &[u8], binding: &Binding) -> Result<Self, &'static str> {
+        binding.validate()?;
+        Self::decode_expected(bytes, Some(binding))
+    }
+    fn decode_expected(bytes: &[u8], binding: Option<&Binding>) -> Result<Self, &'static str> {
         let d: Self = serde_json::from_value(strict_json(bytes)?).map_err(|_| "descriptor")?;
+        let version = if binding.is_some() { 2 } else { 1 };
+        let subscription = if binding.is_some() {
+            "lux.aux.v2"
+        } else {
+            "lux.aux.v1"
+        };
+        let inputs = binding
+            .map(|b| b.inputs.clone())
+            .unwrap_or_else(|| ["input-01", "input-02", "input-03", "input-04"].map(String::from));
         if d.contract != "C-ANALYSIS"
-            || d.version != 1
-            || d.subscription != "lux.aux.v1"
+            || d.version != version
+            || d.subscription != subscription
             || d.stream != 3
             || d.sample_rate != 48000
             || d.tap != "raw-pre-fader"
             || d.clock != "linux-clock-monotonic-ms"
             || d.sources != ["kick", "bass", "guitar-1", "guitar-2"]
-            || d.inputs != ["input-01", "input-02", "input-03", "input-04"]
+            || d.inputs != inputs
         {
             return Err("descriptor_identity");
         }
@@ -361,6 +402,13 @@ pub struct Client {
 }
 impl Client {
     pub fn start(socket: &Path) -> io::Result<Self> {
+        Self::start_expected(socket, None)
+    }
+    pub fn start_configured(socket: &Path, binding: Binding) -> io::Result<Self> {
+        binding.validate().map_err(io::Error::other)?;
+        Self::start_expected(socket, Some(binding))
+    }
+    fn start_expected(socket: &Path, binding: Option<Binding>) -> io::Result<Self> {
         if !socket.is_absolute() {
             return Err(io::Error::other("absolute analysis socket required"));
         }
@@ -387,11 +435,20 @@ impl Client {
                     crate::local_service::same_uid(&stream)?;
                     stream.set_read_timeout(Some(Duration::from_millis(100)))?;
                     stream.set_write_timeout(Some(Duration::from_millis(100)))?;
-                    let request = br#"{"subscription":"lux.aux.v1","version":1}"#;
+                    let request: &[u8] = if binding.is_some() {
+                        br#"{"subscription":"lux.aux.v2","version":2}"#
+                    } else {
+                        br#"{"subscription":"lux.aux.v1","version":1}"#
+                    };
                     stream.write_all(&(request.len() as u32).to_be_bytes())?;
                     stream.write_all(request)?;
-                    let d = Descriptor::decode(&client_frame(&mut stream, 4096)?)
-                        .map_err(io::Error::other)?;
+                    let bytes = client_frame(&mut stream, 4096)?;
+                    let d = if let Some(binding) = &binding {
+                        Descriptor::decode_configured(&bytes, binding)
+                    } else {
+                        Descriptor::decode(&bytes)
+                    }
+                    .map_err(io::Error::other)?;
                     {
                         let mut q = queue.lock().map_err(|_| io::Error::other("poison"))?;
                         q.descriptor = Some(d);

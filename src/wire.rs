@@ -281,6 +281,7 @@ struct AnalysisGrant {
 pub struct Service {
     engine: Authority,
     analysis: Option<crate::analysis_subscription::AnalysisState>,
+    analysis_binding: Option<crate::analysis_subscription::Binding>,
     analysis_grant: Option<AnalysisGrant>,
     last_analysis_step: Option<u64>,
     analysis_now: u64,
@@ -303,6 +304,7 @@ impl Service {
         let service = Self {
             engine,
             analysis: None,
+            analysis_binding: None,
             analysis_grant: None,
             last_analysis_step: None,
             analysis_now: 0,
@@ -367,7 +369,34 @@ impl Service {
         Ok(service)
     }
     pub fn enable_analysis(&mut self) -> Result<(), &'static str> {
+        if self.analysis_binding.is_some() {
+            return Err("configured analysis identity pinned");
+        }
+        self.enable_analysis_inner(None)
+    }
+    pub fn enable_configured_analysis(
+        &mut self,
+        binding: crate::analysis_subscription::Binding,
+    ) -> Result<(), &'static str> {
+        binding.validate()?;
+        if self.analysis.is_some() {
+            return Err("analysis already enabled");
+        }
+        self.enable_analysis_inner(Some(binding))
+    }
+    fn analysis_schema(&self) -> &'static str {
+        if self.analysis_binding.is_some() {
+            "lx05-v2"
+        } else {
+            "lx05-v1"
+        }
+    }
+    fn enable_analysis_inner(
+        &mut self,
+        binding: Option<crate::analysis_subscription::Binding>,
+    ) -> Result<(), &'static str> {
         let mut next = self.clone();
+        next.analysis_binding = binding;
         next.engine.enable_analysis();
         next.analysis = Some(crate::analysis_subscription::AnalysisState::default());
         next.pages()?;
@@ -541,6 +570,9 @@ impl Service {
             status["grant"]=self.analysis_grant.as_ref().map_or(Json::Null,|g|json!({"writer":g.writer,"lease":g.lease.to_string(),"issue_revision":g.issue_revision.to_string(),"patch_revision":g.patch.to_string(),"analysis_generation":g.generation.to_string(),"expiry_tick":g.expiry.to_string(),"fixtures":g.fixtures,"cap":g.cap}));
             status["automatic_layer"] = self.engine.auto_inventory();
             status["held_reason"] = json!(self.auto_held_reason);
+            if let Some(binding) = &self.analysis_binding {
+                status["analysis_binding"] = json!(binding);
+            }
         }
         status
     }
@@ -675,7 +707,7 @@ impl Service {
                     "analysis_status",
                     None,
                     None,
-                    json!({"wire_schema":"lx05-v1","analysis":self.analysis_status()}),
+                    json!({"wire_schema":self.analysis_schema(),"analysis":self.analysis_status()}),
                 )]);
             }
             return self.pages();
@@ -998,7 +1030,7 @@ impl Service {
             .validate_for_schema(
                 self.engine.patch(),
                 if self.analysis.is_some() {
-                    "lx05-v1"
+                    self.analysis_schema()
                 } else {
                     "lx03-v1"
                 },
@@ -1016,9 +1048,13 @@ impl Service {
             inventory["checkpoint"] = json!({"available":true,"recovery":"current_intended_look_frozen_into_hold","active_transients_resumed":false});
         }
         if self.analysis.is_some() {
-            inventory["wire_schema"] = json!("lx05-v1");
+            inventory["wire_schema"] = json!(self.analysis_schema());
             inventory["analysis"] = self.analysis_status();
             inventory["applied_auto"] = json!("explicit_bounded_intensity_grant");
+            if let Some(binding) = &self.analysis_binding {
+                inventory["analysis_binding"] = json!(binding);
+                validate_configured_analysis(&inventory)?;
+            }
         }
         Ok(inventory)
     }
@@ -1061,6 +1097,50 @@ impl Service {
             if serde_json::to_vec(&page).map_err(|_|"unavailable")?.len()>MAX_MESSAGE_BYTES {Err("capacity")} else {Ok(page)}
         }).collect()
     }
+}
+/// Validate current and retained configured identities independently: a retained
+/// contribution can legitimately name an older source epoch/map than the live one.
+pub fn validate_configured_analysis(inventory: &Json) -> Result<(), &'static str> {
+    use crate::analysis_subscription::{Binding, Descriptor};
+    if inventory["wire_schema"] != "lx05-v2" {
+        return Err("configured wire schema");
+    }
+    let binding: Binding = serde_json::from_value(inventory["analysis_binding"].clone())
+        .map_err(|_| "analysis binding")?;
+    binding.validate()?;
+    let status = &inventory["analysis"];
+    if status["analysis_binding"] != inventory["analysis_binding"]
+        || status["analysis_version"] != "lux.analysis.v1"
+    {
+        return Err("analysis binding status");
+    }
+    let validate = |value: &Json| -> Result<(), &'static str> {
+        Descriptor::decode_configured(
+            &serde_json::to_vec(value).map_err(|_| "descriptor")?,
+            &binding,
+        )
+        .map(|_| ())
+    };
+    if !status["source_identity"].is_null() {
+        validate(&status["source_identity"])?;
+    }
+    for value in status["automatic_layer"]["values"]
+        .as_array()
+        .ok_or("automatic layer")?
+    {
+        let provenance = &value["provenance"];
+        if provenance.is_null() {
+            if value["source"] == "mode-entry-continuity" {
+                continue;
+            }
+            return Err("configured provenance required");
+        }
+        if provenance["analysis_version"] != "lux.analysis.v1" {
+            return Err("analysis provenance version");
+        }
+        validate(&provenance["source_identity"])?;
+    }
+    Ok(())
 }
 fn error_reason(e: Error) -> &'static str {
     match e {
@@ -1155,6 +1235,9 @@ impl PageAssembler {
         snapshot
             .validate_for_schema(&patch, value["wire_schema"].as_str().unwrap_or("lx03-v1"))
             .map_err(error_reason)?;
+        if value["wire_schema"] == "lx05-v2" {
+            validate_configured_analysis(&value)?;
+        }
         self.key = None;
         self.pages.clear();
         Ok(Some(value))
@@ -1299,6 +1382,10 @@ mod analysis_clock_tests {
         fixture::{FixtureSpec, Patch, PatchSpec, SyntheticMode},
     };
     fn ready_service() -> Service {
+        ready_service_binding(None)
+    }
+    fn ready_service_binding(binding: Option<crate::analysis_subscription::Binding>) -> Service {
+        let configured = binding.is_some();
         let id = Id::new("fixture-11").unwrap();
         let patch = Patch::validate(PatchSpec {
             version: 1,
@@ -1315,16 +1402,30 @@ mod analysis_clock_tests {
             Authority::new(patch, "11111111-1111-4111-8111-111111111111", 9).unwrap(),
         )
         .unwrap();
-        s.enable_analysis().unwrap();
+        if let Some(binding) = &binding {
+            s.enable_configured_analysis(binding.clone()).unwrap();
+        } else {
+            s.enable_analysis().unwrap();
+        }
         s.engine.execute(Command::Mode(Mode::Auto)).unwrap();
         let c: Json =
             serde_json::from_str(include_str!("../tests/fixtures/lx05/v1/e09.json")).unwrap();
-        let d = Descriptor::decode(&serde_json::to_vec(&c["descriptor"]).unwrap()).unwrap();
+        let d = if let Some(binding) = &binding {
+            Descriptor::decode_configured(
+                include_bytes!("../tests/fixtures/lx05/v2/configured-descriptor.json"),
+                binding,
+            )
+            .unwrap()
+        } else {
+            Descriptor::decode(&serde_json::to_vec(&c["descriptor"]).unwrap()).unwrap()
+        };
+        let origin = counter::parse(&d.first_frame).unwrap();
+        let calibration = counter::parse(&d.calibration_revision).unwrap();
         let a = s.analysis.as_mut().unwrap();
         a.attach(d);
         for n in 0..111u64 {
             let mut b = b"GAW1".to_vec();
-            for v in [0u64, 1, 2, 1000] {
+            for v in [0u64, 1, calibration, 1000] {
                 b.extend(v.to_be_bytes());
             }
             b.extend([0; 4]);
@@ -1334,7 +1435,7 @@ mod analysis_clock_tests {
                     .step_by(2)
                     .map(|j| u8::from_str_radix(&h[j..j + 2], 16).unwrap())
                     .collect();
-                p[24..32].copy_from_slice(&(48000 + n * 480 + i as u64 * 48).to_be_bytes());
+                p[24..32].copy_from_slice(&(origin + n * 480 + i as u64 * 48).to_be_bytes());
                 p[32..36].copy_from_slice(&(n as u32 * 10 + i as u32).to_be_bytes());
                 b.extend(p);
             }
@@ -1347,6 +1448,7 @@ mod analysis_clock_tests {
             }
         }
         assert!(a.ready());
+        assert_eq!(a.descriptor.as_ref().unwrap().version == 2, configured);
         let generation = a.generation;
         let writer = Id::new("clock-test").unwrap();
         s.sessions.insert(
@@ -1546,6 +1648,78 @@ mod analysis_clock_tests {
                 ))
                 .unwrap()
             );
+        }
+    }
+    #[test]
+    fn configured_owner_corpus_active_absent_retained_and_manual() {
+        let binding = crate::analysis_subscription::Binding {
+            version: 2,
+            inputs: ["input-17", "input-03", "input-09", "input-01"].map(String::from),
+        };
+        let mut s = ready_service_binding(Some(binding.clone()));
+        s.poll_analysis_clock(None, 1000, 1, || Ok(1000)).unwrap();
+        let active = s.inventory().unwrap();
+        validate_configured_analysis(&active).unwrap();
+        s.analysis.as_mut().unwrap().absent();
+        s.poll_analysis_clock(None, 1001, 2, || Ok(1001)).unwrap();
+        let absent = s.inventory().unwrap();
+        assert!(absent["analysis"]["source_identity"].is_null());
+        assert!(
+            !absent["analysis"]["automatic_layer"]["values"]
+                .as_array()
+                .unwrap()
+                .is_empty()
+        );
+        validate_configured_analysis(&absent).unwrap();
+        let old =
+            &absent["analysis"]["automatic_layer"]["values"][0]["provenance"]["source_identity"];
+        assert_eq!(old["version"], 2);
+        assert_eq!(old["inputs"], json!(binding.inputs));
+        let request = json!({"contract":"C-LIGHT","version":1,"show_id":"11111111-1111-4111-8111-111111111111","module":"lighting","epoch":"9","writer":"clock-test","lease":"1","request_id":"2","expected_revision":s.engine.revision().to_string(),"kind":"command","body":{"scope":SCOPE,"command":{"action":"touch","values":[{"fixture":"fixture-11","attribute":"intensity","value":900}]}}});
+        let replies = s.handle(&serde_json::to_vec(&request).unwrap());
+        assert_eq!(replies[0]["kind"], "applied");
+        let manual = s.inventory().unwrap();
+        let config = crate::service_config::ServiceConfig {
+            version: 1,
+            show_id: "22222222-2222-4222-8222-222222222222".into(),
+            patch: PatchSpec {
+                version: 1,
+                patch_revision: 7,
+                fixtures: vec![
+                    FixtureSpec::synthetic(
+                        Id::new("front").unwrap(),
+                        "Front",
+                        SyntheticMode::Dimmer,
+                        1,
+                    ),
+                    FixtureSpec::synthetic(
+                        Id::new("back").unwrap(),
+                        "Back",
+                        SyntheticMode::Rgb,
+                        12,
+                    ),
+                ],
+            },
+            analysis: Some(binding),
+        };
+        let mut cold =
+            Service::new(Authority::new(config.validate().unwrap(), &config.show_id, 1).unwrap())
+                .unwrap();
+        cold.enable_configured_analysis(config.analysis.clone().unwrap())
+            .unwrap();
+        let cold_start = cold.inventory().unwrap();
+        let status_request = json!({"contract":"C-LIGHT","version":1,"show_id":config.show_id,"module":"lighting","epoch":"1","writer":null,"lease":null,"request_id":null,"expected_revision":null,"kind":"analysis_status","body":{}});
+        let status_reply = cold.handle(&serde_json::to_vec(&status_request).unwrap());
+        let corpus = json!({"schema":"lx05-v2","provenance":"Actual independent Lux configured decoder, existing Calibrator/Analyzer/Director and Authority/Service; accepted synthetic E09 PCM with configured source frame/calibration headers; injected same-host clocks. No hardware output.","config":config,"cold_start":cold_start,"status":{"request":status_request,"replies":status_reply},"active":active,"source_absent_retained":absent,"manual":{"request":request,"replies":replies,"inventory":manual}});
+        if std::env::var_os("LUX_GENERATE_LX05_V2_CORPUS").is_some() {
+            std::fs::write(
+                "tests/fixtures/lx05/v2/configured.json",
+                serde_json::to_string_pretty(&corpus).unwrap() + "\n",
+            )
+            .unwrap();
+        } else {
+            let saved = std::fs::read("tests/fixtures/lx05/v2/configured.json").unwrap();
+            assert_eq!(corpus, serde_json::from_slice::<Json>(&saved).unwrap());
         }
     }
     #[test]

@@ -14,6 +14,11 @@ proposals and bounded intensity AUTO grants; device-free software validation pas
 in [the owning plan](docs/notes/0027-gigpies-implementation.md) and
 [analysis protocol/evidence](docs/notes/0032-analysis-subscription.md).
 
+Configured software startup additionally accepts an explicit show, synthetic fixture
+patch and four named logical inputs through `lux-service --config ABS_JSON`.
+The additive lx05-v2 path preserves legacy startup and keeps recovery disarmed; see
+[configuration and protocol](docs/notes/0033-configured-analysis.md).
+
 Minimum design target: Raspberry Pi 1 with 512 MB; hardware validation pending.
 The connected uDMX dongle responds to USB descriptor queries; physical lighting output
 has not been tested. Read [hardware evidence](docs/notes/0002-hardware-baseline.md).

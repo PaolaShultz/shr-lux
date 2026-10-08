@@ -19,3 +19,5 @@ pub mod wire;
 pub mod recovery;
 
 pub mod analysis_subscription;
+
+pub mod service_config;
