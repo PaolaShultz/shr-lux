@@ -91,3 +91,19 @@ owner output against the accepted fixture. Explicit fixture refresh is
 review the diff before accepting any change. No automatic fixture rewrites occur.
 Hardware, audible playback, MIDI/DMX output and deadline qualification remain
 separate; no service starts automatically on boot.
+
+## Recorded software validation — 2026-10-08
+
+The complete normal all-target suite passed114tests, including eight configured
+startup/recovery/socket regressions and the exact v2 owner corpus. Warning-denied
+all-target Clippy, formatting, release, six fast simulation checks, the legacy
+E04 corpus and eight Linux PTY checks passed. The actual legacy null-service
+checkpoint check passed three unique epochs with disarmed recovery.
+
+An actual configured GigPies/Lux private process episode passed with seventeen
+logical inputs, reversed capture slots, explicit [17,03,09,01] selection, a custom
+show and two fixtures. It exercised explicit calibration, fresh ready analysis,
+a scoped AUTO grant, source-child loss with retained provenance, and independent
+human intensity900. Processes were bounded and joined; no physical endpoint was
+opened. Exact executable hashes and private command/evidence logs are retained in
+the task handoff, not treated as hardware qualification.

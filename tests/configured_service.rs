@@ -321,3 +321,36 @@ fn configured_missing_epoch_never_reuses_prior_identity() {
         std::fs::read(dir.0.join("lighting-startup.json")).unwrap()
     );
 }
+
+#[test]
+fn configured_cli_refuses_invalid_startup_before_private_files() {
+    let dir = Directory::new();
+    let files = Directory::new();
+    let path = files.0.join("config.json");
+    std::fs::write(&path, serde_json::to_vec(&config()).unwrap()).unwrap();
+    let binary = env!("CARGO_BIN_EXE_lux-service");
+    let output = std::process::Command::new(binary)
+        .args([
+            "--synthetic-private-dir",
+            dir.0.to_str().unwrap(),
+            "--config",
+            path.to_str().unwrap(),
+        ])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert!(String::from_utf8_lossy(&output.stderr).contains("requires explicit --analysis"));
+    assert_eq!(std::fs::read_dir(&dir.0).unwrap().count(), 0);
+    std::fs::write(&path, br#"{"version":1,"version":1}"#).unwrap();
+    let output = std::process::Command::new(binary)
+        .args([
+            "--synthetic-private-dir",
+            dir.0.to_str().unwrap(),
+            "--config",
+            path.to_str().unwrap(),
+        ])
+        .output()
+        .unwrap();
+    assert!(!output.status.success());
+    assert_eq!(std::fs::read_dir(&dir.0).unwrap().count(), 0);
+}
