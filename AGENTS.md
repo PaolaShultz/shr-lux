@@ -44,3 +44,13 @@ cargo test --locked --all-targets. Physical fixture tests are separate and never
 in CI. Update the notebook with significant validation evidence and remaining limitations.
 
 Also run the fast Linux PTY suite after the release build: python3 scripts/check-terminal.py.
+
+## GigPies task tracking
+
+Use `docs/notes/0027-gigpies-implementation.md` for GigPies work owned here. Keep each task plan,
+implementation state, acceptance checklist, evidence and next action in the same
+card; update it with the change. Shared integration tasks have one card in
+GigPies, linked from contributor plans. STATUS, maps, handoffs and knowledge notes
+route to task owners or preserve dated evidence; never mirror current task state.
+Archive closed cards once; keep the active queue limited to open work. Reference
+projects do not become GigPies runtime modules merely because code is reused.
