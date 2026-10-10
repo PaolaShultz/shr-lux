@@ -4,6 +4,10 @@ A standalone zk notebook of linked Markdown notes. Keep observed facts, protocol
 references, proposals, decisions and test results distinguishable. Sources were consulted
 on 2026-09-28 unless another date is stated. The original [idea](../idea.md) remains intact.
 
+For GigPies module work, plan and track implementation only in
+[the owning plan](notes/0027-gigpies-implementation.md). The dated notes below
+are technical references/evidence, not competing task queues.
+
 ## Notes
 
 - [Project map](notes/0001-project-map.md)
