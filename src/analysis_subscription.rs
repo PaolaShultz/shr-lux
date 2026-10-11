@@ -210,6 +210,7 @@ pub struct AnalysisState {
     analyzer: Option<Analyzer>,
     analyzed_frames: u32,
     snapshot: Option<Snapshot>,
+    music: Option<crate::musical::MusicalAnalyzer>,
     director: Director,
     pub proposal: Option<i32>,
     pub generation: u64,
@@ -233,6 +234,7 @@ impl Default for AnalysisState {
             analyzer: None,
             analyzed_frames: 0,
             snapshot: None,
+            music: None,
             director: Director::new(Program::Atmospheric),
             proposal: None,
             generation: 0,
@@ -242,6 +244,12 @@ impl Default for AnalysisState {
     }
 }
 impl AnalysisState {
+    pub fn enable_music(&mut self) {
+        self.music = Some(crate::musical::MusicalAnalyzer::new());
+    }
+    pub fn music_enabled(&self) -> bool {
+        self.music.is_some()
+    }
     pub fn attach(&mut self, d: Descriptor) {
         self.invalidate("reattach");
         self.descriptor = Some(d);
@@ -260,6 +268,9 @@ impl AnalysisState {
         self.calibration = None;
         self.analyzer = None;
         self.snapshot = None;
+        if let Some(music) = &mut self.music {
+            music.reset();
+        }
         self.proposal = None;
         self.generation = self.generation.saturating_add(1);
         self.director = Director::new(Program::Atmospheric);
@@ -360,12 +371,19 @@ impl AnalysisState {
                 .analyzed_frames
                 .checked_add(480)
                 .ok_or("analysis_frame_overflow")?;
+            let musical = self.music.as_mut().map(|m| m.process(&w.pcm, w.first));
             let decision = self.director.update(snap.at, snap.features(), false);
             self.proposal = decision.input_available.then_some(match decision.scene {
                 Scene::Calm => 250,
                 Scene::Drive => 500,
                 Scene::Intense => 750,
             });
+            // Harmonic evidence only nudges the existing bounded intensity proposal.
+            // It grants no authority and bypasses no Hold, cap, freshness or manual rule.
+            if snap.reliable {
+                let nudge = musical.map(musical_intensity_nudge).unwrap_or(0);
+                self.proposal = self.proposal.map(|value| (value + nudge).clamp(0, 1000));
+            }
             self.state = if snap.reliable { "ready" } else { "settling" };
             self.snapshot = Some(snap);
         }
@@ -384,9 +402,100 @@ impl AnalysisState {
     pub fn ready(&self) -> bool {
         self.state == "ready" && self.proposal.is_some()
     }
-    pub fn status(&self, now: u64) -> Value {
-        json!({"analysis_version":"lux.analysis.v1","calibration_generation":self.analyzer.as_ref().map(|_|self.generation.to_string()),"calibration_windows":self.calibration_windows,"source_epoch":self.descriptor.as_ref().map(|d|&d.source_epoch),"map_revision":self.descriptor.as_ref().map(|d|&d.map_revision),"calibration_revision":self.descriptor.as_ref().map(|d|&d.calibration_revision),"sources":self.descriptor.as_ref().map(|d|&d.sources),"state":self.state,"reason":self.reason,"source_identity":self.descriptor,"source_window_range":self.last_range.map(|(a,b)|json!({"first_frame":a.to_string(),"end_frame_exclusive":b.to_string()})),"source_age_ms":self.oldest.and_then(|t|now.checked_sub(t)),"losses":self.losses.to_string(),"confidence":if self.ready(){1000}else{0},"rms_millionths":self.snapshot.map(|s|s.rms.map(|v|(v*1000000.).round() as u32)),"energy_millionths":self.snapshot.map(|s|(s.energy*1000000.).round() as u32),"beat":null,"downbeat":null,"harmony":null,"proposal":self.proposal,"generation":self.generation.to_string()})
+    pub fn scene_evidence(&self) -> crate::scenes::Evidence {
+        let snap = self.snapshot;
+        let music = self.music.as_ref().map(|m| m.snapshot());
+        crate::scenes::Evidence {
+            available: self.ready(),
+            energy: snap.map_or(0, |s| (s.energy.clamp(0., 1.) * 1000.).round() as i32),
+            density: snap.map_or(0, |s| {
+                (s.kick_density / 8. * 1000.).clamp(0., 1000.).round() as i32
+            }),
+            confidence: if self.ready() { 1000 } else { 0 },
+            section_id: music.and_then(crate::scenes::section_identity),
+            harmonic_relation: music
+                .and_then(|m| m.movement)
+                .map(|m| format!("{:?}", m.kind).to_lowercase()),
+        }
     }
+    pub fn status(&self, now: u64) -> Value {
+        let mut status = json!({"analysis_version":"lux.analysis.v1","calibration_generation":self.analyzer.as_ref().map(|_|self.generation.to_string()),"calibration_windows":self.calibration_windows,"source_epoch":self.descriptor.as_ref().map(|d|&d.source_epoch),"map_revision":self.descriptor.as_ref().map(|d|&d.map_revision),"calibration_revision":self.descriptor.as_ref().map(|d|&d.calibration_revision),"sources":self.descriptor.as_ref().map(|d|&d.sources),"state":self.state,"reason":self.reason,"source_identity":self.descriptor,"source_window_range":self.last_range.map(|(a,b)|json!({"first_frame":a.to_string(),"end_frame_exclusive":b.to_string()})),"source_age_ms":self.oldest.and_then(|t|now.checked_sub(t)),"losses":self.losses.to_string(),"confidence":if self.ready(){1000}else{0},"rms_millionths":self.snapshot.map(|s|s.rms.map(|v|(v*1000000.).round() as u32)),"energy_millionths":self.snapshot.map(|s|(s.energy*1000000.).round() as u32),"beat":null,"downbeat":null,"harmony":null,"proposal":self.proposal,"generation":self.generation.to_string()});
+        if let Some(music) = &self.music {
+            status["analysis_version"] = json!("lux.analysis.v2");
+            status["musical"] = musical_status(music.snapshot(), self.state);
+        }
+        status
+    }
+}
+/// Key-dependent harmonic evidence cannot exceed the owner's modest ±50 proposal nudge.
+fn musical_intensity_nudge(snapshot: crate::musical::MusicalSnapshot) -> i32 {
+    if !snapshot.ready || snapshot.key.is_none() {
+        return 0;
+    }
+    snapshot.movement.map_or(0, |movement| {
+        ((movement.tension.clamp(0., 1.) - movement.resolution.clamp(0., 1.)) * 50.).round() as i32
+    })
+}
+
+#[cfg(test)]
+mod musical_policy_tests {
+    use super::musical_intensity_nudge;
+    use crate::musical::{HarmonicMovement, KeyEstimate, Mode, MovementKind, MusicalSnapshot};
+    #[test]
+    fn harmonic_nudge_is_bounded_and_requires_ready_key_evidence() {
+        let mut snapshot = MusicalSnapshot {
+            ready: true,
+            key: Some(KeyEstimate {
+                tonic: 0,
+                mode: Mode::Major,
+                camelot_number: 8,
+                camelot_letter: 'B',
+                confidence: 0.8,
+            }),
+            movement: Some(HarmonicMovement {
+                fifths_steps: 1,
+                kind: MovementKind::FifthsForward,
+                tension: 1.,
+                resolution: 0.,
+            }),
+            ..MusicalSnapshot::default()
+        };
+        assert_eq!(musical_intensity_nudge(snapshot), 50);
+        snapshot.movement.as_mut().unwrap().resolution = 1.;
+        snapshot.movement.as_mut().unwrap().tension = 0.;
+        assert_eq!(musical_intensity_nudge(snapshot), -50);
+        snapshot.key = None;
+        assert_eq!(musical_intensity_nudge(snapshot), 0);
+        snapshot.ready = false;
+        assert_eq!(musical_intensity_nudge(snapshot), 0);
+    }
+}
+
+/// Integer, bounded public estimates. An unavailable source never exposes retained music.
+fn musical_status(m: crate::musical::MusicalSnapshot, source_state: &str) -> Value {
+    use crate::musical::{Mode, MovementKind, SectionLabel};
+    let tracking = source_state == "ready" && m.ready;
+    let state = if source_state == "stale" {
+        "stale"
+    } else if tracking {
+        "tracking"
+    } else {
+        "unknown"
+    };
+    let unit = |v: f32| (v.clamp(0., 1.) * 1000.).round() as u32;
+    let mode = |v: Mode| match v {
+        Mode::Major => "major",
+        Mode::Minor => "minor",
+    };
+    json!({
+        "state":state,
+        "source_frame":tracking.then(||m.source_frame.to_string()),
+        "chroma":if tracking {m.chroma.map(unit)} else {[0;12]},
+        "chord":m.chord.filter(|_|tracking).map(|c|json!({"root":c.root,"quality":mode(c.quality),"confidence":unit(c.confidence)})),
+        "key":m.key.filter(|_|tracking).map(|k|json!({"tonic":k.tonic,"mode":mode(k.mode),"camelot_number":k.camelot_number,"camelot_letter":k.camelot_letter.to_string(),"confidence":unit(k.confidence)})),
+        "movement":m.movement.filter(|_|tracking).map(|v|json!({"fifths_steps":v.fifths_steps,"kind":match v.kind {MovementKind::Stationary=>"stationary",MovementKind::FifthsForward=>"fifths_forward",MovementKind::FifthsBackward=>"fifths_backward",MovementKind::Other=>"other"},"tension":unit(v.tension),"resolution":unit(v.resolution)})),
+        "section":m.section.filter(|_|tracking).map(|v|json!({"id":v.id,"novelty":unit(v.novelty),"recurrence":unit(v.recurrence),"label":match v.label {SectionLabel::Unknown=>"unknown",SectionLabel::VerseCandidate=>"verse_candidate",SectionLabel::ChorusCandidate=>"chorus_candidate"},"confidence":unit(v.confidence)}))
+    })
 }
 struct Inbox {
     descriptor: Option<Descriptor>,
@@ -489,22 +598,51 @@ impl Client {
         })
     }
     pub fn drain(&self, state: &mut AnalysisState, now: u64) {
-        if let Ok(mut q) = self.inbox.lock() {
-            if q.disconnected {
+        self.drain_with(state, now, AnalysisState::ingest);
+    }
+    fn drain_with(
+        &self,
+        state: &mut AnalysisState,
+        now: u64,
+        mut ingest: impl FnMut(&mut AnalysisState, &[u8], u64) -> Result<(), &'static str>,
+    ) {
+        // Move at most two owned windows; expensive analysis never holds the
+        // transport mutex. The reader can fill its existing bounded queue while
+        // this batch is analyzed; neither the queue nor acquisition age grows.
+        let batch = self.inbox.lock().ok().map(|mut q| {
+            (
+                std::mem::take(&mut q.disconnected),
+                std::mem::take(&mut q.dropped),
+                q.descriptor.take(),
+                [q.windows.pop_front(), q.windows.pop_front()],
+            )
+        });
+        if let Some((disconnected, dropped, descriptor, windows)) = batch {
+            if disconnected {
                 state.absent();
-                q.disconnected = false;
             }
-            if q.dropped {
+            if dropped {
                 state.invalidate("client_queue_loss");
-                q.dropped = false;
             }
-            if let Some(d) = q.descriptor.take() {
+            if let Some(d) = descriptor {
                 state.attach(d);
             }
-            for b in q.windows.drain(..) {
-                if state.ingest(&b, now).is_err() {
+            for bytes in windows.into_iter().flatten() {
+                if ingest(state, &bytes, now).is_err() {
                     self.reconnect.store(true, Ordering::Release);
                     break;
+                }
+            }
+            // A receiver loss or new connection during DSP invalidates the
+            // processed batch before the owner can apply an AUTO proposal. Keep
+            // those events queued for their normal ordered handling next drain.
+            if let Ok(q) = self.inbox.lock() {
+                if q.disconnected {
+                    state.absent();
+                } else if q.dropped {
+                    state.invalidate("client_queue_loss");
+                } else if q.descriptor.is_some() {
+                    state.invalidate("reattach");
                 }
             }
         }
@@ -517,6 +655,73 @@ impl Client {
         state.expire(now);
     }
 }
+#[cfg(test)]
+mod inbox_tests {
+    use super::*;
+    fn descriptor() -> Descriptor {
+        let corpus: Value =
+            serde_json::from_str(include_str!("../tests/fixtures/lx05/v1/e09.json")).unwrap();
+        Descriptor::decode(&serde_json::to_vec(&corpus["descriptor"]).unwrap()).unwrap()
+    }
+    fn client() -> Client {
+        Client {
+            reconnect: Arc::new(AtomicBool::new(false)),
+            inbox: Arc::new(Mutex::new(Inbox {
+                descriptor: Some(descriptor()),
+                windows: [vec![1], vec![2]].into_iter().collect(),
+                disconnected: true,
+                dropped: true,
+            })),
+            stop: Arc::new(AtomicBool::new(false)),
+            worker: None,
+        }
+    }
+    #[test]
+    fn receiver_can_enqueue_while_bounded_batch_is_analyzed() {
+        let client = client();
+        let mut state = AnalysisState::default();
+        let mut observed = Vec::new();
+        client.drain_with(&mut state, 1000, |state, bytes, _| {
+            // Pending reset events precede the descriptor, so attachment is admitted.
+            assert!(state.admitted);
+            assert_eq!(state.reason, Some("reattach"));
+            let mut inbox = client
+                .inbox
+                .try_lock()
+                .expect("DSP must release transport mutex");
+            inbox.windows.push_back(vec![3]);
+            observed.push(bytes[0]);
+            Ok(())
+        });
+        assert_eq!(observed, [1, 2]);
+        assert_eq!(client.inbox.lock().unwrap().windows.len(), 2);
+    }
+    #[test]
+    fn loss_disconnect_or_reattach_during_analysis_cannot_leave_ready_proposal() {
+        for event in ["loss", "disconnect", "reattach"] {
+            let client = client();
+            let mut state = AnalysisState::default();
+            state.enable_music();
+            client.drain_with(&mut state, 1000, |state, _, _| {
+                state.state = "ready";
+                state.proposal = Some(500);
+                let mut inbox = client.inbox.try_lock().unwrap();
+                match event {
+                    "loss" => inbox.dropped = true,
+                    "disconnect" => inbox.disconnected = true,
+                    _ => inbox.descriptor = Some(descriptor()),
+                }
+                Ok(())
+            });
+            assert!(!state.ready());
+            assert!(state.proposal.is_none());
+            assert!(state.status(1000)["musical"]["source_frame"].is_null());
+            let inbox = client.inbox.lock().unwrap();
+            assert!(inbox.dropped || inbox.disconnected || inbox.descriptor.is_some());
+        }
+    }
+}
+
 fn bounded_connect(path: &Path, stop: &AtomicBool) -> io::Result<UnixStream> {
     use std::os::{
         fd::{AsRawFd, FromRawFd},

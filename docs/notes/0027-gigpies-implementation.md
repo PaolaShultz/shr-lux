@@ -12,7 +12,9 @@ bounded ASSIST/AUTO. Actual provider/consumer execution uses null output.
 [Authority](0028-static-authority.md), [wire](0029-lighting-wire.md),
 [release/recovery](0030-release-recovery.md), [provider](0031-local-provider-integration.md)
 and [analysis](0032-analysis-subscription.md) own exact behavior/evidence.
-Beat/downbeat/harmony and physical light are not implied by source activity.
+Optional music analysis adds chord/key/Camelot, movement and tentative recurring
+sections; [LX-07 synthetic software acceptance](archive/2026-10-11-musical-understanding.md)
+records its validation. Beat/downbeat and physical light remain unavailable.
 
 ## LX-06 — physical fixture output
 
@@ -44,3 +46,7 @@ Preserve closed milestone details in the linked archive; do not reopen old launc
 A documentation reconciliation does not rerun tests or qualify hardware.
 
 [Historical plan and milestone evidence](archive/tracking-before-2026-10-09/0027-gigpies-implementation.md). Its launch instructions are retired.
+
+## Shared scene integration
+
+[GP-SCENES](../../../gigpies/docs/archive/records/2026-10-11-gp-scenes.md) is the archived shared acceptance card for Lux director and Lightdesk editor work. Owner behavior and protocol are documented in [0035](0035-scene-map.md); task state, acceptance and next action stay in GigPies.

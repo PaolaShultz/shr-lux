@@ -197,6 +197,18 @@ enum Action {
     AnalysisCalibrate {
         phase: String,
     },
+    SceneMapReplace {
+        map: crate::scenes::ShowMap,
+    },
+    ScenePreview {
+        scene_id: Id,
+    },
+    SceneGrant {
+        fixtures: Vec<Id>,
+        intensity_cap: i32,
+        color_cap: i32,
+        ttl_ms: u64,
+    },
     AnalysisGrant {
         fixtures: Vec<Id>,
         cap: i32,
@@ -249,6 +261,9 @@ impl Action {
             | Self::ReleaseCancel
             | Self::AnalysisCalibrate { .. }
             | Self::AnalysisGrant { .. }
+            | Self::SceneMapReplace { .. }
+            | Self::ScenePreview { .. }
+            | Self::SceneGrant { .. }
             | Self::Checkpoint => return Err("unavailable"),
         })
     }
@@ -263,7 +278,7 @@ struct Session {
     lease: u64,
     expiry: u64,
     highwater: u64,
-    cache: VecDeque<(u64, Json, Json)>,
+    cache: VecDeque<(u64, std::sync::Arc<Json>, std::sync::Arc<Json>)>,
 }
 #[derive(Clone)]
 struct AnalysisGrant {
@@ -275,11 +290,14 @@ struct AnalysisGrant {
     expiry: u64,
     fixtures: Vec<Id>,
     cap: i32,
+    color_cap: Option<i32>,
 }
 /// One scope, one active writer, bounded never-forgotten identities per epoch.
 #[derive(Clone)]
 pub struct Service {
     engine: Authority,
+    scenes: Option<crate::scenes::Director>,
+    scene_generation: Option<u64>,
     analysis: Option<crate::analysis_subscription::AnalysisState>,
     analysis_binding: Option<crate::analysis_subscription::Binding>,
     analysis_grant: Option<AnalysisGrant>,
@@ -292,7 +310,7 @@ pub struct Service {
     next_lease: u64,
     sessions: BTreeMap<Id, Session>,
     retired: BTreeSet<Id>,
-    denied_grants: BTreeMap<Id, (Json, Json)>,
+    denied_grants: BTreeMap<Id, (std::sync::Arc<Json>, std::sync::Arc<Json>)>,
     timed: bool,
     preview: Option<PreviewEntry>,
     store: Option<std::sync::Arc<crate::recovery::CheckpointStore>>,
@@ -303,6 +321,8 @@ impl Service {
     pub fn new(engine: Authority) -> Result<Self, &'static str> {
         let service = Self {
             engine,
+            scenes: None,
+            scene_generation: None,
             analysis: None,
             analysis_binding: None,
             analysis_grant: None,
@@ -384,8 +404,54 @@ impl Service {
         }
         self.enable_analysis_inner(Some(binding))
     }
+    /// Explicit additive estimator mode; existing LX05 output remains unchanged.
+    pub fn enable_musical_analysis(&mut self) -> Result<(), &'static str> {
+        let mut next = self.clone();
+        let analysis = next.analysis.as_mut().ok_or("analysis required")?;
+        if analysis.descriptor.is_some() || analysis.music_enabled() {
+            return Err("musical mode is startup-only");
+        }
+        analysis.enable_music();
+        next.pages()?;
+        *self = next;
+        Ok(())
+    }
+    pub fn enable_scene_director(&mut self) -> Result<(), &'static str> {
+        if !self.analysis.as_ref().is_some_and(|a| a.music_enabled()) || self.scenes.is_some() {
+            return Err("scenes require musical analysis startup");
+        }
+        let mut next = self.clone();
+        let owner = next.store.as_ref().or(next.epoch_owner.as_ref());
+        let map = owner
+            .map(|s| s.load_scene_map(next.engine.patch()))
+            .transpose()
+            .map_err(|_| "scene map recovery")?
+            .flatten()
+            .unwrap_or_else(|| crate::scenes::ShowMap::defaults(next.engine.patch()));
+        map.validate(next.engine.patch())?;
+        next.engine.enable_scenes();
+        next.scenes = Some(crate::scenes::Director::new(map));
+        next.pages()?;
+        *self = next;
+        Ok(())
+    }
+    pub fn scene_status(&self) -> Json {
+        self.scenes.as_ref().map_or(Json::Null,|director|{let mut s=serde_json::to_value(&director.status).expect("scene status");s["grant"]=self.analysis_grant.as_ref().filter(|g|g.color_cap.is_some()).map_or(Json::Null,|g|json!({"writer":g.writer,"lease":g.lease.to_string(),"issue_revision":g.issue_revision.to_string(),"patch_revision":g.patch.to_string(),"analysis_generation":g.generation.to_string(),"expiry_tick":g.expiry.to_string(),"fixtures":g.fixtures,"intensity_cap":g.cap,"color_cap":g.color_cap}));s["automatic_layer"]=self.engine.scene_inventory();s})
+    }
     fn analysis_schema(&self) -> &'static str {
-        if self.analysis_binding.is_some() {
+        if self.scenes.is_some() {
+            if self.analysis_binding.is_some() {
+                "lx06-scenes-v2"
+            } else {
+                "lx06-scenes-v1"
+            }
+        } else if self.analysis.as_ref().is_some_and(|a| a.music_enabled()) {
+            if self.analysis_binding.is_some() {
+                "lx05-music-v2"
+            } else {
+                "lx05-music-v1"
+            }
+        } else if self.analysis_binding.is_some() {
             "lx05-v2"
         } else {
             "lx05-v1"
@@ -436,7 +502,7 @@ impl Service {
         }
         let mut baseline = self.clone();
         baseline.analysis_emergency = true;
-        baseline.advance(tick)?;
+        baseline.advance_inner(tick)?;
         let mut candidate = baseline.clone();
         candidate.analysis_emergency = false;
         candidate.poll_analysis_inner(client, now_ms, tick, &mut clock)?;
@@ -447,6 +513,9 @@ impl Service {
             }
             baseline.engine.set_analysis_proposal(None);
             baseline.revoke_analysis("snapshot_capacity")?;
+            if let Some(d) = &mut baseline.scenes {
+                d.reset_source();
+            }
             baseline.last_analysis_step = Some(tick);
             baseline.analysis_now = clock().map_err(|_| "clock")?;
             baseline.pages()?;
@@ -463,6 +532,9 @@ impl Service {
             }
             candidate.engine.set_analysis_proposal(None);
             candidate.revoke_analysis("clock_regression")?;
+            if let Some(d) = &mut candidate.scenes {
+                d.reset_source();
+            }
             candidate.pages()?;
             *self = candidate;
             return Ok(());
@@ -481,6 +553,9 @@ impl Service {
             candidate.analysis_emergency = true;
             candidate.engine.set_analysis_proposal(None);
             candidate.revoke_analysis("analysis_age_after_processing")?;
+            if let Some(d) = &mut candidate.scenes {
+                d.reset_source();
+            }
             candidate.pages()?;
         }
         *self = candidate;
@@ -533,6 +608,32 @@ impl Service {
         if let Some(reason) = invalid {
             self.revoke_analysis(reason)?;
         }
+        if let Some(director) = &mut self.scenes {
+            let a = self.analysis.as_ref().ok_or("analysis_unavailable")?;
+            if !a.ready() || self.scene_generation != Some(a.generation) {
+                director.reset_source();
+                self.scene_generation = Some(a.generation);
+            }
+            let actual = self
+                .engine
+                .snapshot()
+                .fixtures
+                .into_iter()
+                .flat_map(|f| {
+                    f.attributes.into_iter().map(move |a| Value {
+                        fixture: f.fixture.clone(),
+                        attribute: a.attribute,
+                        value: a.resolved,
+                    })
+                })
+                .collect::<Vec<_>>();
+            director.step(
+                a.scene_evidence(),
+                self.analysis_now,
+                self.engine.patch(),
+                &actual,
+            )?;
+        }
         if self.last_analysis_step != Some(tick) {
             self.last_analysis_step = Some(tick);
             if let Some(g) = &self.analysis_grant {
@@ -542,12 +643,29 @@ impl Service {
                     .and_then(|a| a.proposal)
                     .ok_or("analysis_unavailable")?;
                 let revision = self.engine.revision();
-                self.engine
-                    .step_auto(&g.fixtures, g.cap, proposal)
-                    .map_err(error_reason)?;
-                let a = self.analysis.as_ref().ok_or("analysis_unavailable")?;
-                let status = a.status(self.analysis_now);
-                self.engine.set_auto_provenance(&g.fixtures,&json!({"analysis_version":"lux.analysis.v1","source_identity":status["source_identity"],"source_window_range":status["source_window_range"],"calibration_generation":status["calibration_generation"],"confidence":status["confidence"]}));
+                let status = self
+                    .analysis
+                    .as_ref()
+                    .ok_or("analysis_unavailable")?
+                    .status(self.analysis_now);
+                if let Some(color_cap) = g.color_cap {
+                    let director = self.scenes.as_ref().ok_or("unavailable")?;
+                    let provenance = json!({"map_revision":director.status.map.revision.to_string(),"scene_id":director.status.current,"analysis_generation":g.generation.to_string(),"section_id":director.status.evidence.section_id,"source_identity":status["source_identity"],"source_window_range":status["source_window_range"]});
+                    self.engine
+                        .step_scene(
+                            &director.status.intended_values,
+                            &g.fixtures,
+                            g.cap,
+                            color_cap,
+                            &provenance,
+                        )
+                        .map_err(error_reason)?;
+                } else {
+                    self.engine
+                        .step_auto(&g.fixtures, g.cap, proposal)
+                        .map_err(error_reason)?;
+                    self.engine.set_auto_provenance(&g.fixtures,&json!({"analysis_version":status["analysis_version"],"source_identity":status["source_identity"],"source_window_range":status["source_window_range"],"calibration_generation":status["calibration_generation"],"confidence":status["confidence"]}));
+                }
                 if self.engine.revision() != revision {
                     self.preview = None;
                     self.durability = crate::lighting_contract::Durability::Volatile;
@@ -567,7 +685,7 @@ impl Service {
             .as_ref()
             .map_or(Json::Null, |a| a.status(self.analysis_now));
         if !status.is_null() {
-            status["grant"]=self.analysis_grant.as_ref().map_or(Json::Null,|g|json!({"writer":g.writer,"lease":g.lease.to_string(),"issue_revision":g.issue_revision.to_string(),"patch_revision":g.patch.to_string(),"analysis_generation":g.generation.to_string(),"expiry_tick":g.expiry.to_string(),"fixtures":g.fixtures,"cap":g.cap}));
+            status["grant"]=self.analysis_grant.as_ref().filter(|g|g.color_cap.is_none()).map_or(Json::Null,|g|json!({"writer":g.writer,"lease":g.lease.to_string(),"issue_revision":g.issue_revision.to_string(),"patch_revision":g.patch.to_string(),"analysis_generation":g.generation.to_string(),"expiry_tick":g.expiry.to_string(),"fixtures":g.fixtures,"cap":g.cap}));
             status["automatic_layer"] = self.engine.auto_inventory();
             status["held_reason"] = json!(self.auto_held_reason);
             if let Some(binding) = &self.analysis_binding {
@@ -583,38 +701,43 @@ impl Service {
         self.tick
     }
     pub fn advance(&mut self, tick: u64) -> Result<(), &'static str> {
+        let mut next = self.clone();
+        next.advance_inner(tick)?;
+        next.pages()?;
+        *self = next;
+        Ok(())
+    }
+    fn advance_inner(&mut self, tick: u64) -> Result<(), &'static str> {
         if tick < self.tick {
             return Err("clock");
         }
-        let mut next = self.clone();
-        next.tick = tick;
-        if next.timed {
-            next.engine.advance(tick).map_err(error_reason)?;
-            if next.engine.revision() != self.engine.revision() {
-                next.durability = crate::lighting_contract::Durability::Volatile;
+        let revision = self.engine.revision();
+        self.tick = tick;
+        if self.timed {
+            self.engine.advance(tick).map_err(error_reason)?;
+            if self.engine.revision() != revision {
+                self.durability = crate::lighting_contract::Durability::Volatile;
             }
         }
-        let expired = next
+        let expired = self
             .sessions
             .iter()
             .filter(|(_, s)| s.expiry <= tick)
             .map(|(id, _)| id.clone())
             .collect::<Vec<_>>();
         for id in expired {
-            next.sessions.remove(&id);
-            next.retired.insert(id);
+            self.sessions.remove(&id);
+            self.retired.insert(id);
         }
-        if next.preview.as_ref().is_some_and(|p| {
-            !next.engine.preview_is_current(&p.preview)
-                || !next
+        if self.preview.as_ref().is_some_and(|p| {
+            !self.engine.preview_is_current(&p.preview)
+                || !self
                     .sessions
                     .get(&p.writer)
                     .is_some_and(|s| s.lease == p.lease)
         }) {
-            next.preview = None;
+            self.preview = None;
         }
-        next.pages()?;
-        *self = next;
         Ok(())
     }
     fn reply(&self, kind: &str, reason: Option<&str>, request: Option<&str>, body: Json) -> Json {
@@ -703,12 +826,12 @@ impl Service {
                 if self.analysis.is_none() {
                     return Err("unavailable");
                 }
-                return Ok(vec![self.reply(
-                    "analysis_status",
-                    None,
-                    None,
-                    json!({"wire_schema":self.analysis_schema(),"analysis":self.analysis_status()}),
-                )]);
+                let mut body =
+                    json!({"wire_schema":self.analysis_schema(),"analysis":self.analysis_status()});
+                if self.scenes.is_some() {
+                    body["scenes"] = self.scene_status();
+                }
+                return Ok(vec![self.reply("analysis_status", None, None, body)]);
             }
             return self.pages();
         }
@@ -723,8 +846,8 @@ impl Service {
         }
         let id = counter::parse(e.request_id.as_deref().ok_or("malformed")?)?;
         if let Some((_, old, response)) = session.cache.iter().find(|(i, _, _)| *i == id) {
-            return if old == &raw {
-                Ok(vec![response.clone()])
+            return if old.as_ref() == &raw {
+                Ok(vec![response.as_ref().clone()])
             } else {
                 Err("reused_id")
             };
@@ -758,7 +881,9 @@ impl Service {
         // Retire removes the session; its identity remains permanently unavailable this epoch.
         if let Some(session) = self.sessions.get_mut(&writer) {
             session.highwater = id;
-            session.cache.push_back((id, raw, response.clone()));
+            session
+                .cache
+                .push_back((id, raw.into(), response.clone().into()));
             if session.cache.len() > CACHE {
                 session.cache.pop_front();
             }
@@ -788,8 +913,8 @@ impl Service {
                 return Err("lease");
             }
             if let Some((_, old, response)) = session.cache.iter().find(|(i, _, _)| *i == 1) {
-                return if old == &raw {
-                    Ok(vec![response.clone()])
+                return if old.as_ref() == &raw {
+                    Ok(vec![response.as_ref().clone()])
                 } else {
                     Err("reused_id")
                 };
@@ -797,8 +922,8 @@ impl Service {
             return Err("expired_id");
         }
         if let Some((old, response)) = self.denied_grants.get(&writer) {
-            return if old == &raw {
-                Ok(vec![response.clone()])
+            return if old.as_ref() == &raw {
+                Ok(vec![response.as_ref().clone()])
             } else {
                 Err("reused_id")
             };
@@ -851,10 +976,13 @@ impl Service {
         };
         let response = self.correlated(response, e);
         if let Some(session) = self.sessions.get_mut(&writer) {
-            session.cache.push_back((1, raw, response.clone()));
+            session
+                .cache
+                .push_back((1, raw.into(), response.clone().into()));
         } else {
             self.retired.insert(writer.clone());
-            self.denied_grants.insert(writer, (raw, response.clone()));
+            self.denied_grants
+                .insert(writer, (raw.into(), response.clone().into()));
         }
         Ok(vec![response])
     }
@@ -895,6 +1023,78 @@ impl Service {
         let mut result =
             json!({"application":"logical_static","output":"null_disarmed","physical":"unknown"});
         match action {
+            Action::SceneMapReplace { map } => {
+                let old = candidate.scenes.as_ref().ok_or("unavailable")?;
+                if map.revision != old.status.map.revision.checked_add(1).ok_or("capacity")? {
+                    return Err("scene_map_revision");
+                }
+                map.validate(candidate.engine.patch())?;
+                candidate.revoke_analysis("scene_map_edit")?;
+                candidate.scenes = Some(crate::scenes::Director::new(map.clone()));
+                candidate.engine.bump_revision().map_err(error_reason)?;
+                candidate.pages()?;
+                let owner = candidate
+                    .store
+                    .as_ref()
+                    .or(candidate.epoch_owner.as_ref())
+                    .ok_or("durability")?;
+                owner
+                    .save_scene_map(&map, candidate.engine.patch())
+                    .map_err(|_| "durability")?;
+                result = json!({"application":"scene_map_replaced","map_revision":map.revision.to_string(),"physical":"unknown"});
+            }
+            Action::ScenePreview { scene_id } => {
+                let d = candidate.scenes.as_ref().ok_or("unavailable")?;
+                let values = d.status.map.values(&scene_id, candidate.engine.patch())?;
+                let unsupported=candidate.engine.patch().fixtures().iter().map(|f|json!({"fixture":f.id,"attributes":if f.capability(crate::fixture::Attribute::Red).is_none(){vec!["red","green","blue","movement","strobe"]}else{vec!["movement","strobe"]}})).collect::<Vec<_>>();
+                let snapshot = candidate.engine.snapshot();
+                let actual=values.iter().map(|v|{let a=snapshot.fixtures.iter().find(|f|f.fixture==v.fixture).and_then(|f|f.attributes.iter().find(|a|a.attribute==v.attribute)).expect("validated preview target");json!({"fixture":v.fixture,"attribute":v.attribute,"value":a.resolved,"source":a.source})}).collect::<Vec<_>>();
+                result = json!({"application":"scene_preview","scene_id":scene_id,"map_revision":d.status.map.revision.to_string(),"values":values,"actual":actual,"unsupported":unsupported,"physical":"unknown"});
+            }
+            Action::SceneGrant {
+                fixtures,
+                intensity_cap,
+                color_cap,
+                ttl_ms,
+            } => {
+                if candidate.scenes.is_none() {
+                    return Err("unavailable");
+                }
+                let now = crate::analysis_subscription::monotonic_ms().map_err(|_| "clock")?;
+                candidate.analysis_now = now;
+                let a = candidate.analysis.as_mut().ok_or("unavailable")?;
+                a.expire(now);
+                if !a.ready() {
+                    return Err("analysis_unavailable");
+                }
+                if ttl_ms == 0
+                    || ttl_ms > 2000
+                    || !ttl_ms.is_multiple_of(10)
+                    || !(0..=1000).contains(&color_cap)
+                {
+                    return Err("range");
+                }
+                candidate
+                    .engine
+                    .validate_auto_targets(&fixtures, intensity_cap)
+                    .map_err(error_reason)?;
+                let generation = a.generation;
+                let lease = candidate.sessions.get(writer).ok_or("lease")?.lease;
+                candidate.revoke_analysis("replaced_grant")?;
+                candidate.analysis_grant = Some(AnalysisGrant {
+                    writer: writer.clone(),
+                    lease,
+                    issue_revision: candidate.engine.revision(),
+                    patch: candidate.engine.patch().revision(),
+                    generation,
+                    expiry: candidate.tick.checked_add(ttl_ms / 10).ok_or("capacity")?,
+                    fixtures,
+                    cap: intensity_cap,
+                    color_cap: Some(color_cap),
+                });
+                candidate.auto_held_reason = None;
+                result = json!({"application":"scene_granted","map_revision":candidate.scenes.as_ref().ok_or("unavailable")?.status.map.revision.to_string(),"grant":candidate.scene_status()["grant"]});
+            }
             Action::AnalysisCalibrate { phase } => {
                 let now = crate::analysis_subscription::monotonic_ms().map_err(|_| "clock")?;
                 candidate.analysis_now = now;
@@ -930,6 +1130,10 @@ impl Service {
                 let generation = a.generation;
                 let lease = session.lease;
                 candidate.revoke_analysis("replaced_grant")?;
+                candidate
+                    .engine
+                    .replace_scene_intensity(&fixtures)
+                    .map_err(error_reason)?;
                 candidate.analysis_grant = Some(AnalysisGrant {
                     writer: writer.clone(),
                     lease,
@@ -939,6 +1143,7 @@ impl Service {
                     expiry: candidate.tick.checked_add(ttl_ms / 10).ok_or("capacity")?,
                     fixtures,
                     cap,
+                    color_cap: None,
                 });
                 candidate.auto_held_reason = None;
                 result = json!({"analysis":candidate.analysis_status()});
@@ -1001,6 +1206,11 @@ impl Service {
                     .engine
                     .execute(ordinary.command()?)
                     .map_err(error_reason)?;
+                if candidate.engine.patch().revision() != self.engine.patch().revision()
+                    && let Some(d) = &candidate.scenes
+                {
+                    d.status.map.validate(candidate.engine.patch())?;
+                }
                 candidate.preview = None;
                 if candidate.analysis_grant.as_ref().is_some_and(|g| {
                     g.patch != candidate.engine.patch().revision()
@@ -1010,12 +1220,16 @@ impl Service {
                 }
             }
         }
+        if serde_json::to_vec(&result).map_err(|_| "capacity")?.len() > MAX_MESSAGE_BYTES - 4096 {
+            return Err("capacity");
+        }
         candidate.pages()?; // Coherent readable state is a transaction invariant.
         if candidate.engine.revision() != self.engine.revision() {
             candidate.durability = crate::lighting_contract::Durability::Volatile;
         }
         self.analysis_emergency = candidate.analysis_emergency;
         self.analysis = candidate.analysis;
+        self.scenes = candidate.scenes;
         self.analysis_grant = candidate.analysis_grant;
         self.analysis_now = candidate.analysis_now;
         self.auto_held_reason = candidate.auto_held_reason;
@@ -1055,6 +1269,10 @@ impl Service {
                 inventory["analysis_binding"] = json!(binding);
                 validate_configured_analysis(&inventory)?;
             }
+        }
+        if self.scenes.is_some() {
+            inventory["scenes"] = self.scene_status();
+            inventory["applied_auto"] = json!("explicit_bounded_scene_grant");
         }
         Ok(inventory)
     }
@@ -1102,15 +1320,25 @@ impl Service {
 /// contribution can legitimately name an older source epoch/map than the live one.
 pub fn validate_configured_analysis(inventory: &Json) -> Result<(), &'static str> {
     use crate::analysis_subscription::{Binding, Descriptor};
-    if inventory["wire_schema"] != "lx05-v2" {
+    if !matches!(
+        inventory["wire_schema"].as_str(),
+        Some("lx05-v2" | "lx05-music-v2" | "lx06-scenes-v2")
+    ) {
         return Err("configured wire schema");
     }
     let binding: Binding = serde_json::from_value(inventory["analysis_binding"].clone())
         .map_err(|_| "analysis binding")?;
     binding.validate()?;
     let status = &inventory["analysis"];
+    let version = if inventory["wire_schema"] == "lx05-music-v2"
+        || inventory["wire_schema"] == "lx06-scenes-v2"
+    {
+        "lux.analysis.v2"
+    } else {
+        "lux.analysis.v1"
+    };
     if status["analysis_binding"] != inventory["analysis_binding"]
-        || status["analysis_version"] != "lux.analysis.v1"
+        || status["analysis_version"] != version
     {
         return Err("analysis binding status");
     }
@@ -1135,7 +1363,7 @@ pub fn validate_configured_analysis(inventory: &Json) -> Result<(), &'static str
             }
             return Err("configured provenance required");
         }
-        if provenance["analysis_version"] != "lux.analysis.v1" {
+        if provenance["analysis_version"] != version {
             return Err("analysis provenance version");
         }
         validate(&provenance["source_identity"])?;
@@ -1235,7 +1463,7 @@ impl PageAssembler {
         snapshot
             .validate_for_schema(&patch, value["wire_schema"].as_str().unwrap_or("lx03-v1"))
             .map_err(error_reason)?;
-        if value["wire_schema"] == "lx05-v2" {
+        if value["wire_schema"] == "lx05-v2" || value["wire_schema"] == "lx05-music-v2" {
             validate_configured_analysis(&value)?;
         }
         self.key = None;
@@ -1385,6 +1613,19 @@ mod analysis_clock_tests {
         ready_service_binding(None)
     }
     fn ready_service_binding(binding: Option<crate::analysis_subscription::Binding>) -> Service {
+        ready_service_mode(binding, false)
+    }
+    fn ready_service_mode(
+        binding: Option<crate::analysis_subscription::Binding>,
+        music: bool,
+    ) -> Service {
+        ready_service_mode_clock(binding, music, || 1000)
+    }
+    fn ready_service_mode_clock(
+        binding: Option<crate::analysis_subscription::Binding>,
+        music: bool,
+        mut clock: impl FnMut() -> u64,
+    ) -> Service {
         let configured = binding.is_some();
         let id = Id::new("fixture-11").unwrap();
         let patch = Patch::validate(PatchSpec {
@@ -1407,6 +1648,9 @@ mod analysis_clock_tests {
         } else {
             s.enable_analysis().unwrap();
         }
+        if music {
+            s.enable_musical_analysis().unwrap();
+        }
         s.engine.execute(Command::Mode(Mode::Auto)).unwrap();
         let c: Json =
             serde_json::from_str(include_str!("../tests/fixtures/lx05/v1/e09.json")).unwrap();
@@ -1424,8 +1668,9 @@ mod analysis_clock_tests {
         let a = s.analysis.as_mut().unwrap();
         a.attach(d);
         for n in 0..111u64 {
+            let now = clock();
             let mut b = b"GAW1".to_vec();
-            for v in [0u64, 1, calibration, 1000] {
+            for v in [0u64, 1, calibration, now] {
                 b.extend(v.to_be_bytes());
             }
             b.extend([0; 4]);
@@ -1439,12 +1684,12 @@ mod analysis_clock_tests {
                 p[32..36].copy_from_slice(&(n as u32 * 10 + i as u32).to_be_bytes());
                 b.extend(p);
             }
-            a.ingest(&b, 1000).unwrap();
+            a.ingest(&b, now).unwrap();
             if n == 0 {
-                a.calibrate("start", 1000).unwrap();
+                a.calibrate("start", now).unwrap();
             }
             if n == 50 {
-                a.calibrate("finish", 1000).unwrap();
+                a.calibrate("finish", now).unwrap();
             }
         }
         assert!(a.ready());
@@ -1469,8 +1714,496 @@ mod analysis_clock_tests {
             expiry: 100,
             fixtures: vec![id],
             cap: 500,
+            color_cap: None,
         });
         s
+    }
+    fn refresh_test_source(s: &mut Service, n: u64) {
+        let c: Json =
+            serde_json::from_str(include_str!("../tests/fixtures/lx05/v1/e09.json")).unwrap();
+        let a = s.analysis.as_mut().unwrap();
+        let d = a.descriptor.as_ref().unwrap();
+        let origin = counter::parse(&d.first_frame).unwrap();
+        let calibration = counter::parse(&d.calibration_revision).unwrap();
+        let now = crate::analysis_subscription::monotonic_ms().unwrap();
+        let mut bytes = b"GAW1".to_vec();
+        for v in [0u64, 1, calibration, now] {
+            bytes.extend(v.to_be_bytes());
+        }
+        bytes.extend([0; 4]);
+        for i in 0..10 {
+            let hex = c["packets_hex"][i].as_str().unwrap();
+            let mut packet: Vec<u8> = (0..hex.len())
+                .step_by(2)
+                .map(|j| u8::from_str_radix(&hex[j..j + 2], 16).unwrap())
+                .collect();
+            packet[24..32].copy_from_slice(&(origin + n * 480 + i as u64 * 48).to_be_bytes());
+            packet[32..36].copy_from_slice(&(n as u32 * 10 + i as u32).to_be_bytes());
+            bytes.extend(packet);
+        }
+        a.ingest(&bytes, now).unwrap();
+        s.analysis_now = now;
+    }
+    #[test]
+    fn maximum_scene_grant_renewal_and_preview_are_compact_with_many_stores() {
+        let mut s = ready_service_mode(None, true);
+        s.analysis_grant = None;
+        let fixtures = (0..32)
+            .map(|i| {
+                FixtureSpec::synthetic(
+                    Id::new(&format!("fixture-{i:02}")).unwrap(),
+                    "RGB",
+                    SyntheticMode::Rgb,
+                    1 + i * 4,
+                )
+            })
+            .collect::<Vec<_>>();
+        let patch = Patch::validate(PatchSpec {
+            version: 1,
+            patch_revision: 2,
+            fixtures,
+        })
+        .unwrap();
+        let map = crate::scenes::ShowMap::defaults(&patch);
+        let values = map.values(&Id::new("driving").unwrap(), &patch).unwrap();
+        let stores = (0..32)
+            .map(|i| crate::authority::StoredLook {
+                kind: StoredKind::Cue,
+                id: Id::new(&format!("cue-{i:02}")).unwrap(),
+                values: values.clone(),
+            })
+            .collect();
+        s.engine = Authority::new(patch, "11111111-1111-4111-8111-111111111111", 9)
+            .unwrap()
+            .with_stores(stores)
+            .unwrap();
+        s.engine.enable_analysis();
+        s.engine.execute(Command::Mode(Mode::Auto)).unwrap();
+        s.enable_scene_director().unwrap();
+        let e = s.analysis.as_ref().unwrap().scene_evidence();
+        let actual = s
+            .engine
+            .snapshot()
+            .fixtures
+            .into_iter()
+            .flat_map(|f| {
+                f.attributes.into_iter().map(move |a| Value {
+                    fixture: f.fixture.clone(),
+                    attribute: a.attribute,
+                    value: a.resolved,
+                })
+            })
+            .collect::<Vec<_>>();
+        for now in (1000..4000).step_by(100) {
+            s.scenes
+                .as_mut()
+                .unwrap()
+                .step(e.clone(), now, s.engine.patch(), &actual)
+                .unwrap();
+        }
+        let fixture_ids = s
+            .engine
+            .patch()
+            .fixtures()
+            .iter()
+            .map(|f| f.id.clone())
+            .collect::<Vec<_>>();
+        let command = |s: &Service, n: u64, action: Json| json!({"contract":"C-LIGHT","version":1,"show_id":"11111111-1111-4111-8111-111111111111","module":"lighting","epoch":"9","writer":"clock-test","lease":"1","request_id":n.to_string(),"expected_revision":s.engine.revision().to_string(),"kind":"command","body":{"scope":SCOPE,"command":action}});
+        refresh_test_source(&mut s, 111);
+        let first_request = command(
+            &s,
+            2,
+            json!({"action":"scene_grant","fixtures":fixture_ids,"intensity_cap":1000,"color_cap":1000,"ttl_ms":2000}),
+        );
+        let first = s.handle(&serde_json::to_vec(&first_request).unwrap());
+        assert_eq!(first[0]["kind"], "applied", "{first:?}");
+        assert_eq!(first[0]["body"]["application"], "scene_granted");
+        assert!(serde_json::to_vec(&first[0]).unwrap().len() < MAX_MESSAGE_BYTES);
+        s.engine.step_scene(&values,&fixture_ids,1000,1000,&json!({"map_revision":"1","scene_id":"driving","analysis_generation":s.analysis.as_ref().unwrap().generation.to_string(),"section_id":null,"source_identity":s.analysis_status()["source_identity"],"source_window_range":s.analysis_status()["source_window_range"]})).unwrap();
+        let populated = s.inventory().unwrap();
+        assert_eq!(
+            populated["scenes"]["automatic_layer"]["values"]
+                .as_array()
+                .unwrap()
+                .len(),
+            128
+        );
+        assert!(s.pages().unwrap().len() > 1);
+        refresh_test_source(&mut s, 112);
+        let renewal_request = command(
+            &s,
+            3,
+            json!({"action":"scene_grant","fixtures":fixture_ids,"intensity_cap":1000,"color_cap":1000,"ttl_ms":2000}),
+        );
+        let renewal = s.handle(&serde_json::to_vec(&renewal_request).unwrap());
+        assert_eq!(renewal[0]["kind"], "applied", "{renewal:?}");
+        assert!(serde_json::to_vec(&renewal[0]).unwrap().len() < MAX_MESSAGE_BYTES);
+        let preview_request = command(
+            &s,
+            4,
+            json!({"action":"scene_preview","scene_id":"driving"}),
+        );
+        let revision = s.engine.revision();
+        let preview = s.handle(&serde_json::to_vec(&preview_request).unwrap());
+        assert_eq!(preview[0]["kind"], "applied");
+        assert_eq!(preview[0]["body"]["actual"].as_array().unwrap().len(), 128);
+        assert!(serde_json::to_vec(&preview[0]).unwrap().len() < MAX_MESSAGE_BYTES);
+        assert_eq!(revision, s.engine.revision());
+        let retry = s.handle(&serde_json::to_vec(&preview_request).unwrap());
+        assert_eq!(retry, preview);
+        if let Ok(path) = std::env::var("GP_SCENES_MAX_FIXTURE_OUT") {
+            std::fs::create_dir_all(&path).unwrap();
+            std::fs::write(std::path::Path::new(&path).join("maximum.json"),serde_json::to_string_pretty(&json!({"provenance":"Actual calibrated Lux source decoder, production director/authority,32RGB fixtures and32cues; real leased grant+renewal+preview ACKs. Software/null output.","inventory":s.inventory().unwrap(),"grant":{"request":renewal_request,"replies":renewal},"preview":{"request":preview_request,"replies":preview}})).unwrap()+"\n").unwrap();
+        }
+    }
+    #[test]
+    fn scene_producer_authority_loss_and_real_command_preview() {
+        let mut s = ready_service_mode(None, true);
+        s.engine
+            .execute(Command::ReplacePatch(PatchSpec {
+                version: 1,
+                patch_revision: 2,
+                fixtures: vec![FixtureSpec::synthetic(
+                    Id::new("fixture-11").unwrap(),
+                    "RGB",
+                    SyntheticMode::Rgb,
+                    1,
+                )],
+            }))
+            .unwrap();
+        s.analysis_grant = None;
+        s.enable_scene_director().unwrap();
+        s.analysis_now = 1000;
+        let initial = s.inventory().unwrap();
+        let e = s.analysis.as_ref().unwrap().scene_evidence();
+        let actual = s
+            .engine
+            .snapshot()
+            .fixtures
+            .into_iter()
+            .flat_map(|f| {
+                f.attributes.into_iter().map(move |a| Value {
+                    fixture: f.fixture.clone(),
+                    attribute: a.attribute,
+                    value: a.resolved,
+                })
+            })
+            .collect::<Vec<_>>();
+        for now in (1000..4000).step_by(100) {
+            s.scenes
+                .as_mut()
+                .unwrap()
+                .step(e.clone(), now, s.engine.patch(), &actual)
+                .unwrap();
+        }
+        s.scene_generation = Some(s.analysis.as_ref().unwrap().generation);
+        s.analysis_grant = Some(AnalysisGrant {
+            writer: Id::new("clock-test").unwrap(),
+            lease: 1,
+            issue_revision: s.engine.revision(),
+            patch: 2,
+            generation: s.analysis.as_ref().unwrap().generation,
+            expiry: 100,
+            fixtures: vec![Id::new("fixture-11").unwrap()],
+            cap: 700,
+            color_cap: Some(650),
+        });
+        s.poll_analysis_clock(None, 1000, 1, || Ok(1000)).unwrap();
+        let active = s.inventory().unwrap();
+        assert!(
+            active["scenes"]["automatic_layer"]["values"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .any(|v| v["attribute"] == "red")
+        );
+        assert!(active["analysis"]["grant"].is_null());
+        let scene_id = s.scenes.as_ref().unwrap().status.current.clone().unwrap();
+        let request = json!({"contract":"C-LIGHT","version":1,"show_id":"11111111-1111-4111-8111-111111111111","module":"lighting","epoch":"9","writer":"clock-test","lease":"1","request_id":"2","expected_revision":s.engine.revision().to_string(),"kind":"command","body":{"scope":SCOPE,"command":{"action":"scene_preview","scene_id":scene_id}}});
+        let before = s.engine.revision();
+        let preview = s.handle(&serde_json::to_vec(&request).unwrap());
+        assert_eq!(preview[0]["kind"], "applied");
+        assert_eq!(s.engine.revision(), before);
+        assert_eq!(preview[0]["body"]["actual"].as_array().unwrap().len(), 4);
+        for actual in preview[0]["body"]["actual"].as_array().unwrap() {
+            let a = active["snapshot"]["fixtures"][0]["attributes"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .find(|a| a["attribute"] == actual["attribute"])
+                .unwrap();
+            assert_eq!(actual["value"], a["resolved"]);
+            assert_eq!(actual["source"], a["source"]);
+        }
+        s.poll_analysis_clock(None, 1101, 2, || Ok(1101)).unwrap();
+        let held = s.inventory().unwrap();
+        assert!(held["scenes"]["grant"].is_null());
+        assert!(held["scenes"]["current"].is_null());
+        assert!(
+            held["scenes"]["automatic_layer"]["values"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .all(|v| v["source"] == "scene-held")
+        );
+        if let Ok(path) = std::env::var("GP_SCENES_FIXTURE_OUT") {
+            std::fs::create_dir_all(&path).unwrap();
+            std::fs::write(std::path::Path::new(&path).join("producer.json"),serde_json::to_string_pretty(&json!({"provenance":"Actual Lux calibrated PCM analyzer, production Director, Authority, Service inventory and leased command handler; elapsed director clock injected; null output.","initial":initial,"active":active,"held":held,"preview":{"request":request,"replies":preview}})).unwrap()+"\n").unwrap();
+        }
+    }
+    /// One-time synthetic owner evidence, retained as JSON for consumer tests.
+    #[test]
+    #[ignore = "opt-in musical owner corpus refresh; no private audio"]
+    fn musical_owner_estimate_corpus() {
+        use std::f32::consts::TAU;
+        for binding in [
+            None,
+            Some(crate::analysis_subscription::Binding {
+                version: 2,
+                inputs: ["input-17", "input-03", "input-09", "input-01"].map(String::from),
+            }),
+        ] {
+            let configured = binding.is_some();
+            let mut service = ready_service_mode(binding, true);
+            let analysis = service.analysis.as_mut().unwrap();
+            let descriptor = analysis.descriptor.as_ref().unwrap().clone();
+            let origin = counter::parse(&descriptor.first_frame).unwrap();
+            let calibration = counter::parse(&descriptor.calibration_revision).unwrap();
+            let corpus: Json =
+                serde_json::from_str(include_str!("../tests/fixtures/lx05/v1/e09.json")).unwrap();
+            let mut n = 111u64;
+            let progression = [
+                ([60., 64., 67.], 300),
+                ([65., 69., 72.], 100),
+                ([67., 71., 74.], 100),
+                ([60., 64., 67.], 200),
+                ([60., 64., 67.], 300),
+                ([65., 69., 72.], 100),
+                ([67., 71., 74.], 100),
+                ([60., 64., 67.], 200),
+                ([67., 71., 74.], 65),
+            ];
+            for (notes, windows) in progression {
+                let frequencies = notes.map(|note| 440. * 2.0_f32.powf((note - 69.) / 12.));
+                for _ in 0..windows {
+                    let mut bytes = b"GAW1".to_vec();
+                    for value in [0u64, 1, calibration, 1000] {
+                        bytes.extend(value.to_be_bytes());
+                    }
+                    bytes.extend([0; 4]);
+                    for packet in 0..10 {
+                        let hex = corpus["packets_hex"][packet].as_str().unwrap();
+                        let mut pcm: Vec<u8> = (0..hex.len())
+                            .step_by(2)
+                            .map(|j| u8::from_str_radix(&hex[j..j + 2], 16).unwrap())
+                            .collect();
+                        let first = origin + n * 480 + packet as u64 * 48;
+                        pcm[24..32].copy_from_slice(&first.to_be_bytes());
+                        pcm[32..36].copy_from_slice(&(n as u32 * 10 + packet as u32).to_be_bytes());
+                        for frame in 0..48 {
+                            let time =
+                                (n * 480 + packet as u64 * 48 + frame as u64) as f32 / 48000.;
+                            let tone = frequencies
+                                .iter()
+                                .map(|frequency| (TAU * frequency * time).sin())
+                                .sum::<f32>()
+                                * 0.2;
+                            // Opposite guitars preserve independent-channel evidence.
+                            for (channel, sample) in [(1, tone), (2, tone), (3, -tone)] {
+                                let encoded = ((sample * 8388608.).round() as i32).to_be_bytes();
+                                let offset = 48 + (frame * 4 + channel) * 3;
+                                pcm[offset..offset + 3].copy_from_slice(&encoded[1..]);
+                            }
+                        }
+                        bytes.extend(pcm);
+                    }
+                    analysis.ingest(&bytes, 1000).unwrap();
+                    n += 1;
+                }
+            }
+            service
+                .poll_analysis_clock(None, 1000, 1, || Ok(1000))
+                .unwrap();
+            let active = service.inventory().unwrap();
+            for estimate in ["chord", "key", "movement", "section"] {
+                assert!(
+                    !active["analysis"]["musical"][estimate].is_null(),
+                    "missing {estimate}: {}",
+                    active["analysis"]["musical"]
+                );
+            }
+            assert_eq!(active["analysis"]["musical"]["key"]["tonic"], 0);
+            assert!(service.engine.snapshot().fixtures[0].attributes[0].resolved <= 500);
+            for value in active["analysis"]["automatic_layer"]["values"]
+                .as_array()
+                .unwrap()
+            {
+                assert_eq!(value["provenance"]["analysis_version"], "lux.analysis.v2");
+            }
+            service
+                .engine
+                .execute(Command::Touch(vec![crate::fixture::Value {
+                    fixture: Id::new("fixture-11").unwrap(),
+                    attribute: crate::fixture::Attribute::Intensity,
+                    value: 900,
+                }]))
+                .unwrap();
+            service
+                .poll_analysis_clock(None, 1000, 2, || Ok(1000))
+                .unwrap();
+            assert_eq!(
+                service.engine.snapshot().fixtures[0].attributes[0].resolved,
+                900
+            );
+            service.engine.execute(Command::ClearToHold).unwrap();
+            service
+                .poll_analysis_clock(None, 1000, 3, || Ok(1000))
+                .unwrap();
+            assert_eq!(
+                service.engine.snapshot().fixtures[0].attributes[0].resolved,
+                900
+            );
+            service
+                .poll_analysis_clock(None, 1101, 4, || Ok(1101))
+                .unwrap();
+            let stale = service.inventory().unwrap();
+            service.analysis.as_mut().unwrap().absent();
+            let unknown = service.inventory().unwrap();
+            std::fs::create_dir_all("tests/fixtures/musical").unwrap();
+            let name = if configured {
+                "configured-estimates"
+            } else {
+                "legacy-estimates"
+            };
+            std::fs::write(
+                format!("tests/fixtures/musical/{name}.json"),
+                serde_json::to_string_pretty(
+                    &json!({"active":active,"stale":stale,"unknown":unknown}),
+                )
+                .unwrap()
+                    + "\n",
+            )
+            .unwrap();
+        }
+    }
+    #[test]
+    fn musical_opt_in_schema_source_frames_and_stale_reset() {
+        for binding in [
+            None,
+            Some(crate::analysis_subscription::Binding {
+                version: 2,
+                inputs: ["input-17", "input-03", "input-09", "input-01"].map(String::from),
+            }),
+        ] {
+            let configured = binding.is_some();
+            let mut service = ready_service_mode(binding, true);
+            service
+                .poll_analysis_clock(None, 1000, 1, || Ok(1000))
+                .unwrap();
+            let active = service.inventory().unwrap();
+            assert_eq!(
+                active["wire_schema"],
+                if configured {
+                    "lx05-music-v2"
+                } else {
+                    "lx05-music-v1"
+                }
+            );
+            assert_eq!(active["analysis"]["analysis_version"], "lux.analysis.v2");
+            assert_eq!(active["analysis"]["musical"]["state"], "tracking");
+            let music_frame = counter::parse(
+                active["analysis"]["musical"]["source_frame"]
+                    .as_str()
+                    .unwrap(),
+            )
+            .unwrap();
+            let window_end = counter::parse(
+                active["analysis"]["source_window_range"]["end_frame_exclusive"]
+                    .as_str()
+                    .unwrap(),
+            )
+            .unwrap();
+            assert!(music_frame <= window_end);
+            assert!(
+                window_end - music_frame < 6144,
+                "last spectral hop must remain within one hop"
+            );
+            for value in active["analysis"]["automatic_layer"]["values"]
+                .as_array()
+                .unwrap()
+            {
+                if !value["provenance"].is_null() {
+                    assert_eq!(value["provenance"]["analysis_version"], "lux.analysis.v2");
+                }
+            }
+            assert!(active["analysis"]["beat"].is_null());
+            assert!(active["analysis"]["harmony"].is_null());
+            if configured {
+                validate_configured_analysis(&active).unwrap();
+            }
+            // Every ownership/calibration discontinuity discards musical history.
+            let mut reset = service.analysis.as_ref().unwrap().clone();
+            for reason in [
+                "lost_windows",
+                "gap_overlap_reorder",
+                "mapping",
+                "clock_regression",
+            ] {
+                reset.invalidate(reason);
+                let status = reset.status(1000);
+                assert_eq!(status["musical"]["state"], "unknown");
+                assert!(status["musical"]["source_frame"].is_null());
+                assert_eq!(status["musical"]["chroma"], json!(vec![0; 12]));
+                for estimate in ["chord", "key", "movement", "section"] {
+                    assert!(status["musical"][estimate].is_null());
+                }
+            }
+            let mut calibration = service.analysis.as_ref().unwrap().clone();
+            calibration.calibrate("start", 1000).unwrap();
+            assert_eq!(calibration.status(1000)["musical"]["state"], "unknown");
+            let descriptor = calibration.descriptor.as_ref().unwrap().clone();
+            calibration.attach(descriptor);
+            assert!(calibration.status(1000)["musical"]["source_frame"].is_null());
+            let before = service.engine.snapshot();
+            service
+                .poll_analysis_clock(None, 1101, 2, || Ok(1101))
+                .unwrap();
+            let stale = service.inventory().unwrap();
+            assert_eq!(stale["analysis"]["musical"]["state"], "stale");
+            assert!(stale["analysis"]["musical"]["source_frame"].is_null());
+            assert!(stale["analysis"]["musical"]["key"].is_null());
+            assert_eq!(stale["analysis"]["musical"]["chroma"], json!(vec![0; 12]));
+            if std::env::var_os("LUX_GENERATE_MUSICAL_CORPUS").is_some() {
+                let name = if configured {
+                    "configured"
+                } else {
+                    "legacy-binding"
+                };
+                std::fs::create_dir_all("tests/fixtures/musical").unwrap();
+                std::fs::write(
+                    format!("tests/fixtures/musical/{name}.json"),
+                    serde_json::to_string_pretty(&json!({"active":active,"stale":stale})).unwrap()
+                        + "\n",
+                )
+                .unwrap();
+            }
+            assert!(service.analysis_grant.is_none());
+            assert_eq!(
+                before.fixtures[0].attributes[0].resolved,
+                service.engine.snapshot().fixtures[0].attributes[0].resolved
+            );
+            service.analysis.as_mut().unwrap().absent();
+            assert_eq!(
+                service.inventory().unwrap()["analysis"]["musical"]["state"],
+                "unknown"
+            );
+        }
+        assert!(ready_service().enable_musical_analysis().is_err());
+        assert!(
+            ready_service().inventory().unwrap()["analysis"]
+                .get("musical")
+                .is_none()
+        );
     }
     #[test]
     fn processing_and_encoding_delay_or_clock_regression_never_commit_stale_step() {

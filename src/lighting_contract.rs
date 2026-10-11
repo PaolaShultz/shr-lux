@@ -154,10 +154,17 @@ impl Snapshot {
     /// Durable owner wire schema allows honest checkpoint/error status; static LX03
     /// validation continues refusing unbacked nonvolatile claims.
     pub fn validate_for_schema(&self, patch: &Patch, schema: &str) -> Result<(), Error> {
-        if matches!(schema, "lx05-v1" | "lx05-v2") {
+        if matches!(schema, "lx06-scenes-v1" | "lx06-scenes-v2") {
             let mut logical = self.clone();
             logical.durability = Durability::Volatile;
-            logical.validate_inner(patch, true)
+            logical.validate_inner(patch, true, true)
+        } else if matches!(
+            schema,
+            "lx05-v1" | "lx05-v2" | "lx05-music-v1" | "lx05-music-v2"
+        ) {
+            let mut logical = self.clone();
+            logical.durability = Durability::Volatile;
+            logical.validate_inner(patch, true, false)
         } else if schema == "lx04-durable-v1" {
             let mut logical = self.clone();
             logical.durability = Durability::Volatile;
@@ -171,9 +178,9 @@ impl Snapshot {
     /// Schema/capability consistency only. Does not resolve contributors, masters,
     /// holds or inhibit policy (LX-02), persist state (LX-04), or submit output.
     pub fn validate(&self, patch: &Patch) -> Result<(), Error> {
-        self.validate_inner(patch, false)
+        self.validate_inner(patch, false, false)
     }
-    fn validate_inner(&self, patch: &Patch, analysis: bool) -> Result<(), Error> {
+    fn validate_inner(&self, patch: &Patch, analysis: bool, scenes: bool) -> Result<(), Error> {
         if self.version != VERSION {
             return Err(Error::Version);
         }
@@ -258,7 +265,16 @@ impl Snapshot {
                     return Err(Error::Duplicate);
                 }
                 if attribute.auto.is_some()
-                    && (!analysis || attribute.attribute != Attribute::Intensity)
+                    && (!analysis
+                        || (!scenes && attribute.attribute != Attribute::Intensity)
+                        || (scenes
+                            && !matches!(
+                                attribute.attribute,
+                                crate::fixture::Attribute::Intensity
+                                    | crate::fixture::Attribute::Red
+                                    | crate::fixture::Attribute::Green
+                                    | crate::fixture::Attribute::Blue
+                            )))
                 {
                     return Err(Error::Unavailable);
                 }
@@ -294,12 +310,25 @@ impl Snapshot {
                     match &c.source {
                         Source::Auto(id)
                             if !analysis
-                                || attribute.attribute != Attribute::Intensity
+                                || (!scenes && attribute.attribute != Attribute::Intensity)
+                                || (scenes
+                                    && !matches!(
+                                        attribute.attribute,
+                                        crate::fixture::Attribute::Intensity
+                                            | crate::fixture::Attribute::Red
+                                            | crate::fixture::Attribute::Green
+                                            | crate::fixture::Attribute::Blue
+                                    ))
                                 || attribute.auto != Some(c.value)
-                                || !matches!(
-                                    id.as_str(),
-                                    "mode-entry-continuity" | "analysis-active" | "analysis-held"
-                                ) =>
+                                || match id.as_str() {
+                                    "mode-entry-continuity"
+                                    | "analysis-active"
+                                    | "analysis-held" => {
+                                        attribute.attribute != Attribute::Intensity
+                                    }
+                                    "scene-active" | "scene-held" => !scenes,
+                                    _ => true,
+                                } =>
                         {
                             return Err(Error::Unavailable);
                         }

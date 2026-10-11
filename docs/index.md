@@ -85,6 +85,8 @@ manual command API, copies/masks, provenance and preview-only release boundary.
 
 - [0032 Independent named analysis subscription](notes/0032-analysis-subscription.md)
 - [0033 Configured synthetic authority and named analysis](notes/0033-configured-analysis.md)
+- [0034 Bounded harmonic and arrangement estimates](notes/0034-musical-analysis.md)
+- [0035 Authored musical scene director](notes/0035-scene-map.md)
 
 ## CI incident notifications
 

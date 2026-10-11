@@ -280,6 +280,37 @@ impl CheckpointStore {
             Err(e) => Err(e),
         }
     }
+    pub fn load_scene_map(&self, patch: &Patch) -> io::Result<Option<crate::scenes::ShowMap>> {
+        match read_private(&self.directory, "lighting-scenes.json") {
+            Ok(bytes) => {
+                let raw = crate::wire::strict_json_bounded(&bytes, LIMIT).map_err(invalid)?;
+                #[derive(Deserialize)]
+                #[serde(deny_unknown_fields)]
+                struct Saved {
+                    show_id: String,
+                    map: crate::scenes::ShowMap,
+                }
+                let saved: Saved =
+                    serde_json::from_value(raw).map_err(|_| invalid("scene map schema"))?;
+                if saved.show_id != self.show {
+                    return Err(invalid("scene map show"));
+                }
+                saved.map.validate(patch).map_err(invalid)?;
+                Ok(Some(saved.map))
+            }
+            Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(None),
+            Err(e) => Err(e),
+        }
+    }
+    pub fn save_scene_map(&self, map: &crate::scenes::ShowMap, patch: &Patch) -> io::Result<()> {
+        map.validate(patch).map_err(invalid)?;
+        atomic_replace(
+            &self.directory,
+            "lighting-scenes.json",
+            &serde_json::to_vec(&serde_json::json!({"show_id":self.show,"map":map}))?,
+            WriteFault::None,
+        )
+    }
     pub fn checkpoint(&self, state: &DurableState) -> io::Result<()> {
         self.checkpoint_with_fault(state, WriteFault::None)
     }

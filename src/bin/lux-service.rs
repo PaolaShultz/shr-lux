@@ -16,8 +16,10 @@ use std::{
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<_> = std::env::args().collect();
     if args.len() < 3 || args[1] != "--synthetic-private-dir" {
-        return Err("usage: lux-service --synthetic-private-dir ABSOLUTE_OWNED_0700_DIRECTORY [--timed|--durable] [--analysis ABSOLUTE_PRIVATE_PROVIDER_SOCKET] [--config ABSOLUTE_JSON]".into());
+        return Err("usage: lux-service --synthetic-private-dir ABSOLUTE_OWNED_0700_DIRECTORY [--timed|--durable] [--analysis ABSOLUTE_PRIVATE_PROVIDER_SOCKET] [--config ABSOLUTE_JSON] [--musical-analysis] [--scene-director]".into());
     }
+    let mut scenes = false;
+    let mut music = false;
     let mut timed = false;
     let mut durable = false;
     let mut analysis_socket = None;
@@ -25,6 +27,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let mut i = 3;
     while i < args.len() {
         match args[i].as_str() {
+            "--scene-director" if !scenes => scenes = true,
+            "--musical-analysis" if !music => music = true,
             "--timed" if !timed && !durable => timed = true,
             "--durable" if !timed && !durable => {
                 timed = true;
@@ -41,6 +45,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             _ => return Err("invalid lux-service option".into()),
         }
         i += 1;
+    }
+    if scenes && !music {
+        return Err("scene director requires --musical-analysis".into());
+    }
+    if music && analysis_socket.is_none() {
+        return Err("musical analysis requires explicit --analysis socket".into());
     }
     let config = config_path
         .as_deref()
@@ -106,6 +116,16 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     } else {
         None
     };
+    if music {
+        service
+            .enable_musical_analysis()
+            .map_err(std::io::Error::other)?;
+    }
+    if scenes {
+        service
+            .enable_scene_director()
+            .map_err(std::io::Error::other)?;
+    }
     let mut server = LocalServer::bind_with_analysis(&PathBuf::from(&args[2]), service, analysis)?;
     let stop = Arc::new(AtomicBool::new(false));
     signal_hook::flag::register(signal_hook::consts::SIGINT, stop.clone())?;

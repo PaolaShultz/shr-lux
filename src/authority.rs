@@ -67,6 +67,8 @@ pub struct Authority {
     analysis_enabled: bool,
     automatic: BTreeMap<Id, AutoValue>,
     proposal: Option<i32>,
+    scene_values: BTreeMap<Key, AutoValue>,
+    scenes_enabled: bool,
 }
 impl Authority {
     pub fn new(patch: Patch, show_id: &str, epoch: u64) -> Result<Self, Error> {
@@ -91,6 +93,8 @@ impl Authority {
             analysis_enabled: false,
             automatic: BTreeMap::new(),
             proposal: None,
+            scene_values: BTreeMap::new(),
+            scenes_enabled: false,
         })
     }
     /// Validated volatile initial cue/palette copies. This is not durable restart loading.
@@ -148,9 +152,18 @@ impl Authority {
     }
     pub fn freeze_auto(&mut self, reason: &str) -> Result<(), Error> {
         let mut changed = false;
-        for v in self.automatic.values_mut() {
-            if v.source == "analysis-active" {
-                v.source = "analysis-held".into();
+        for v in self
+            .automatic
+            .values_mut()
+            .chain(self.scene_values.values_mut())
+        {
+            if v.source == "analysis-active" || v.source == "scene-active" {
+                v.source = if v.source == "scene-active" {
+                    "scene-held"
+                } else {
+                    "analysis-held"
+                }
+                .into();
                 v.held_reason = Some(reason.into());
                 changed = true;
             }
@@ -176,7 +189,12 @@ impl Authority {
                 .fixture(id)
                 .and_then(|f| f.capability(Attribute::Intensity))
                 .ok_or(Error::Target)?;
-            if self.automatic.get(id).map_or(0, |v| v.value) > cap {
+            if self.automatic.get(id).map_or(0, |v| v.value) > cap
+                || self
+                    .scene_values
+                    .get(&(id.clone(), Attribute::Intensity))
+                    .is_some_and(|v| v.value > cap)
+            {
                 return Err(Error::Range);
             }
         }
@@ -215,6 +233,160 @@ impl Authority {
         }
         if changed {
             self.revision = self.revision.checked_add(1).ok_or(Error::Capacity)?;
+        }
+        Ok(())
+    }
+    pub fn enable_scenes(&mut self) {
+        self.scenes_enabled = true;
+    }
+    pub fn bump_revision(&mut self) -> Result<(), Error> {
+        self.revision = self.revision.checked_add(1).ok_or(Error::Capacity)?;
+        Ok(())
+    }
+    pub fn scene_inventory(&self) -> serde_json::Value {
+        serde_json::json!({"values":self.scene_values.iter().map(|((fixture,attribute),v)|serde_json::json!({"fixture":fixture,"attribute":attribute,"value":v.value,"source":v.source,"held_reason":v.held_reason,"provenance":v.provenance})).collect::<Vec<_>>()})
+    }
+    /// An explicit legacy grant replaces scene intensity only in its stated scope.
+    pub fn replace_scene_intensity(&mut self, fixtures: &[Id]) -> Result<(), Error> {
+        let snapshot = self.snapshot();
+        let mut changed = false;
+        for id in fixtures {
+            if self
+                .scene_values
+                .remove(&(id.clone(), Attribute::Intensity))
+                .is_some()
+            {
+                let value = snapshot
+                    .fixtures
+                    .iter()
+                    .find(|f| &f.fixture == id)
+                    .and_then(|f| {
+                        f.attributes
+                            .iter()
+                            .find(|a| a.attribute == Attribute::Intensity)
+                    })
+                    .map_or(0, |a| a.resolved);
+                self.automatic.insert(
+                    id.clone(),
+                    AutoValue {
+                        value,
+                        source: "mode-entry-continuity".into(),
+                        held_reason: Some("replaced_scene_grant".into()),
+                        provenance: None,
+                    },
+                );
+                changed = true;
+            }
+        }
+        if changed {
+            self.bump_revision()?
+        }
+        Ok(())
+    }
+    pub fn step_scene(
+        &mut self,
+        values: &[Value],
+        fixtures: &[Id],
+        intensity_cap: i32,
+        color_cap: i32,
+        provenance: &serde_json::Value,
+    ) -> Result<(), Error> {
+        if !self.scenes_enabled {
+            return Err(Error::Unavailable);
+        }
+        let mut next = self.clone();
+        next.step_scene_inner(values, fixtures, intensity_cap, color_cap, provenance)?;
+        next.snapshot()
+            .validate_for_schema(&next.patch, "lx06-scenes-v1")?;
+        *self = next;
+        Ok(())
+    }
+    fn step_scene_inner(
+        &mut self,
+        values: &[Value],
+        fixtures: &[Id],
+        intensity_cap: i32,
+        color_cap: i32,
+        provenance: &serde_json::Value,
+    ) -> Result<(), Error> {
+        self.validate_auto_targets(fixtures, intensity_cap)?;
+        bounded(color_cap)?;
+        let mut keys = std::collections::BTreeSet::new();
+        for value in values {
+            if !fixtures.contains(&value.fixture) {
+                continue;
+            }
+            if !keys.insert((value.fixture.clone(), value.attribute)) {
+                return Err(Error::Duplicate);
+            }
+            if !matches!(
+                value.attribute,
+                Attribute::Intensity | Attribute::Red | Attribute::Green | Attribute::Blue
+            ) {
+                return Err(Error::Target);
+            }
+            self.patch
+                .fixture(&value.fixture)
+                .and_then(|f| f.capability(value.attribute))
+                .filter(|c| c.contains(value.value))
+                .ok_or(Error::Range)?;
+        }
+        let mut changed = false;
+        for ((fixture, attribute), old) in &mut self.scene_values {
+            if fixtures.contains(fixture)
+                && !values
+                    .iter()
+                    .any(|v| &v.fixture == fixture && &v.attribute == attribute)
+                && old.source == "scene-active"
+            {
+                old.source = "scene-held".into();
+                old.held_reason = Some("scene_unmapped".into());
+                changed = true;
+            }
+        }
+        for value in values {
+            if !fixtures.contains(&value.fixture) {
+                continue;
+            }
+            if !matches!(
+                value.attribute,
+                Attribute::Intensity | Attribute::Red | Attribute::Green | Attribute::Blue
+            ) {
+                return Err(Error::Target);
+            }
+            self.patch
+                .fixture(&value.fixture)
+                .and_then(|f| f.capability(value.attribute))
+                .filter(|c| c.contains(value.value))
+                .ok_or(Error::Range)?;
+            if self.transition.as_ref().is_some_and(|t| {
+                t.values
+                    .iter()
+                    .any(|v| v.fixture == value.fixture && v.attribute == value.attribute)
+            }) {
+                continue;
+            }
+            let key = (value.fixture.clone(), value.attribute);
+            let cap = if value.attribute == Attribute::Intensity {
+                intensity_cap
+            } else {
+                color_cap
+            };
+            let target = value.value.min(cap);
+            let old = self.scene_values.get(&key);
+            changed |= old.is_none_or(|v| v.value != target || v.source != "scene-active");
+            self.scene_values.insert(
+                key,
+                AutoValue {
+                    value: target,
+                    source: "scene-active".into(),
+                    held_reason: None,
+                    provenance: Some(provenance.clone()),
+                },
+            );
+        }
+        if changed {
+            self.bump_revision()?
         }
         Ok(())
     }
@@ -275,7 +447,14 @@ impl Authority {
         next.revision = next.revision.checked_add(1).ok_or(Error::Capacity)?;
         let snapshot = next.snapshot();
         if next.analysis_enabled {
-            snapshot.validate_for_schema(&next.patch, "lx05-v1")?;
+            snapshot.validate_for_schema(
+                &next.patch,
+                if next.scenes_enabled {
+                    "lx06-scenes-v1"
+                } else {
+                    "lx05-v1"
+                },
+            )?;
         } else {
             snapshot.validate(&next.patch)?;
         }
@@ -362,6 +541,7 @@ impl Authority {
                     let snapshot = self.snapshot();
                     if mode == Mode::Auto {
                         self.automatic.clear();
+                        self.scene_values.clear();
                         for f in snapshot.fixtures {
                             for a in f.attributes {
                                 if a.attribute == Attribute::Intensity
@@ -389,6 +569,7 @@ impl Authority {
                             }
                         }
                         self.automatic.clear();
+                        self.scene_values.clear();
                     }
                     self.mode = mode;
                 }
@@ -417,6 +598,12 @@ impl Authority {
                     patch
                         .fixture(id)
                         .and_then(|f| f.capability(Attribute::Intensity))
+                        .is_some_and(|c| c.contains(v.value))
+                });
+                self.scene_values.retain(|(id, a), v| {
+                    patch
+                        .fixture(id)
+                        .and_then(|f| f.capability(*a))
                         .is_some_and(|c| c.contains(v.value))
                 });
                 self.patch = patch;
@@ -504,9 +691,14 @@ impl Authority {
                                     p.order,
                                 )
                             });
-                            let auto = (cap.attribute == Attribute::Intensity)
-                                .then(|| self.automatic.get(&f.id))
-                                .flatten();
+                            let auto = self
+                                .scene_values
+                                .get(&(f.id.clone(), cap.attribute))
+                                .or_else(|| {
+                                    (cap.attribute == Attribute::Intensity)
+                                        .then(|| self.automatic.get(&f.id))
+                                        .flatten()
+                                });
                             let auto_id = Id::new(
                                 auto.map_or("mode-entry-continuity", |v| v.source.as_str()),
                             )
@@ -743,7 +935,9 @@ impl Authority {
             .collect();
         next.snapshot().validate_for_schema(
             &next.patch,
-            if next.analysis_enabled {
+            if next.scenes_enabled {
+                "lx06-scenes-v1"
+            } else if next.analysis_enabled {
                 "lx05-v1"
             } else {
                 "lx03-v1"
@@ -851,7 +1045,9 @@ impl Authority {
                 next.revision = next.revision.checked_add(1).ok_or(Error::Capacity)?;
                 next.snapshot().validate_for_schema(
                     &next.patch,
-                    if next.analysis_enabled {
+                    if next.scenes_enabled {
+                        "lx06-scenes-v1"
+                    } else if next.analysis_enabled {
                         "lx05-v1"
                     } else {
                         "lx03-v1"
@@ -894,7 +1090,9 @@ impl Authority {
         next.revision = next.revision.checked_add(1).ok_or(Error::Capacity)?;
         next.snapshot().validate_for_schema(
             &next.patch,
-            if next.analysis_enabled {
+            if next.scenes_enabled {
+                "lx06-scenes-v1"
+            } else if next.analysis_enabled {
                 "lx05-v1"
             } else {
                 "lx03-v1"

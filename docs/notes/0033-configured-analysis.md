@@ -107,3 +107,61 @@ a scoped AUTO grant, source-child loss with retained provenance, and independent
 human intensity900. Processes were bounded and joined; no physical endpoint was
 opened. Exact executable hashes and private command/evidence logs are retained in
 the task handoff, not treated as hardware qualification.
+
+## Optional musical estimator
+
+Add `--musical-analysis` alongside `--analysis ABS_PRIVATE_PROVIDER_SOCKET` to
+select the additive `lx05-music-v1` (legacy input binding) or `lx05-music-v2`
+(configured binding) schema and `lux.analysis.v2` estimator. Without the flag,
+legacy LX05 output and exact corpora are unchanged. This is a startup choice;
+configuration identity, provider subscription and raw source timing are unchanged.
+
+```sh
+lux-service --synthetic-private-dir ABS_PRIVATE_DIRECTORY --analysis ABS_PRIVATE_PROVIDER_SOCKET --musical-analysis
+lux-service --synthetic-private-dir ABS_PRIVATE_DIRECTORY --config ABS_JSON --analysis ABS_PRIVATE_PROVIDER_SOCKET --musical-analysis
+```
+
+The new `analysis.musical` object contains state (`unknown`, `tracking`, `stale`),
+nullable decimal-string exclusive-end `source_frame`, twelve integer chroma bins
+(C through B), and nullable chord, key, movement and section estimates. Normalized
+values/confidences use 0..1000. Chord has root (C=0), quality (major/minor), confidence.
+Key has tonic, mode, Camelot number (1..12), letter (A minor/B major), confidence.
+Movement has signed fifths_steps (-6..6), kind (stationary/fifths_forward/
+fifths_backward/other), tension and resolution. Section has id, novelty, recurrence,
+label (unknown/verse_candidate/chorus_candidate) and confidence. Candidate section
+names are acoustic hypotheses, not known lyrics or formal song annotations.
+
+Tracking requires both calibrated source readiness and musical readiness; its frame
+names the last completed spectral hop's exclusive source-frame end, at most
+6143 frames behind the current source window end. It does not advance between
+spectral hops. Every invalidation, source
+loss, reattachment and fresh calibration resets musical history. Unknown/stale
+output clears estimates, frame and chroma. Beat/downbeat/harmony legacy slots remain
+null; music lives exclusively in the additive object. AUTO provenance uses the
+advertised estimator version. Harmonic tension/resolution can nudge the existing
+intensity proposal by at most 50/1000; existing grant caps, steps, expiry, Hold,
+manual priority and loss freeze still govern application. No output backend or
+arming authority changes. Algorithm and limitations: [musical analysis](0034-musical-analysis.md).
+
+The spectral window spans about 256ms, with a 128ms hop. The reported frame is
+analysis evidence time, not capture or sound-card synchronization qualification.
+Normal protocol/reset coverage is `cargo test --locked --lib
+musical_opt_in_schema_source_frames_and_stale_reset`. Explicit owner fixture
+refresh is `LUX_GENERATE_MUSICAL_CORPUS=1 cargo test --locked --lib
+musical_opt_in_schema_source_frames_and_stale_reset`; review the JSON changes.
+Fixture generation is opt-in and no private PCM is written.
+
+The longer synthetic owner estimate corpus is an opt-in evidence renderer:
+`cargo test --locked --lib musical_owner_estimate_corpus -- --ignored`. It retains
+real owner-encoded active, stale and unknown snapshots under `tests/fixtures/musical/`;
+its progression includes C/F/G chords and the final active snapshot contains all
+four estimates. Section estimates are informational; only key-supported harmonic
+movement adjusts AUTO intensity in this implementation.
+
+The owner drains at most two queued PCM windows into local ownership under the
+transport mutex, then releases that mutex before DSP. The receiver retains its
+two-window queue and the 100ms acquisition-age limit. Loss, disconnect or a new
+source descriptor arriving during DSP invalidates the analyzed batch before AUTO
+can use it; pending transport events are handled in order on the next drain. This
+reduces transport lock contention; it does not establish the cause of any observed
+process reconnection or qualify realtime throughput.

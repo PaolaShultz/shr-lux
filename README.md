@@ -19,6 +19,23 @@ patch and four named logical inputs through `lux-service --config ABS_JSON`.
 The additive lx05-v2 path preserves legacy startup and keeps recovery disarmed; see
 [configuration and protocol](docs/notes/0033-configured-analysis.md).
 
+The service optionally estimates chroma, major/minor chords, key/Camelot relationships,
+harmonic movement and tentative recurring arrangement sections from the named feeds:
+
+```sh
+lux-service --synthetic-private-dir ABS_PRIVATE_DIRECTORY --analysis ABS_PRIVATE_PROVIDER_SOCKET --musical-analysis
+```
+
+This selects additive `lx05-music-v1` or configured `lx05-music-v2` status for capable
+consumers. Section names are acoustic candidates; physical recognition and live gig
+quality remain unqualified. Harmonic evidence can modestly adjust the existing scoped
+AUTO intensity proposal; section estimates are displayed. See [musical analysis](docs/notes/0034-musical-analysis.md).
+
+Optional `--scene-director --musical-analysis` startup adds a bounded authored show
+map, deterministic scene selection, owner preview/edit commands and explicitly
+scoped RGB/intensity grants. Selected intent and resolved manual/Hold state remain
+separate; output stays null/disarmed. See [scene maps](docs/notes/0035-scene-map.md).
+
 Minimum design target: Raspberry Pi 1 with 512 MB; hardware validation pending.
 The connected uDMX dongle responds to USB descriptor queries; physical lighting output
 has not been tested. Read [hardware evidence](docs/notes/0002-hardware-baseline.md).
@@ -97,7 +114,7 @@ colors remain. Both banks display the same show. MiniLab colors are discrete, so
 smooth RGB fades become color steps. No preset is stored or changed.
 See [show design and audition](docs/notes/0019-composed-pad-show.md).
 
-The analyzer measures isolated sources; it does not yet identify song sections,
+The default standalone simulation analyzer measures isolated sources; it does not identify song sections,
 downbeats, harmony or solos. See [implementation and validation](docs/notes/0018-analysis-and-pad-preview.md)
 for measured results, shutdown behavior and remaining limits.
 

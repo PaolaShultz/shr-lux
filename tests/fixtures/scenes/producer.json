@@ -1,0 +1,2387 @@
+{
+  "active": {
+    "analysis": {
+      "analysis_version": "lux.analysis.v2",
+      "automatic_layer": {
+        "values": [
+          {
+            "fixture": "fixture-11",
+            "held_reason": "mode_entry",
+            "intensity": 0,
+            "provenance": null,
+            "source": "mode-entry-continuity"
+          }
+        ]
+      },
+      "beat": null,
+      "calibration_generation": "2",
+      "calibration_revision": "2",
+      "calibration_windows": 50,
+      "confidence": 1000,
+      "downbeat": null,
+      "energy_millionths": 520261,
+      "generation": "2",
+      "grant": null,
+      "harmony": null,
+      "held_reason": null,
+      "losses": "0",
+      "map_revision": "1",
+      "musical": {
+        "chord": null,
+        "chroma": [
+          0,
+          3,
+          64,
+          7,
+          3,
+          11,
+          9,
+          437,
+          434,
+          6,
+          1,
+          25
+        ],
+        "key": null,
+        "movement": null,
+        "section": null,
+        "source_frame": "97056",
+        "state": "tracking"
+      },
+      "proposal": 250,
+      "reason": null,
+      "rms_millionths": [
+        4364,
+        8727,
+        13091,
+        17455
+      ],
+      "source_age_ms": 0,
+      "source_epoch": "9",
+      "source_identity": {
+        "calibration_revision": "2",
+        "clock": "linux-clock-monotonic-ms",
+        "contract": "C-ANALYSIS",
+        "first_frame": "48000",
+        "inputs": [
+          "input-01",
+          "input-02",
+          "input-03",
+          "input-04"
+        ],
+        "map_revision": "1",
+        "sample_rate": 48000,
+        "source_epoch": "9",
+        "sources": [
+          "kick",
+          "bass",
+          "guitar-1",
+          "guitar-2"
+        ],
+        "stream": 3,
+        "subscription": "lux.aux.v1",
+        "tap": "raw-pre-fader",
+        "version": 1
+      },
+      "source_window_range": {
+        "end_frame_exclusive": "101280",
+        "first_frame": "100800"
+      },
+      "sources": [
+        "kick",
+        "bass",
+        "guitar-1",
+        "guitar-2"
+      ],
+      "state": "ready"
+    },
+    "applied_auto": "explicit_bounded_scene_grant",
+    "authority_inventory": {
+      "cues": [],
+      "fixture_masters": [],
+      "palettes": [],
+      "playbacks": []
+    },
+    "blackout": false,
+    "capability_metadata": [
+      {
+        "attributes": [
+          {
+            "attribute": "intensity",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "red",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "green",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "blue",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          }
+        ],
+        "coherent_groups": [
+          [
+            "red",
+            "green",
+            "blue"
+          ]
+        ],
+        "fixture": "fixture-11"
+      }
+    ],
+    "grants": [
+      {
+        "remaining_ms": 1990,
+        "scope": "lighting-control",
+        "writer": "clock-test"
+      }
+    ],
+    "groups": [
+      {
+        "fixtures": [
+          "fixture-11"
+        ],
+        "id": "all"
+      }
+    ],
+    "limits": {
+      "cached_responses": 64,
+      "cues": 32,
+      "depth": 12,
+      "fixtures": 32,
+      "lease_ms": 2000,
+      "message_bytes": 65536,
+      "pages": 16,
+      "palettes": 32,
+      "playbacks": 8,
+      "renew_ms": 500,
+      "targets": 64,
+      "writer_history": 1024,
+      "writers": 1
+    },
+    "master": 1000,
+    "mode": "auto",
+    "output": "null_disarmed",
+    "patch": {
+      "fixtures": [
+        {
+          "address": 1,
+          "capabilities": [
+            {
+              "attribute": "intensity",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "red",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "green",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "blue",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            }
+          ],
+          "id": "fixture-11",
+          "label": "RGB",
+          "mode": "rgb"
+        }
+      ],
+      "patch_revision": "2",
+      "version": 1
+    },
+    "physical": "unknown",
+    "release": {
+      "preview_available": false,
+      "preview_validity_ms": 2000,
+      "transition": null,
+      "transition_ms": 500
+    },
+    "scenes": {
+      "automatic_layer": {
+        "values": [
+          {
+            "attribute": "intensity",
+            "fixture": "fixture-11",
+            "held_reason": null,
+            "provenance": {
+              "analysis_generation": "2",
+              "map_revision": "1",
+              "scene_id": "driving",
+              "section_id": null,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "scene-active",
+            "value": 650
+          },
+          {
+            "attribute": "red",
+            "fixture": "fixture-11",
+            "held_reason": null,
+            "provenance": {
+              "analysis_generation": "2",
+              "map_revision": "1",
+              "scene_id": "driving",
+              "section_id": null,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "scene-active",
+            "value": 650
+          },
+          {
+            "attribute": "green",
+            "fixture": "fixture-11",
+            "held_reason": null,
+            "provenance": {
+              "analysis_generation": "2",
+              "map_revision": "1",
+              "scene_id": "driving",
+              "section_id": null,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "scene-active",
+            "value": 220
+          },
+          {
+            "attribute": "blue",
+            "fixture": "fixture-11",
+            "held_reason": null,
+            "provenance": {
+              "analysis_generation": "2",
+              "map_revision": "1",
+              "scene_id": "driving",
+              "section_id": null,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "scene-active",
+            "value": 90
+          }
+        ]
+      },
+      "current": "driving",
+      "evidence": {
+        "available": true,
+        "confidence": 1000,
+        "density": 0,
+        "energy": 520,
+        "harmonic_relation": null,
+        "section_id": null
+      },
+      "grant": {
+        "analysis_generation": "2",
+        "color_cap": 650,
+        "expiry_tick": "100",
+        "fixtures": [
+          "fixture-11"
+        ],
+        "intensity_cap": 700,
+        "issue_revision": "2",
+        "lease": "1",
+        "patch_revision": "2",
+        "writer": "clock-test"
+      },
+      "intended_values": [
+        {
+          "attribute": "intensity",
+          "fixture": "fixture-11",
+          "value": 650
+        },
+        {
+          "attribute": "red",
+          "fixture": "fixture-11",
+          "value": 850
+        },
+        {
+          "attribute": "green",
+          "fixture": "fixture-11",
+          "value": 220
+        },
+        {
+          "attribute": "blue",
+          "fixture": "fixture-11",
+          "value": 90
+        }
+      ],
+      "interpretation": {
+        "change": "stable",
+        "trend": 0,
+        "uncertain": false
+      },
+      "map": {
+        "revision": "1",
+        "roles": [
+          {
+            "fixtures": [
+              "fixture-11"
+            ],
+            "id": "stage"
+          }
+        ],
+        "scenes": [
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 210,
+                "min": 0
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 150,
+                "min": -1000
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "intimate",
+            "id": "intimate",
+            "label": "intimate",
+            "lift": 300,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-intimate",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  1000,
+                  380,
+                  170
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 430,
+                "min": 160
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 120,
+                "min": -120
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "floating",
+            "id": "floating",
+            "label": "floating",
+            "lift": 450,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-floating",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  230,
+                  410,
+                  1000
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 1000,
+                "min": 400
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 120,
+                "min": -120
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "driving",
+            "id": "driving",
+            "label": "driving",
+            "lift": 650,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-driving",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  850,
+                  220,
+                  90
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 800,
+                "min": 220
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 1000,
+                "min": 90
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "building",
+            "id": "building",
+            "label": "building",
+            "lift": 600,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-building",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  630,
+                  230,
+                  780
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 1000,
+                "min": 750
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 1000,
+                "min": 150
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "open_lift",
+            "id": "open_lift",
+            "label": "open lift",
+            "lift": 900,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-open_lift",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  1000,
+                  720,
+                  380
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 900,
+                "min": 180
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": -90,
+                "min": -1000
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "release",
+            "id": "release",
+            "label": "release",
+            "lift": 400,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-release",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  200,
+                  460,
+                  760
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          }
+        ],
+        "version": 1
+      },
+      "proposed": "driving",
+      "reason": "current_scene_fits",
+      "transition": null,
+      "variation": 0
+    },
+    "scope": "lighting-control",
+    "snapshot": {
+      "durability": "volatile",
+      "epoch": "9",
+      "fixtures": [
+        {
+          "attributes": [
+            {
+              "attribute": "intensity",
+              "auto": 650,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "scene-active"
+                  },
+                  "value": 650,
+                  "winner": true
+                }
+              ],
+              "final_intent": 650,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 650,
+              "source": {
+                "auto": "scene-active"
+              },
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "red",
+              "auto": 650,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "scene-active"
+                  },
+                  "value": 650,
+                  "winner": true
+                }
+              ],
+              "final_intent": 650,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 650,
+              "source": {
+                "auto": "scene-active"
+              },
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "green",
+              "auto": 220,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "scene-active"
+                  },
+                  "value": 220,
+                  "winner": true
+                }
+              ],
+              "final_intent": 220,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 220,
+              "source": {
+                "auto": "scene-active"
+              },
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "blue",
+              "auto": 90,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "scene-active"
+                  },
+                  "value": 90,
+                  "winner": true
+                }
+              ],
+              "final_intent": 90,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 90,
+              "source": {
+                "auto": "scene-active"
+              },
+              "stored": [],
+              "submitted": null
+            }
+          ],
+          "fixture": "fixture-11"
+        }
+      ],
+      "patch_revision": "2",
+      "revision": "3",
+      "show_id": "11111111-1111-4111-8111-111111111111",
+      "version": 1
+    },
+    "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+    "wire_schema": "lx06-scenes-v1"
+  },
+  "held": {
+    "analysis": {
+      "analysis_version": "lux.analysis.v2",
+      "automatic_layer": {
+        "values": [
+          {
+            "fixture": "fixture-11",
+            "held_reason": "mode_entry",
+            "intensity": 0,
+            "provenance": null,
+            "source": "mode-entry-continuity"
+          }
+        ]
+      },
+      "beat": null,
+      "calibration_generation": null,
+      "calibration_revision": "2",
+      "calibration_windows": 50,
+      "confidence": 0,
+      "downbeat": null,
+      "energy_millionths": null,
+      "generation": "3",
+      "grant": null,
+      "harmony": null,
+      "held_reason": "analysis_loss_or_change",
+      "losses": "0",
+      "map_revision": "1",
+      "musical": {
+        "chord": null,
+        "chroma": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "key": null,
+        "movement": null,
+        "section": null,
+        "source_frame": null,
+        "state": "stale"
+      },
+      "proposal": null,
+      "reason": "age",
+      "rms_millionths": null,
+      "source_age_ms": 101,
+      "source_epoch": "9",
+      "source_identity": {
+        "calibration_revision": "2",
+        "clock": "linux-clock-monotonic-ms",
+        "contract": "C-ANALYSIS",
+        "first_frame": "48000",
+        "inputs": [
+          "input-01",
+          "input-02",
+          "input-03",
+          "input-04"
+        ],
+        "map_revision": "1",
+        "sample_rate": 48000,
+        "source_epoch": "9",
+        "sources": [
+          "kick",
+          "bass",
+          "guitar-1",
+          "guitar-2"
+        ],
+        "stream": 3,
+        "subscription": "lux.aux.v1",
+        "tap": "raw-pre-fader",
+        "version": 1
+      },
+      "source_window_range": {
+        "end_frame_exclusive": "101280",
+        "first_frame": "100800"
+      },
+      "sources": [
+        "kick",
+        "bass",
+        "guitar-1",
+        "guitar-2"
+      ],
+      "state": "stale"
+    },
+    "applied_auto": "explicit_bounded_scene_grant",
+    "authority_inventory": {
+      "cues": [],
+      "fixture_masters": [],
+      "palettes": [],
+      "playbacks": []
+    },
+    "blackout": false,
+    "capability_metadata": [
+      {
+        "attributes": [
+          {
+            "attribute": "intensity",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "red",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "green",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "blue",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          }
+        ],
+        "coherent_groups": [
+          [
+            "red",
+            "green",
+            "blue"
+          ]
+        ],
+        "fixture": "fixture-11"
+      }
+    ],
+    "grants": [
+      {
+        "remaining_ms": 1980,
+        "scope": "lighting-control",
+        "writer": "clock-test"
+      }
+    ],
+    "groups": [
+      {
+        "fixtures": [
+          "fixture-11"
+        ],
+        "id": "all"
+      }
+    ],
+    "limits": {
+      "cached_responses": 64,
+      "cues": 32,
+      "depth": 12,
+      "fixtures": 32,
+      "lease_ms": 2000,
+      "message_bytes": 65536,
+      "pages": 16,
+      "palettes": 32,
+      "playbacks": 8,
+      "renew_ms": 500,
+      "targets": 64,
+      "writer_history": 1024,
+      "writers": 1
+    },
+    "master": 1000,
+    "mode": "auto",
+    "output": "null_disarmed",
+    "patch": {
+      "fixtures": [
+        {
+          "address": 1,
+          "capabilities": [
+            {
+              "attribute": "intensity",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "red",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "green",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "blue",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            }
+          ],
+          "id": "fixture-11",
+          "label": "RGB",
+          "mode": "rgb"
+        }
+      ],
+      "patch_revision": "2",
+      "version": 1
+    },
+    "physical": "unknown",
+    "release": {
+      "preview_available": false,
+      "preview_validity_ms": 2000,
+      "transition": null,
+      "transition_ms": 500
+    },
+    "scenes": {
+      "automatic_layer": {
+        "values": [
+          {
+            "attribute": "intensity",
+            "fixture": "fixture-11",
+            "held_reason": "analysis_loss_or_change",
+            "provenance": {
+              "analysis_generation": "2",
+              "map_revision": "1",
+              "scene_id": "driving",
+              "section_id": null,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "scene-held",
+            "value": 650
+          },
+          {
+            "attribute": "red",
+            "fixture": "fixture-11",
+            "held_reason": "analysis_loss_or_change",
+            "provenance": {
+              "analysis_generation": "2",
+              "map_revision": "1",
+              "scene_id": "driving",
+              "section_id": null,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "scene-held",
+            "value": 650
+          },
+          {
+            "attribute": "green",
+            "fixture": "fixture-11",
+            "held_reason": "analysis_loss_or_change",
+            "provenance": {
+              "analysis_generation": "2",
+              "map_revision": "1",
+              "scene_id": "driving",
+              "section_id": null,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "scene-held",
+            "value": 220
+          },
+          {
+            "attribute": "blue",
+            "fixture": "fixture-11",
+            "held_reason": "analysis_loss_or_change",
+            "provenance": {
+              "analysis_generation": "2",
+              "map_revision": "1",
+              "scene_id": "driving",
+              "section_id": null,
+              "source_identity": {
+                "calibration_revision": "2",
+                "clock": "linux-clock-monotonic-ms",
+                "contract": "C-ANALYSIS",
+                "first_frame": "48000",
+                "inputs": [
+                  "input-01",
+                  "input-02",
+                  "input-03",
+                  "input-04"
+                ],
+                "map_revision": "1",
+                "sample_rate": 48000,
+                "source_epoch": "9",
+                "sources": [
+                  "kick",
+                  "bass",
+                  "guitar-1",
+                  "guitar-2"
+                ],
+                "stream": 3,
+                "subscription": "lux.aux.v1",
+                "tap": "raw-pre-fader",
+                "version": 1
+              },
+              "source_window_range": {
+                "end_frame_exclusive": "101280",
+                "first_frame": "100800"
+              }
+            },
+            "source": "scene-held",
+            "value": 90
+          }
+        ]
+      },
+      "current": null,
+      "evidence": {
+        "available": false,
+        "confidence": 0,
+        "density": 0,
+        "energy": 0,
+        "harmonic_relation": null,
+        "section_id": null
+      },
+      "grant": null,
+      "intended_values": [
+        {
+          "attribute": "intensity",
+          "fixture": "fixture-11",
+          "value": 650
+        },
+        {
+          "attribute": "red",
+          "fixture": "fixture-11",
+          "value": 650
+        },
+        {
+          "attribute": "green",
+          "fixture": "fixture-11",
+          "value": 220
+        },
+        {
+          "attribute": "blue",
+          "fixture": "fixture-11",
+          "value": 90
+        }
+      ],
+      "interpretation": {
+        "change": "unknown",
+        "trend": 0,
+        "uncertain": true
+      },
+      "map": {
+        "revision": "1",
+        "roles": [
+          {
+            "fixtures": [
+              "fixture-11"
+            ],
+            "id": "stage"
+          }
+        ],
+        "scenes": [
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 210,
+                "min": 0
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 150,
+                "min": -1000
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "intimate",
+            "id": "intimate",
+            "label": "intimate",
+            "lift": 300,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-intimate",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  1000,
+                  380,
+                  170
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 430,
+                "min": 160
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 120,
+                "min": -120
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "floating",
+            "id": "floating",
+            "label": "floating",
+            "lift": 450,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-floating",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  230,
+                  410,
+                  1000
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 1000,
+                "min": 400
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 120,
+                "min": -120
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "driving",
+            "id": "driving",
+            "label": "driving",
+            "lift": 650,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-driving",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  850,
+                  220,
+                  90
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 800,
+                "min": 220
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 1000,
+                "min": 90
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "building",
+            "id": "building",
+            "label": "building",
+            "lift": 600,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-building",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  630,
+                  230,
+                  780
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 1000,
+                "min": 750
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 1000,
+                "min": 150
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "open_lift",
+            "id": "open_lift",
+            "label": "open lift",
+            "lift": 900,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-open_lift",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  1000,
+                  720,
+                  380
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 900,
+                "min": 180
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": -90,
+                "min": -1000
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "release",
+            "id": "release",
+            "label": "release",
+            "lift": 400,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-release",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  200,
+                  460,
+                  760
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          }
+        ],
+        "version": 1
+      },
+      "proposed": null,
+      "reason": "uncertain_hold",
+      "transition": null,
+      "variation": 0
+    },
+    "scope": "lighting-control",
+    "snapshot": {
+      "durability": "volatile",
+      "epoch": "9",
+      "fixtures": [
+        {
+          "attributes": [
+            {
+              "attribute": "intensity",
+              "auto": 650,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "scene-held"
+                  },
+                  "value": 650,
+                  "winner": true
+                }
+              ],
+              "final_intent": 650,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 650,
+              "source": {
+                "auto": "scene-held"
+              },
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "red",
+              "auto": 650,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "scene-held"
+                  },
+                  "value": 650,
+                  "winner": true
+                }
+              ],
+              "final_intent": 650,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 650,
+              "source": {
+                "auto": "scene-held"
+              },
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "green",
+              "auto": 220,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "scene-held"
+                  },
+                  "value": 220,
+                  "winner": true
+                }
+              ],
+              "final_intent": 220,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 220,
+              "source": {
+                "auto": "scene-held"
+              },
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "blue",
+              "auto": 90,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "scene-held"
+                  },
+                  "value": 90,
+                  "winner": true
+                }
+              ],
+              "final_intent": 90,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 90,
+              "source": {
+                "auto": "scene-held"
+              },
+              "stored": [],
+              "submitted": null
+            }
+          ],
+          "fixture": "fixture-11"
+        }
+      ],
+      "patch_revision": "2",
+      "revision": "4",
+      "show_id": "11111111-1111-4111-8111-111111111111",
+      "version": 1
+    },
+    "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+    "wire_schema": "lx06-scenes-v1"
+  },
+  "initial": {
+    "analysis": {
+      "analysis_version": "lux.analysis.v2",
+      "automatic_layer": {
+        "values": [
+          {
+            "fixture": "fixture-11",
+            "held_reason": "mode_entry",
+            "intensity": 0,
+            "provenance": null,
+            "source": "mode-entry-continuity"
+          }
+        ]
+      },
+      "beat": null,
+      "calibration_generation": "2",
+      "calibration_revision": "2",
+      "calibration_windows": 50,
+      "confidence": 1000,
+      "downbeat": null,
+      "energy_millionths": 520261,
+      "generation": "2",
+      "grant": null,
+      "harmony": null,
+      "held_reason": null,
+      "losses": "0",
+      "map_revision": "1",
+      "musical": {
+        "chord": null,
+        "chroma": [
+          0,
+          3,
+          64,
+          7,
+          3,
+          11,
+          9,
+          437,
+          434,
+          6,
+          1,
+          25
+        ],
+        "key": null,
+        "movement": null,
+        "section": null,
+        "source_frame": "97056",
+        "state": "tracking"
+      },
+      "proposal": 250,
+      "reason": null,
+      "rms_millionths": [
+        4364,
+        8727,
+        13091,
+        17455
+      ],
+      "source_age_ms": 0,
+      "source_epoch": "9",
+      "source_identity": {
+        "calibration_revision": "2",
+        "clock": "linux-clock-monotonic-ms",
+        "contract": "C-ANALYSIS",
+        "first_frame": "48000",
+        "inputs": [
+          "input-01",
+          "input-02",
+          "input-03",
+          "input-04"
+        ],
+        "map_revision": "1",
+        "sample_rate": 48000,
+        "source_epoch": "9",
+        "sources": [
+          "kick",
+          "bass",
+          "guitar-1",
+          "guitar-2"
+        ],
+        "stream": 3,
+        "subscription": "lux.aux.v1",
+        "tap": "raw-pre-fader",
+        "version": 1
+      },
+      "source_window_range": {
+        "end_frame_exclusive": "101280",
+        "first_frame": "100800"
+      },
+      "sources": [
+        "kick",
+        "bass",
+        "guitar-1",
+        "guitar-2"
+      ],
+      "state": "ready"
+    },
+    "applied_auto": "explicit_bounded_scene_grant",
+    "authority_inventory": {
+      "cues": [],
+      "fixture_masters": [],
+      "palettes": [],
+      "playbacks": []
+    },
+    "blackout": false,
+    "capability_metadata": [
+      {
+        "attributes": [
+          {
+            "attribute": "intensity",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "red",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "green",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          },
+          {
+            "attribute": "blue",
+            "default": 0,
+            "max": 1000,
+            "min": 0,
+            "step": 1,
+            "unit": "tenth_percent"
+          }
+        ],
+        "coherent_groups": [
+          [
+            "red",
+            "green",
+            "blue"
+          ]
+        ],
+        "fixture": "fixture-11"
+      }
+    ],
+    "grants": [
+      {
+        "remaining_ms": 2000,
+        "scope": "lighting-control",
+        "writer": "clock-test"
+      }
+    ],
+    "groups": [
+      {
+        "fixtures": [
+          "fixture-11"
+        ],
+        "id": "all"
+      }
+    ],
+    "limits": {
+      "cached_responses": 64,
+      "cues": 32,
+      "depth": 12,
+      "fixtures": 32,
+      "lease_ms": 2000,
+      "message_bytes": 65536,
+      "pages": 16,
+      "palettes": 32,
+      "playbacks": 8,
+      "renew_ms": 500,
+      "targets": 64,
+      "writer_history": 1024,
+      "writers": 1
+    },
+    "master": 1000,
+    "mode": "auto",
+    "output": "null_disarmed",
+    "patch": {
+      "fixtures": [
+        {
+          "address": 1,
+          "capabilities": [
+            {
+              "attribute": "intensity",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "red",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "green",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            },
+            {
+              "attribute": "blue",
+              "default": 0,
+              "max": 1000,
+              "min": 0
+            }
+          ],
+          "id": "fixture-11",
+          "label": "RGB",
+          "mode": "rgb"
+        }
+      ],
+      "patch_revision": "2",
+      "version": 1
+    },
+    "physical": "unknown",
+    "release": {
+      "preview_available": false,
+      "preview_validity_ms": 2000,
+      "transition": null,
+      "transition_ms": 500
+    },
+    "scenes": {
+      "automatic_layer": {
+        "values": []
+      },
+      "current": null,
+      "evidence": {
+        "available": false,
+        "confidence": 0,
+        "density": 0,
+        "energy": 0,
+        "harmonic_relation": null,
+        "section_id": null
+      },
+      "grant": null,
+      "intended_values": [],
+      "interpretation": {
+        "change": "unknown",
+        "trend": 0,
+        "uncertain": true
+      },
+      "map": {
+        "revision": "1",
+        "roles": [
+          {
+            "fixtures": [
+              "fixture-11"
+            ],
+            "id": "stage"
+          }
+        ],
+        "scenes": [
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 210,
+                "min": 0
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 150,
+                "min": -1000
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "intimate",
+            "id": "intimate",
+            "label": "intimate",
+            "lift": 300,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-intimate",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  1000,
+                  380,
+                  170
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 430,
+                "min": 160
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 120,
+                "min": -120
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "floating",
+            "id": "floating",
+            "label": "floating",
+            "lift": 450,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-floating",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  230,
+                  410,
+                  1000
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 1000,
+                "min": 400
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 120,
+                "min": -120
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "driving",
+            "id": "driving",
+            "label": "driving",
+            "lift": 650,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-driving",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  850,
+                  220,
+                  90
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 800,
+                "min": 220
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 1000,
+                "min": 90
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "building",
+            "id": "building",
+            "label": "building",
+            "lift": 600,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-building",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  630,
+                  230,
+                  780
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 1000,
+                "min": 750
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": 1000,
+                "min": 150
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "open_lift",
+            "id": "open_lift",
+            "label": "open lift",
+            "lift": 900,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-open_lift",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  1000,
+                  720,
+                  380
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          },
+          {
+            "compatible_from": [],
+            "conditions": {
+              "density": {
+                "max": 1000,
+                "min": 0
+              },
+              "energy": {
+                "max": 900,
+                "min": 180
+              },
+              "min_confidence": 600,
+              "trend": {
+                "max": -90,
+                "min": -1000
+              }
+            },
+            "confirm_ms": 600,
+            "fade_ms": 1200,
+            "family": "release",
+            "id": "release",
+            "label": "release",
+            "lift": 400,
+            "min_dwell_ms": 2500,
+            "mood": "authored",
+            "palette": "palette-release",
+            "repetition_penalty": 80,
+            "roles": [
+              {
+                "intensity": 1000,
+                "rgb": [
+                  200,
+                  460,
+                  760
+                ],
+                "role": "stage"
+              }
+            ],
+            "variation": 20
+          }
+        ],
+        "version": 1
+      },
+      "proposed": null,
+      "reason": "waiting_for_evidence",
+      "transition": null,
+      "variation": 0
+    },
+    "scope": "lighting-control",
+    "snapshot": {
+      "durability": "volatile",
+      "epoch": "9",
+      "fixtures": [
+        {
+          "attributes": [
+            {
+              "attribute": "intensity",
+              "auto": 0,
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": {
+                    "auto": "mode-entry-continuity"
+                  },
+                  "value": 0,
+                  "winner": true
+                }
+              ],
+              "final_intent": 0,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 0,
+              "source": {
+                "auto": "mode-entry-continuity"
+              },
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "red",
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": "fixture_default",
+                  "value": 0,
+                  "winner": true
+                }
+              ],
+              "final_intent": 0,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 0,
+              "source": "fixture_default",
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "green",
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": "fixture_default",
+                  "value": 0,
+                  "winner": true
+                }
+              ],
+              "final_intent": 0,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 0,
+              "source": "fixture_default",
+              "stored": [],
+              "submitted": null
+            },
+            {
+              "attribute": "blue",
+              "clamped": false,
+              "contributors": [
+                {
+                  "source": "fixture_default",
+                  "value": 0,
+                  "winner": true
+                }
+              ],
+              "final_intent": 0,
+              "hold": null,
+              "inhibit": "none",
+              "observed": null,
+              "playing": [],
+              "programmer": null,
+              "proposal": null,
+              "resolved": 0,
+              "source": "fixture_default",
+              "stored": [],
+              "submitted": null
+            }
+          ],
+          "fixture": "fixture-11"
+        }
+      ],
+      "patch_revision": "2",
+      "revision": "2",
+      "show_id": "11111111-1111-4111-8111-111111111111",
+      "version": 1
+    },
+    "snapshot_budget": "16 encoded pages of at most 65536 bytes; overbudget edits refused atomically",
+    "wire_schema": "lx06-scenes-v1"
+  },
+  "preview": {
+    "replies": [
+      {
+        "body": {
+          "actual": [
+            {
+              "attribute": "intensity",
+              "fixture": "fixture-11",
+              "source": {
+                "auto": "scene-active"
+              },
+              "value": 650
+            },
+            {
+              "attribute": "red",
+              "fixture": "fixture-11",
+              "source": {
+                "auto": "scene-active"
+              },
+              "value": 650
+            },
+            {
+              "attribute": "green",
+              "fixture": "fixture-11",
+              "source": {
+                "auto": "scene-active"
+              },
+              "value": 220
+            },
+            {
+              "attribute": "blue",
+              "fixture": "fixture-11",
+              "source": {
+                "auto": "scene-active"
+              },
+              "value": 90
+            }
+          ],
+          "application": "scene_preview",
+          "map_revision": "1",
+          "physical": "unknown",
+          "scene_id": "driving",
+          "unsupported": [
+            {
+              "attributes": [
+                "movement",
+                "strobe"
+              ],
+              "fixture": "fixture-11"
+            }
+          ],
+          "values": [
+            {
+              "attribute": "intensity",
+              "fixture": "fixture-11",
+              "value": 650
+            },
+            {
+              "attribute": "red",
+              "fixture": "fixture-11",
+              "value": 850
+            },
+            {
+              "attribute": "green",
+              "fixture": "fixture-11",
+              "value": 220
+            },
+            {
+              "attribute": "blue",
+              "fixture": "fixture-11",
+              "value": 90
+            }
+          ]
+        },
+        "contract": "C-LIGHT",
+        "effective_tick": "1",
+        "epoch": "9",
+        "expected_revision": "3",
+        "kind": "applied",
+        "lease": "1",
+        "module": "lighting",
+        "reason": null,
+        "request_id": "2",
+        "revision": "3",
+        "sequence": "1",
+        "show_id": "11111111-1111-4111-8111-111111111111",
+        "version": 1,
+        "writer": "clock-test"
+      }
+    ],
+    "request": {
+      "body": {
+        "command": {
+          "action": "scene_preview",
+          "scene_id": "driving"
+        },
+        "scope": "lighting-control"
+      },
+      "contract": "C-LIGHT",
+      "epoch": "9",
+      "expected_revision": "3",
+      "kind": "command",
+      "lease": "1",
+      "module": "lighting",
+      "request_id": "2",
+      "show_id": "11111111-1111-4111-8111-111111111111",
+      "version": 1,
+      "writer": "clock-test"
+    }
+  },
+  "provenance": "Actual Lux calibrated PCM analyzer, production Director, Authority, Service inventory and leased command handler; elapsed director clock injected; null output."
+}
